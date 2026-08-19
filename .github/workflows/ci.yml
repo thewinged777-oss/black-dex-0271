@@ -1,25 +1,21 @@
-name: Deploy Black DEX
+name: Black DEX CI
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: github-pages
+  group: black-dex-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  validate:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
           cache: yarn
           cache-dependency-path: yarn.lock
 
@@ -40,22 +36,10 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Build production SPA
+      - name: Production SPA build
         run: yarn build:spa
         env:
           VITE_DEPLOYMENT_ENV: mainnet
           PUBLIC_PATH: /
           VITE_PUBLIC_PATH: /
-          VITE_BASE_URL: ""
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./build/client
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          VITE_BASE_URL: ''
