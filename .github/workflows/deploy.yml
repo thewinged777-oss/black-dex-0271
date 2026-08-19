@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Check if triggered by merge commit
         id: check_merge
-        uses: actions/github-script@ed59741 # v8.0.0 (Node 24)
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0 (Node 24)
         with:
           script: |
             if (context.eventName !== 'push') {
@@ -36,12 +36,7 @@ jobs:
               ref: context.sha
             });
             const isMerge = commit.data.parents.length > 1;
-            if (isMerge) {
-              console.log('Triggered by merge commit, skipping workflow to prevent loop');
-              core.setOutput('should_skip', 'true');
-            } else {
-              core.setOutput('should_skip', 'false');
-            }
+            core.setOutput('should_skip', isMerge ? 'true' : 'false');
 
   build-and-deploy:
     needs: check-prerequisites
@@ -53,7 +48,7 @@ jobs:
     steps:
       - name: Check if fork
         id: check_fork
-        uses: actions/github-script@ed59741 # v8.0.0 (Node 24)
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0 (Node 24)
         with:
           script: |
             const repo = await github.rest.repos.get({
@@ -84,10 +79,6 @@ jobs:
           MERGE_EXTRA=""
           if [ "$UPSTREAM_BRANCH" = "qa" ] || [ "$UPSTREAM_BRANCH" = "staging" ]; then MERGE_EXTRA="-X theirs"; fi
           BEFORE_MERGE=$(git rev-parse HEAD)
-          UPSTREAM_TIP=$(git rev-parse "upstream/$UPSTREAM_BRANCH")
-          echo "DEPLOYMENT_ENV=$DEPLOYMENT_ENV → upstream/$UPSTREAM_BRANCH"
-          echo "Local HEAD: $BEFORE_MERGE"
-          echo "Upstream tip: $UPSTREAM_TIP"
           if git merge "upstream/$UPSTREAM_BRANCH" --no-edit $MERGE_EXTRA; then
             AFTER_MERGE=$(git rev-parse HEAD)
             if [ "$BEFORE_MERGE" != "$AFTER_MERGE" ]; then
