@@ -18,6 +18,10 @@ const defaultLinks: CustomLink[] = [
   { id: "orders", label: "Order Types Guide", url: "#orders" },
 ];
 
+const helperStyles = `
+.black-trader-help{width:min(760px,calc(100vw - 24px));max-height:min(760px,calc(100vh - 80px));overflow:auto;border:1px solid #383329;border-radius:12px;background:#0c0c0d;box-shadow:0 30px 110px rgba(0,0,0,.72);color:#e8e8eb}.black-trader-help-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #25252a}.black-trader-help-header span{display:block;font-size:7px;font-weight:900;letter-spacing:.18em;color:#d4af37}.black-trader-help-header strong{display:block;margin-top:6px;font-size:16px;letter-spacing:-.01em}.black-trader-help-header button{border:0;background:transparent;color:#777780;font-size:22px;cursor:pointer}.black-trader-help-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}.black-trader-help-grid section{padding:14px;border:1px solid #222228;border-radius:8px;background:#111113}.black-trader-help-grid h3{display:flex;align-items:center;gap:7px;margin:0 0 9px;font-size:8px;letter-spacing:.13em;color:#d4af37}.black-trader-help-grid p{margin:0;color:#8f8f98;font-size:9px;line-height:1.65}.black-trader-help-grid kbd{display:inline-flex;min-width:19px;justify-content:center;padding:2px 5px;border:1px solid #3a3832;border-radius:4px;background:#171613;color:#e0c76d;font-size:7px}.black-custom-links{display:grid;gap:4px}.black-custom-links>div{display:flex;align-items:center;gap:4px}.black-custom-links a{flex:1;display:flex;align-items:center;justify-content:space-between;padding:8px 9px;border:1px solid #24242a;border-radius:5px;background:#0d0d0f;color:#b7b7bf;text-decoration:none;font-size:8px}.black-custom-links a:hover{border-color:#5a4a28;color:#e0c76d}.black-custom-links button{width:30px;height:30px;border:1px solid #29292f;border-radius:5px;background:#111113;color:#66666e;cursor:pointer}.black-custom-links button:hover{color:#f06470}.black-add-link{display:grid;grid-template-columns:1fr 1.4fr 32px;gap:4px;margin-top:7px}.black-add-link input{min-width:0;height:30px;border:1px solid #29292f;border-radius:5px;background:#0d0d0f;color:#eeeef0;padding:0 8px;font-size:8px;outline:none}.black-add-link input:focus{border-color:rgba(212,175,55,.5)}.black-add-link button{border:1px solid #5a4a28;border-radius:5px;background:#d4af37;color:#090909;display:grid;place-items:center;cursor:pointer}.black-add-link button:disabled{opacity:.35;cursor:not-allowed}.black-helper-footer{grid-column:1/-1!important;display:flex;align-items:center;gap:8px;color:#65656d!important;font-size:8px!important}.black-helper-footer svg{color:#d4af37;flex:none}@media(max-width:640px){.black-trader-help-grid{grid-template-columns:1fr}.black-trader-help{max-height:calc(100vh - 70px)}.black-add-link{grid-template-columns:1fr 1fr 32px}}
+`;
+
 export default function BlackProTraderTools({ symbol, focusMode, onFocusMode, onFullscreen }: { symbol: string; focusMode: boolean; onFocusMode: () => void; onFullscreen: () => void }) {
   const [commandOpen, setCommandOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
@@ -62,6 +66,7 @@ export default function BlackProTraderTools({ symbol, focusMode, onFocusMode, on
   const openHelp = () => { setCommandOpen(false); setHelpOpen(true); };
 
   return <>
+    <style>{helperStyles}</style>
     <div className="black-pro-tool-dock" aria-label="Pro trader tools">
       <button onClick={() => setQuickOpen((value) => !value)} className={quickOpen ? "active" : ""}><Zap size={14} /> QUICK <kbd>Q</kbd></button>
       <button onClick={() => setCompact((value) => !value)} className={compact ? "active" : ""}><PanelRight size={14} /> PANELS</button>
