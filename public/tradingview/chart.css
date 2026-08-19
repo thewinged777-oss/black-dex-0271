@@ -11,47 +11,41 @@ span {
     letter-spacing: 0.03em;
 }
 
+/* Black DEX — graphite + gold TradingView UI palette. */
+:root,
+.theme-dark {
+    --tv-color-platform-background: #080808;
+    --tv-color-pane-background: #080808;
+    --tv-color-pane-background-secondary: #0F0F10;
+    --tv-color-toolbar-button-background-hover: #181818;
+    --tv-color-toolbar-button-background-secondary-hover: #181818;
+    --tv-color-toolbar-button-text: #A3A3A3;
+    --tv-color-toolbar-button-text-hover: #D4AF37;
+    --tv-color-popup-element-background-active: #D4AF37;
+    --tv-color-popup-element-text-active: #080808;
+    --tv-color-popup-element-background-hover: #181818;
+    --tv-color-popup-element-text-hover: #D4AF37;
+    --tv-color-popup-element-divider-background: #27272A;
+    --tv-color-popup-element-text: #E5E5E5;
+    --tv-color-popup-element-secondary-text: #A3A3A3;
+    --tv-color-popup-element-hint-text: #737373;
+}
+
 /* Disabled instant orders placement control */
-div[data-section-name='tradingConfirmEnabled'] {
-    display: none;
-}
-div[data-section-name='tradingSoundEnabled'] {
-    display: none;
-}
-div[data-section-name='tradingRejectionNotifications'] {
-    display: none;
-}
-div[data-section-name='positionPLDisplay'] {
-    display: none !important;
-}
-div[data-section-name='reverseButton'] {
-    display: none;
-}
-div[data-section-name='appearanceVisibilityGroup'] {
-    display: none;
-}
-div[data-section-name='tradingPositions'] {
-    display: none;
-}
-div[data-section-name='tradingOrders'] {
-    display: none;
-}
-div[data-section-name='tradingExecutions'] {
-    display: none;
-}
-div[data-section-name='extendLeftTradingLine'] {
-    display: none;
-}
-/* instant order placement control style*/
+div[data-section-name='tradingConfirmEnabled'] { display: none; }
+div[data-section-name='tradingSoundEnabled'] { display: none; }
+div[data-section-name='tradingRejectionNotifications'] { display: none; }
+div[data-section-name='positionPLDisplay'] { display: none !important; }
+div[data-section-name='reverseButton'] { display: none; }
+div[data-section-name='appearanceVisibilityGroup'] { display: none; }
+div[data-section-name='tradingPositions'] { display: none; }
+div[data-section-name='tradingOrders'] { display: none; }
+div[data-section-name='tradingExecutions'] { display: none; }
+div[data-section-name='extendLeftTradingLine'] { display: none; }
+
 .loading-indicator {
     font-family: Trebuchet MS, roboto, ubuntu, sans-serif;
 }
-.wrapper-3X2QgaDd {
-    flex-direction: row-reverse;
-}
-.calculator-3AwNSLGC .calculator__input-3AwNSLGC {
-    display: flex !important;
-}
-[data-name="legend-source-exchange"] {
-    display: none !important;
-}
+.wrapper-3X2QgaDd { flex-direction: row-reverse; }
+.calculator-3AwNSLGC .calculator__input-3AwNSLGC { display: flex !important; }
+[data-name="legend-source-exchange"] { display: none !important; }
