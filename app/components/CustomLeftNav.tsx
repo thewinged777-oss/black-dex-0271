@@ -5,6 +5,7 @@ import { LeftNavProps, LeftNavItem } from "@orderly.network/ui-scaffold";
 import { ExternalLink } from "lucide-react";
 import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-config";
 import { withBasePath } from "@/utils/base-path";
+import "@/styles/navigation.css";
 
 type LeftNavUIProps = LeftNavProps & { className?: string; logo?: { src: string; alt: string }; externalLinks?: Array<{ name: string; href: string; target?: string }> };
 
