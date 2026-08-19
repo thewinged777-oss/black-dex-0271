@@ -1,12 +1,12 @@
 import type { TradingPageProps } from "@orderly.network/trading";
 import { withBasePath } from "./base-path";
 
-// Black DEX TradingView palette: graphite background + premium gold branding.
-// Profit/loss colors remain green/red so trading information stays unambiguous.
+// Black DEX TradingView palette. Keep the terminal background/branding,
+// but restore the original Gang DEX green/red candle colors.
 const BLACK_DEX_TRADING_VIEW_COLORS = {
   chartBG: "#080808",
-  upColor: "#D4AF37",
-  downColor: "#EF4444",
+  upColor: "#2DD4A7",
+  downColor: "#FF647D",
   pnlUpColor: "#22C55E",
   pnlDownColor: "#EF4444",
   pnlZeroColor: "#A3A3A3",
