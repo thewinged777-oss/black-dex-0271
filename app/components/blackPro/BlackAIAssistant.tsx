@@ -9,7 +9,7 @@ type BlackAIContext = {
   page: string;
 };
 
-const endpoint = import.meta.env.VITE_BLACK_AI_ENDPOINT as string | undefined;
+const endpoint = import.meta.env.VITE_BLACK_DEX_AI_ENDPOINT as string | undefined;
 
 const suggestions = [
   "Explain my current trading screen",
