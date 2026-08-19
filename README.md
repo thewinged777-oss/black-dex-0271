@@ -1,113 +1,77 @@
-# Orderly Broker UI Template
+# BLACK DEX
 
-This template provides a quick way to set up a customized trading UI for Orderly Network brokers, built with Remix and deployable on Vercel.
+Premium perpetual futures trading interface powered by Orderly Network.
 
-🔗 [Live Demo](https://broker-template-seven.vercel.app/)
+BLACK DEX is a professional trading frontend built on top of Orderly's trading infrastructure. The frontend owns the Black DEX experience, design system and trader tools; Orderly remains the source of truth for markets, balances, positions, orders, execution, funding, deposits and withdrawals.
 
-## Quick Start
+## Production
 
-1. **Fork the Repository**
-   
-   Fork this repository to your GitHub account to create your broker's UI.
+- Production: https://black-dex.online
+- Repository: https://github.com/thewinged777-oss/black-dex-0271
 
-2. **Clone Your Fork**
+Production deployment is intentionally simple:
 
-```sh
-git clone https://github.com/YOUR_USERNAME/broker-template.git
-cd broker-template
-```
+`main` → CI validation → production SPA build → GitHub Pages → `black-dex.online`
 
-3. **Install Dependencies**
-
-```sh
-yarn install
-cp .env.example .env.local
-```
-
-## Configuration Steps
-
-### 1. Environment Configuration
-
-The repository keeps a minimal `.env` for compatibility with existing forks.
-For local customization, copy `.env.example` to the ignored `.env.local` file,
-then edit `.env.local` to configure the broker and application metadata.
-Variables prefixed with `VITE_` are exposed to the browser by Vite, so do not put
-private keys, passwords, or other secrets in this file.
-
-```env
-# Broker settings
-VITE_ORDERLY_BROKER_ID=your_broker_id
-VITE_ORDERLY_BROKER_NAME=Your Broker Name
-VITE_DEPLOYMENT_ENV=mainnet  # use testnet for testing
-
-# Application metadata
-VITE_APP_NAME=Your App Name
-VITE_APP_DESCRIPTION=Your app description for SEO
-
-# Navigation menu configuration (optional)
-VITE_ENABLED_MENUS=Trading,Portfolio,Markets,Leaderboard
-VITE_CUSTOM_MENUS=Documentation,https://docs.yoursite.com;Blog,https://blog.yoursite.com;Support,https://support.yoursite.com
-```
-
-`VITE_DEPLOYMENT_ENV` controls whether the app connects to Orderly mainnet or
-testnet. Restart the development server after changing `.env.local`; production
-deployments must be rebuilt so the new values are included.
-
-For deployments that use runtime configuration, values in `public/config.js`
-(`window.__RUNTIME_CONFIG__`) take precedence over the corresponding `.env.local`
-values. This allows configuration changes without rebuilding the application.
-
-### 2. Theme Customization
-
-1. Visit the [Orderly Storybook Trading Page](https://storybook.orderly.network/?path=/story/package-trading-tradingpage--page)
-2. Customize your preferred theme using the controls
-3. Export the generated CSS
-4. Replace the contents of `app/styles/theme.css` with your exported CSS
-
-### 3. UI Configuration
-
-Edit `app/utils/config.tsx` to customize your UI:
-
-- **Footer Links**: Update `footerProps` with your social media links
-- **Logos**: Replace the main and secondary logos in the `appIcons` section
-- **PnL Sharing**: Customize the PnL poster backgrounds and colors in `sharePnLConfig`
-
-Required assets:
-- Place your logos in the `public` directory:
-  - Main logo: `public/orderly-logo.svg`
-  - Secondary logo: `public/orderly-logo-secondary.svg`
-  - Favicon: `public/favicon.webp`
-- PnL sharing backgrounds: `public/pnl/poster_bg_[1-4].png`
+There is no PR preview deployment and no upstream-template synchronization in the production workflow.
 
 ## Development
 
-Run the development server:
+Requirements:
+
+- Node.js 20+
+- Yarn
+
+Install dependencies:
+
+```sh
+yarn install --frozen-lockfile
+```
+
+Run locally:
 
 ```sh
 yarn dev
 ```
 
-## Deployment
-
-1. Build the application:
+Validate:
 
 ```sh
-yarn build
+yarn typecheck
+yarn lint
+yarn build:spa
 ```
 
-2. Deploy to Vercel:
-   - Create an account on [Vercel](https://vercel.com) if you haven't already
-   - Install Vercel CLI: `yarn global add vercel`
-   - Run `vercel` in your project directory and follow the prompts
-   - For subsequent deployments, use `vercel --prod` to deploy to production
+## Orderly integration
 
-For custom domain setup:
-   - Go to your project settings in Vercel dashboard
-   - Navigate to the "Domains" section
-   - Add and configure your custom domain
+The project uses Orderly SDK 3.x packages for the trading infrastructure. Do not replace working Orderly providers, authentication, wallet integration, market streams, order execution, balances or positions with mock/local implementations.
 
-## Additional Resources
+Environment values are supplied through the deployment environment and local `.env.local` configuration. Never commit private keys or secrets. Browser-exposed `VITE_*` values must be treated as public.
 
-- [Orderly JS SDK Documentation](https://github.com/OrderlyNetwork/js-sdk)
-- [Orderly Network Documentation](https://orderly.network/docs/sdks)
-- [Storybook Theme Editor](https://storybook.orderly.network/?path=/story/package-trading-tradingpage--page)
+## Product architecture
+
+The frontend is organized around these product areas:
+
+- Trading terminal
+- Portfolio
+- Markets
+- Leaderboard / Black Season
+- Rewards / Points
+- Affiliate
+- Earn / Vaults
+- Pro Trader tools
+- BLACK DEX AI
+- Trader Help / Knowledge Center
+
+The design system should remain centralized and consistent. Black/graphite is the base interface; gold is a restrained Black DEX accent; green/red remain dedicated to trading state and PnL.
+
+## Deployment
+
+Deployment is handled by GitHub Actions. Every push to `main` runs the production validation/build pipeline and deploys the resulting SPA to GitHub Pages. A manual `workflow_dispatch` deployment is also available.
+
+Do not add branch-specific production deployments or preview deployments unless the deployment architecture is intentionally changed and documented.
+
+## Orderly documentation
+
+- https://orderly.network/docs/sdks
+- https://storybook.orderly.network/
