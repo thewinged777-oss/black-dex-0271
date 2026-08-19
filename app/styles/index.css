@@ -10,61 +10,121 @@
   color-scheme: dark;
   --black-dex-gold: #d4af37;
   --black-dex-gold-bright: #f5d678;
-  --black-dex-bg: #080808;
-  --black-dex-panel: #0f0f10;
-  --black-dex-panel-raised: #141414;
-  --black-dex-border: #27272a;
+  --black-dex-gold-deep: #a17e1e;
+  --black-dex-bg: #050505;
+  --black-dex-surface: #0a0a0b;
+  --black-dex-panel: #101011;
+  --black-dex-panel-raised: #151516;
+  --black-dex-border: #252528;
+  --black-dex-border-soft: #1b1b1e;
   --black-dex-text: #f5f5f5;
-  --black-dex-muted: #a3a3a3;
+  --black-dex-muted: #8f8f98;
+  --black-dex-profit: #22c55e;
+  --black-dex-loss: #ef4444;
 }
 
-html,
-body,
-#root {
-  min-height: 100%;
-  background: var(--black-dex-bg);
-}
-
+html, body, #root { min-height: 100%; background: var(--black-dex-bg) !important; }
 body {
   margin: 0;
   color: var(--black-dex-text);
   font-family: Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+*, *::before, *::after { box-sizing: border-box; }
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+/* BLACK DEX — premium exchange shell */
+.oui-main-nav, header {
+  background: rgba(5,5,5,.96) !important;
+  border-bottom: 1px solid var(--black-dex-border-soft) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,.22) !important;
+  backdrop-filter: blur(18px);
+}
+.oui-main-nav a, .oui-main-nav button { transition: all .18s ease !important; }
+.oui-main-nav a:hover, .oui-main-nav button:hover { color: var(--black-dex-gold-bright) !important; }
+
+[class*="oui-bg-base-8"] { background-color: var(--black-dex-bg) !important; }
+[class*="oui-bg-base-9"] { background-color: var(--black-dex-surface) !important; }
+[class*="oui-bg-base-10"] { background-color: var(--black-dex-panel) !important; }
+[class*="oui-border-line"] { border-color: var(--black-dex-border-soft) !important; }
+
+input, [class*="oui-input"], [role="textbox"] {
+  background: #0b0b0c !important;
+  border-color: var(--black-dex-border) !important;
+  color: var(--black-dex-text) !important;
+  border-radius: 8px !important;
+}
+input:focus, [role="textbox"]:focus {
+  border-color: rgba(212,175,55,.75) !important;
+  box-shadow: 0 0 0 2px rgba(212,175,55,.10) !important;
+  outline: none !important;
 }
 
-/* Black DEX: premium exchange chrome without changing Orderly trading logic. */
-.oui-main-nav {
-  border-bottom: 1px solid rgb(39 39 42 / 0.85) !important;
-  background: rgb(8 8 8 / 0.94) !important;
-  backdrop-filter: blur(14px);
+button[class*="oui-bg-primary"], a[class*="oui-bg-primary"], button[class*="oui-button-primary"] {
+  background: linear-gradient(135deg, var(--black-dex-gold), var(--black-dex-gold-bright)) !important;
+  color: #080808 !important;
+  border: 1px solid rgba(245,214,120,.45) !important;
+  box-shadow: 0 8px 22px rgba(212,175,55,.13) !important;
+  font-weight: 800 !important;
+}
+button[class*="oui-bg-primary"]:hover, button[class*="oui-button-primary"]:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+[role="tablist"] { border-bottom-color: var(--black-dex-border-soft) !important; }
+[role="tab"] { transition: color .16s ease, background .16s ease !important; }
+[role="tab"][aria-selected="true"] {
+  color: var(--black-dex-gold-bright) !important;
+  background: rgba(212,175,55,.08) !important;
+  box-shadow: inset 0 -2px 0 var(--black-dex-gold) !important;
 }
 
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
+[class*="oui-trading-page"], [class*="oui-trading"] { background: var(--black-dex-bg) !important; }
+[class*="oui-order-entry"], [class*="oui-orderbook"], [class*="oui-order-form"] { background: var(--black-dex-surface) !important; }
+
+/* Exchange data density and hierarchy */
+tbody tr { transition: background .14s ease !important; }
+tbody tr:hover { background: rgba(212,175,55,.045) !important; }
+button[class*="success"], [class*="trading-profit"] { color: var(--black-dex-profit) !important; }
+button[class*="danger"], [class*="trading-loss"] { color: var(--black-dex-loss) !important; }
+
+/* TradingView frame */
+iframe, [class*="tradingview"], [class*="TradingView"] { border-color: var(--black-dex-border-soft) !important; }
+
+* { scrollbar-width: thin; scrollbar-color: #353538 transparent; }
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #353538; border-radius: 99px; }
+*::-webkit-scrollbar-thumb:hover { background: var(--black-dex-gold-deep); }
+a:not([class*="no-underline"]):hover { color: var(--black-dex-gold-bright); }
+
+/* Radix/Orderly dialogs and sheets */
+[data-radix-dialog-content] {
+  background: linear-gradient(180deg,#070707 0%,#0b0b0c 100%) !important;
+  border-color: var(--black-dex-border) !important;
+  box-shadow: 24px 0 80px rgba(0,0,0,.55) !important;
 }
 
-a:not([class*="no-underline"]):hover {
-  color: var(--black-dex-gold-bright);
-}
-
-[class*="oui-bg-base-8"] {
-  background-color: var(--black-dex-bg) !important;
-}
-
-[class*="oui-bg-base-9"] {
-  background-color: var(--black-dex-panel) !important;
-}
-
-/* Keep trading semantics intact: green = profit, red = loss. */
-
-.oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
-  display: none;
-}
-
+/* Mobile: turn the terminal into a deliberate trading command center */
 @media (max-width: 768px) {
-  body {
-    overflow-x: hidden;
+  body { padding-bottom: env(safe-area-inset-bottom); }
+  nav, [class*="bottom-nav"], [class*="BottomNav"] {
+    background: rgba(5,5,5,.98) !important;
+    border-top: 1px solid var(--black-dex-border) !important;
+    box-shadow: 0 -12px 32px rgba(0,0,0,.35) !important;
+    backdrop-filter: blur(18px);
   }
+  [class*="trading-page"] { min-height: 0 !important; }
+  button { min-height: 38px; }
+}
+
+.oui-portfolio-page, [class*="portfolio-page"] { background: var(--black-dex-bg) !important; }
+.black-dex-gold { color: var(--black-dex-gold) !important; }
+.black-dex-gold-bg { background: var(--black-dex-gold) !important; color: #080808 !important; }
+.black-dex-panel { background: var(--black-dex-panel) !important; border: 1px solid var(--black-dex-border) !important; }
+
+@media (max-width: 480px) {
+  .oui-main-nav { min-height: 56px !important; }
+  .oui-main-nav img { max-height: 32px !important; }
 }
