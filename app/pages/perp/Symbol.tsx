@@ -21,40 +21,42 @@ export default function PerpSymbol() {
 
   const onSymbolChange = useCallback(
     (data: API.Symbol) => {
-      const symbol = data.symbol;
-      setSymbol(symbol);
+      const nextSymbol = data.symbol;
+      setSymbol(nextSymbol);
 
       const searchParamsString = searchParams.toString();
       const queryString = searchParamsString ? `?${searchParamsString}` : "";
 
-      navigate(`/perp/${symbol}${queryString}`);
+      navigate(`/perp/${nextSymbol}${queryString}`);
     },
-    [navigate, searchParams]
+    [navigate, searchParams],
   );
 
   const pageMeta = getPageMeta();
   const pageTitle = generatePageTitle(formatSymbol(params.symbol!));
 
   return (
-    <div className="h-full">
+    <div className="black-dex-pro-terminal h-full">
       {renderSEOTags(pageMeta, pageTitle)}
+      <div className="black-dex-terminal-topline" aria-hidden="true">
+        <span className="black-dex-terminal-live-dot" />
+        <span>BLACK DEX PRO</span>
+        <span className="black-dex-terminal-divider" />
+        <span>REAL-TIME MARKET DATA</span>
+        <span className="black-dex-terminal-spacer" />
+        <span className="black-dex-terminal-mode">PRO MODE</span>
+      </div>
       <TradingPage
         symbol={symbol}
         onSymbolChange={onSymbolChange}
         tradingViewConfig={config.tradingPage.tradingViewConfig}
         sharePnLConfig={config.tradingPage.sharePnLConfig}
       />
-      <div className="md:hidden pb-2 pt-8 text-center">
-        <span className="oui-text-2xs oui-text-base-contrast-54">
-          Charts powered by{" "}
-          <a
-            href="https://tradingview.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            TradingView
-          </a>
-        </span>
+      <div className="black-dex-terminal-footer-note md:hidden">
+        Charts powered by{" "}
+        <a href="https://tradingview.com" target="_blank" rel="noopener noreferrer">
+          TradingView
+        </a>
       </div>
     </div>
   );
