@@ -12,15 +12,13 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pr-preview-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: black-dex-pages
+  cancel-in-progress: false
 
 jobs:
   preview:
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    environment:
-      name: pr-preview-${{ github.event.pull_request.number || 'manual' }}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -35,26 +33,51 @@ jobs:
           cache: yarn
           cache-dependency-path: yarn.lock
 
-      - name: Install dependencies
+      - name: Install PR dependencies
         run: yarn install --frozen-lockfile --prefer-offline
 
-      - name: Build preview
+      - name: Build PR preview
         run: yarn build:spa
         env:
           VITE_DEPLOYMENT_ENV: mainnet
-          PUBLIC_PATH: /${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || 'preview' }}/
-          VITE_PUBLIC_PATH: /${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || 'preview' }}/
-          VITE_BASE_URL: /${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || 'preview' }}
+          PUBLIC_PATH: /pr-${{ github.event.pull_request.number || 'manual' }}/
+          VITE_PUBLIC_PATH: /pr-${{ github.event.pull_request.number || 'manual' }}/
+          VITE_BASE_URL: /pr-${{ github.event.pull_request.number || 'manual' }}
+
+      - name: Save PR build
+        run: mv build/client /tmp/pr-preview
+
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Install main dependencies
+        run: yarn install --frozen-lockfile --prefer-offline
+
+      - name: Build production copy
+        run: yarn build:spa
+        env:
+          VITE_DEPLOYMENT_ENV: mainnet
+          PUBLIC_PATH: /
+          VITE_PUBLIC_PATH: /
+          VITE_BASE_URL: ''
+
+      - name: Assemble production + PR preview
+        run: |
+          mkdir -p build/client/pr-${{ github.event.pull_request.number || 'manual' }}
+          cp -a /tmp/pr-preview/. build/client/pr-${{ github.event.pull_request.number || 'manual' }}/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload preview artifact
+      - name: Upload combined Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build/client
 
-      - name: Deploy preview
+      - name: Deploy combined Pages site
         id: deployment
         uses: actions/deploy-pages@v4
 
@@ -63,14 +86,10 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const url = '${{ steps.deployment.outputs.page_url }}';
+            const url = `${{ steps.deployment.outputs.page_url }}pr-${context.issue.number}/`;
             const marker = '<!-- black-dex-preview -->';
-            const body = `${marker}\n## 🟡 BLACK DEX Preview\n\n**Preview:** ${url}\n\nThis is a PR preview only. It does **not** change `black-dex.online`.`;
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
+            const body = `${marker}\n## 🟡 BLACK DEX Preview\n\n**Preview:** ${url}\n\nThis is a PR preview only. Production remains at https://black-dex.online/`;
+            const comments = await github.rest.issues.listComments({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number });
             const existing = comments.data.find(c => c.body?.includes(marker));
             if (existing) {
               await github.rest.issues.updateComment({ owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body });
