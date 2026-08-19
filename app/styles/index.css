@@ -6,8 +6,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* hide trading rewards on mobile */
+:root {
+  color-scheme: dark;
+  --black-dex-gold: #d4af37;
+  --black-dex-gold-bright: #f5d678;
+  --black-dex-bg: #080808;
+  --black-dex-panel: #0f0f10;
+  --black-dex-panel-raised: #141414;
+  --black-dex-border: #27272a;
+  --black-dex-text: #f5f5f5;
+  --black-dex-muted: #a3a3a3;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: var(--black-dex-bg);
+}
+
+body {
+  margin: 0;
+  color: var(--black-dex-text);
+  font-family: Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Black DEX: premium exchange chrome without changing Orderly trading logic. */
+.oui-main-nav {
+  border-bottom: 1px solid rgb(39 39 42 / 0.85) !important;
+  background: rgb(8 8 8 / 0.94) !important;
+  backdrop-filter: blur(14px);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:not([class*="no-underline"]):hover {
+  color: var(--black-dex-gold-bright);
+}
+
+[class*="oui-bg-base-8"] {
+  background-color: var(--black-dex-bg) !important;
+}
+
+[class*="oui-bg-base-9"] {
+  background-color: var(--black-dex-panel) !important;
+}
+
+/* Keep trading semantics intact: green = profit, red = loss. */
+
 .oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
   display: none;
 }
 
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+}
