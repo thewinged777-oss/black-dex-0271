@@ -3,7 +3,7 @@
 :root {
   --oui-font-family: 'Manrope', sans-serif;
 
-  /* BLACK DEX — official Black / Gold palette */
+  /* BLACK DEX — existing black / gold palette */
   --oui-color-primary: 212 175 55;
   --oui-color-primary-light: 245 214 120;
   --oui-color-primary-darken: 161 126 30;
@@ -11,10 +11,10 @@
   --oui-color-link: 212 175 55;
   --oui-color-link-light: 245 214 120;
 
-  /* Typography */
-  --oui-color-secondary: 255 255 255;
-  --oui-color-tertiary: 212 212 212;
-  --oui-color-quaternary: 163 163 163;
+  /* Typography hierarchy */
+  --oui-color-secondary: 248 248 249;
+  --oui-color-tertiary: 190 190 196;
+  --oui-color-quaternary: 132 132 141;
 
   /* Trading states */
   --oui-color-danger: 239 68 68;
@@ -30,19 +30,19 @@
   --oui-color-warning-darken: 161 98 7;
   --oui-color-warning-contrast: 0 0 0;
 
-  /* Black / graphite */
-  --oui-color-fill: 24 24 27;
-  --oui-color-fill-active: 39 39 42;
-  --oui-color-base-1: 113 113 122;
-  --oui-color-base-2: 82 82 91;
-  --oui-color-base-3: 63 63 70;
-  --oui-color-base-4: 39 39 42;
-  --oui-color-base-5: 13 13 13;
-  --oui-color-base-6: 20 20 20;
-  --oui-color-base-7: 18 18 18;
+  /* Black / graphite surfaces */
+  --oui-color-fill: 17 17 19;
+  --oui-color-fill-active: 28 28 31;
+  --oui-color-base-1: 148 148 157;
+  --oui-color-base-2: 104 104 113;
+  --oui-color-base-3: 70 70 78;
+  --oui-color-base-4: 42 42 46;
+  --oui-color-base-5: 9 9 10;
+  --oui-color-base-6: 14 14 16;
+  --oui-color-base-7: 18 18 20;
   --oui-color-base-8: 6 6 7;
-  --oui-color-base-9: 15 15 16;
-  --oui-color-base-10: 24 24 27;
+  --oui-color-base-9: 12 12 14;
+  --oui-color-base-10: 21 21 24;
   --oui-color-base-foreground: 255 255 255;
   --oui-color-line: 255 255 255;
   --oui-color-base-static: 255 255 255;
@@ -54,7 +54,7 @@
   --oui-color-trading-profit: 34 197 94;
   --oui-color-trading-profit-contrast: 255 255 255;
 
-  /* Gradients */
+  /* Existing brand gradients */
   --oui-gradient-primary-start: 161 126 30;
   --oui-gradient-primary-end: 245 214 120;
   --oui-gradient-secondary-start: 39 39 42;
@@ -73,16 +73,16 @@
   --oui-gradient-neutral-start: 39 39 42;
   --oui-gradient-neutral-end: 15 15 16;
 
-  /* Shape */
+  /* Shape — restrained, professional trading-terminal geometry */
   --oui-rounded-sm: 2px;
   --oui-rounded: 4px;
   --oui-rounded-md: 6px;
   --oui-rounded-lg: 8px;
-  --oui-rounded-xl: 12px;
-  --oui-rounded-2xl: 16px;
+  --oui-rounded-xl: 10px;
+  --oui-rounded-2xl: 14px;
   --oui-rounded-full: 9999px;
 
-  /* Spacing — sane trading-terminal scale */
+  /* Spacing — compact terminal scale */
   --oui-spacing-xs: 0.25rem;
   --oui-spacing-sm: 0.5rem;
   --oui-spacing-md: 0.75rem;
