@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import OrderlyProvider from "@/components/orderlyProvider";
+import PremiumDexOverlay from "@/components/PremiumDexOverlay";
 import { HttpsRequiredWarning } from "@/components/HttpsRequiredWarning";
 import { withBasePath } from "./utils/base-path";
 import { getSEOConfig, getUserLanguage } from "./utils/seo";
@@ -19,9 +20,9 @@ export default function App() {
       </Helmet>
       <HttpsRequiredWarning />
       <OrderlyProvider>
+        <PremiumDexOverlay />
         <Outlet />
       </OrderlyProvider>
     </>
   );
 }
-
