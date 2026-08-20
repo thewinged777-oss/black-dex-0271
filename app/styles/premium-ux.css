@@ -1,0 +1,232 @@
+/* Black DEX Premium UX — presentation only. No new functionality. */
+
+:root {
+  --bd-control-height: 42px;
+  --bd-control-radius: 8px;
+  --bd-panel-radius: 10px;
+  --bd-nav-height: 72px;
+}
+
+/* Premium control language */
+button,
+a[role="button"],
+select,
+input {
+  transition: background-color .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease, transform .16s ease !important;
+}
+
+button:not([aria-hidden="true"]),
+a[role="button"] {
+  border-radius: var(--bd-control-radius) !important;
+}
+
+button[class*="oui-button"],
+[class*="oui-button"] button,
+[class*="oui-button"] {
+  min-height: var(--bd-control-height);
+  border-radius: var(--bd-control-radius) !important;
+  letter-spacing: .005em;
+}
+
+button:hover,
+a[role="button"]:hover {
+  border-color: rgba(212,175,55,.30) !important;
+}
+
+button:focus-visible,
+a[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(212,175,55,.12) !important;
+}
+
+/* Inputs: premium recessed controls, without changing their function. */
+input,
+select,
+textarea,
+[class*="oui-input"] {
+  min-height: 40px;
+  background: #0b0b0c !important;
+  border-color: #252529 !important;
+  border-radius: 8px !important;
+}
+
+input:hover,
+select:hover,
+textarea:hover,
+[class*="oui-input"]:hover {
+  border-color: #343438 !important;
+}
+
+/* Tabs and segmented controls */
+[role="tablist"] {
+  gap: 2px !important;
+  padding: 3px !important;
+  border: 1px solid #202024 !important;
+  border-radius: 9px !important;
+  background: #0a0a0b !important;
+}
+
+[role="tab"] {
+  min-height: 34px !important;
+  padding: 0 13px !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+}
+
+[role="tab"][aria-selected="true"] {
+  background: #171718 !important;
+  box-shadow: inset 0 0 0 1px rgba(212,175,55,.20), 0 2px 10px rgba(0,0,0,.25) !important;
+}
+
+/* Orderly panels: layered surfaces rather than a collection of flat boxes. */
+[class*="oui-order-entry"],
+[class*="oui-orderbook"],
+[class*="oui-order-form"],
+[class*="oui-card"],
+[class*="oui-panel"] {
+  border-color: #202024 !important;
+  border-radius: var(--bd-panel-radius) !important;
+}
+
+[class*="oui-order-entry"],
+[class*="oui-orderbook"],
+[class*="oui-order-form"] {
+  background: linear-gradient(180deg, #0c0c0d 0%, #09090a 100%) !important;
+}
+
+/* Market/orderbook typography: make numbers feel like a trading terminal. */
+table,
+[class*="orderbook"],
+[class*="orderBook"] {
+  font-variant-numeric: tabular-nums;
+}
+
+thead {
+  letter-spacing: .025em;
+  text-transform: uppercase;
+  font-size: 10px !important;
+}
+
+tbody tr {
+  border-color: #17171a !important;
+}
+
+/* Primary execution controls: substantial, clean and deliberate. */
+button[class*="oui-bg-primary"],
+button[class*="oui-button-primary"] {
+  min-height: 44px !important;
+  border-radius: 8px !important;
+  letter-spacing: .02em;
+  box-shadow: 0 8px 24px rgba(212,175,55,.10) !important;
+}
+
+/* Mobile: turn the existing bottom navigation into a premium floating dock. */
+@media (max-width: 768px) {
+  body { padding-bottom: calc(82px + env(safe-area-inset-bottom)) !important; }
+
+  nav[class*="bottom"],
+  nav[class*="Bottom"],
+  [class*="bottom-nav"],
+  [class*="BottomNav"] {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    min-height: 64px !important;
+    height: 64px !important;
+    padding: 5px !important;
+    border: 1px solid #29292d !important;
+    border-radius: 16px !important;
+    background: rgba(10,10,11,.96) !important;
+    box-shadow: 0 18px 50px rgba(0,0,0,.60), 0 0 0 1px rgba(255,255,255,.015) inset !important;
+    backdrop-filter: blur(22px) saturate(120%) !important;
+    z-index: 100 !important;
+  }
+
+  nav[class*="bottom"] a,
+  nav[class*="bottom"] button,
+  nav[class*="Bottom"] a,
+  nav[class*="Bottom"] button,
+  [class*="bottom-nav"] a,
+  [class*="bottom-nav"] button,
+  [class*="BottomNav"] a,
+  [class*="BottomNav"] button {
+    min-height: 52px !important;
+    height: 52px !important;
+    margin: 0 !important;
+    border: 1px solid transparent !important;
+    border-radius: 11px !important;
+    background: transparent !important;
+    color: #77777f !important;
+    display: flex !important;
+    flex: 1 1 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    letter-spacing: .045em !important;
+    text-transform: uppercase !important;
+  }
+
+  nav[class*="bottom"] a:hover,
+  nav[class*="bottom"] button:hover,
+  nav[class*="Bottom"] a:hover,
+  nav[class*="Bottom"] button:hover,
+  [class*="bottom-nav"] a:hover,
+  [class*="bottom-nav"] button:hover {
+    background: #111113 !important;
+    color: #d4d4d8 !important;
+  }
+
+  nav[class*="bottom"] a[aria-current="page"],
+  nav[class*="bottom"] button[aria-current="page"],
+  nav[class*="bottom"] a[data-active="true"],
+  nav[class*="bottom"] button[data-active="true"],
+  nav[class*="Bottom"] a[aria-current="page"],
+  nav[class*="Bottom"] button[aria-current="page"] {
+    color: var(--bd-gold-bright) !important;
+    background: linear-gradient(180deg, rgba(212,175,55,.12), rgba(212,175,55,.035)) !important;
+    border-color: rgba(212,175,55,.17) !important;
+    box-shadow: inset 0 0 0 1px rgba(212,175,55,.035) !important;
+  }
+
+  nav[class*="bottom"] svg,
+  nav[class*="Bottom"] svg,
+  [class*="bottom-nav"] svg,
+  [class*="BottomNav"] svg {
+    width: 19px !important;
+    height: 19px !important;
+    stroke-width: 1.8 !important;
+  }
+
+  /* Keep trading controls comfortably tappable without oversized desktop cards. */
+  [class*="oui-order-entry"],
+  [class*="oui-orderbook"],
+  [class*="oui-order-form"] {
+    border-radius: 10px !important;
+  }
+
+  [class*="oui-order-entry"] button,
+  [class*="oui-order-form"] button {
+    min-height: 44px !important;
+  }
+}
+
+/* Larger screens: disciplined panel rhythm and no excessive rounding. */
+@media (min-width: 769px) {
+  [class*="oui-order-entry"],
+  [class*="oui-orderbook"],
+  [class*="oui-order-form"] {
+    border-radius: 8px !important;
+  }
+
+  [class*="oui-trading-page"],
+  [class*="oui-trading"] {
+    gap: 0 !important;
+  }
+}
