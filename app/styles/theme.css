@@ -1,3 +1,5 @@
+@import "./premium-ux.css";
+
 :root {
   --oui-font-family: 'Manrope', sans-serif;
 
@@ -80,10 +82,10 @@
   --oui-rounded-2xl: 16px;
   --oui-rounded-full: 9999px;
 
-  /* Spacing */
-  --oui-spacing-xs: 20rem;
-  --oui-spacing-sm: 22.5rem;
-  --oui-spacing-md: 26.25rem;
-  --oui-spacing-lg: 30rem;
-  --oui-spacing-xl: 33.75rem;
+  /* Spacing — sane trading-terminal scale */
+  --oui-spacing-xs: 0.25rem;
+  --oui-spacing-sm: 0.5rem;
+  --oui-spacing-md: 0.75rem;
+  --oui-spacing-lg: 1rem;
+  --oui-spacing-xl: 1.5rem;
 }
