@@ -3,7 +3,22 @@
 :root {
   --oui-font-family: 'Manrope', sans-serif;
 
-  /* BLACK DEX — existing black / gold palette */
+  /* Black DEX semantic surfaces */
+  --bd-bg: 5 5 6;
+  --bd-surface: 10 10 12;
+  --bd-surface-2: 14 14 16;
+  --bd-surface-3: 18 18 21;
+  --bd-elevated: 22 22 25;
+  --bd-line: 255 255 255;
+  --bd-text: 242 242 244;
+  --bd-text-2: 177 177 185;
+  --bd-text-3: 118 118 128;
+  --bd-gold: 212 175 55;
+  --bd-gold-bright: 245 214 120;
+  --bd-positive: 34 197 94;
+  --bd-negative: 239 68 68;
+
+  /* Orderly primary palette */
   --oui-color-primary: 212 175 55;
   --oui-color-primary-light: 245 214 120;
   --oui-color-primary-darken: 161 126 30;
@@ -11,12 +26,10 @@
   --oui-color-link: 212 175 55;
   --oui-color-link-light: 245 214 120;
 
-  /* Typography hierarchy */
   --oui-color-secondary: 248 248 249;
   --oui-color-tertiary: 190 190 196;
   --oui-color-quaternary: 132 132 141;
 
-  /* Trading states */
   --oui-color-danger: 239 68 68;
   --oui-color-danger-light: 248 113 113;
   --oui-color-danger-darken: 185 28 28;
@@ -30,31 +43,29 @@
   --oui-color-warning-darken: 161 98 7;
   --oui-color-warning-contrast: 0 0 0;
 
-  /* Black / graphite surfaces */
-  --oui-color-fill: 17 17 19;
-  --oui-color-fill-active: 28 28 31;
+  /* Graphite depth scale */
+  --oui-color-fill: 14 14 16;
+  --oui-color-fill-active: 24 24 27;
   --oui-color-base-1: 148 148 157;
   --oui-color-base-2: 104 104 113;
   --oui-color-base-3: 70 70 78;
   --oui-color-base-4: 42 42 46;
-  --oui-color-base-5: 9 9 10;
-  --oui-color-base-6: 14 14 16;
+  --oui-color-base-5: 8 8 9;
+  --oui-color-base-6: 12 12 14;
   --oui-color-base-7: 18 18 20;
-  --oui-color-base-8: 6 6 7;
-  --oui-color-base-9: 12 12 14;
-  --oui-color-base-10: 21 21 24;
+  --oui-color-base-8: 5 5 6;
+  --oui-color-base-9: 10 10 12;
+  --oui-color-base-10: 22 22 25;
   --oui-color-base-foreground: 255 255 255;
   --oui-color-line: 255 255 255;
   --oui-color-base-static: 255 255 255;
   --oui-color-base-static-contrast: 0 0 0;
 
-  /* Trading */
   --oui-color-trading-loss: 239 68 68;
   --oui-color-trading-loss-contrast: 255 255 255;
   --oui-color-trading-profit: 34 197 94;
   --oui-color-trading-profit-contrast: 255 255 255;
 
-  /* Existing brand gradients */
   --oui-gradient-primary-start: 161 126 30;
   --oui-gradient-primary-end: 245 214 120;
   --oui-gradient-secondary-start: 39 39 42;
@@ -73,7 +84,7 @@
   --oui-gradient-neutral-start: 39 39 42;
   --oui-gradient-neutral-end: 15 15 16;
 
-  /* Shape — restrained, professional trading-terminal geometry */
+  /* Shape */
   --oui-rounded-sm: 2px;
   --oui-rounded: 4px;
   --oui-rounded-md: 6px;
@@ -82,10 +93,32 @@
   --oui-rounded-2xl: 14px;
   --oui-rounded-full: 9999px;
 
-  /* Spacing — compact terminal scale */
+  /* Compact trading spacing */
   --oui-spacing-xs: 0.25rem;
   --oui-spacing-sm: 0.5rem;
   --oui-spacing-md: 0.75rem;
   --oui-spacing-lg: 1rem;
   --oui-spacing-xl: 1.5rem;
+
+  /* Black DEX control metrics */
+  --bd-control-h: 36px;
+  --bd-control-h-lg: 42px;
+  --bd-radius: 6px;
+  --bd-radius-lg: 8px;
+  --bd-border: rgba(255,255,255,.075);
+  --bd-border-strong: rgba(255,255,255,.12);
+  --bd-focus: rgba(212,175,55,.28);
+  --bd-fast: 140ms;
+}
+
+html,
+body {
+  background: rgb(var(--bd-bg));
+}
+
+body {
+  font-family: var(--oui-font-family);
+  font-feature-settings: "tnum" 1, "cv02" 1, "cv03" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
