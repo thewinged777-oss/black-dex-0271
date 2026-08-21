@@ -1,21 +1,195 @@
-/* BLACK DEX — premium presentation layer. Orderly components remain the source of truth. */
+/* BLACK DEX — premium presentation layer. Native Orderly behavior stays intact. */
 
-.black-dex-main-header { min-height:58px; padding:0 14px; background:rgb(9 9 10 / 96%); border-bottom:1px solid rgb(255 255 255 / 7%); box-shadow:0 8px 24px rgb(0 0 0 / 18%); }
-.black-dex-main-header > div:first-child { min-width:0; flex:1 1 auto; }
-.black-dex-brand { flex:0 0 auto; display:inline-flex; align-items:center; margin-right:10px; text-decoration:none; }
-.black-dex-native-main-nav { display:flex !important; align-items:center; flex:1 1 auto; min-width:0; overflow:hidden; }
-.black-dex-native-main-nav > nav, .black-dex-native-main-nav nav { display:flex !important; align-items:center; gap:2px; min-width:0; overflow-x:auto; scrollbar-width:none; }
-.black-dex-native-main-nav nav::-webkit-scrollbar { display:none; }
-.black-dex-native-main-nav nav a, .black-dex-native-main-nav nav button { min-height:34px; padding:0 11px; display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; border:1px solid transparent; border-radius:6px; color:rgb(190 190 196); background:transparent; font-size:12px; font-weight:650; letter-spacing:.01em; text-decoration:none; white-space:nowrap; transition:background .16s ease,border-color .16s ease,color .16s ease; }
-.black-dex-native-main-nav nav a:hover, .black-dex-native-main-nav nav button:hover { color:rgb(248 248 249); background:rgb(255 255 255 / 5%); border-color:rgb(255 255 255 / 8%); }
-.black-dex-native-main-nav nav a[aria-current="page"], .black-dex-native-main-nav nav a[data-active="true"], .black-dex-native-main-nav nav button[aria-current="page"], .black-dex-native-main-nav nav button[data-active="true"] { color:rgb(245 214 120); background:rgb(212 175 55 / 10%); border-color:rgb(212 175 55 / 22%); box-shadow:inset 0 -2px 0 rgb(212 175 55 / 85%); }
-.black-dex-main-header img[alt="logo"] { object-fit:contain; display:block; }
-.black-dex-header-actions { flex:0 0 auto; margin-left:10px; }
-[role="switch"] { width:28px !important; min-width:28px !important; height:16px !important; min-height:16px !important; padding:1px !important; border-radius:9999px !important; }
-[role="switch"] > * { width:12px !important; height:12px !important; min-width:12px !important; min-height:12px !important; }
-label:has([role="switch"]), label:has(+ [role="switch"]) { min-height:20px; gap:6px; font-size:11px; }
-[role="tablist"] { gap:2px !important; border-bottom-color:rgb(255 255 255 / 7%) !important; }
-[role="tab"] { min-height:32px !important; padding:0 10px !important; border-radius:5px 5px 0 0 !important; color:rgb(148 148 157) !important; font-size:11px !important; font-weight:650 !important; }
-[role="tab"][aria-selected="true"] { color:rgb(245 214 120) !important; background:rgb(212 175 55 / 7%) !important; box-shadow:inset 0 -2px 0 rgb(212 175 55); }
-[data-testid*="symbol"], [data-testid*="orderbook"], [data-testid*="create-order"], [data-testid*="trading-view"] { border-color:rgb(255 255 255 / 6%); }
-@media (max-width:767px) { .black-dex-main-header { min-height:52px; padding:0 10px; box-shadow:0 6px 18px rgb(0 0 0 / 20%); } .black-dex-native-main-nav { display:none !important; } .black-dex-header-actions { margin-left:auto; } .black-dex-main-header [aria-label*="menu"], .black-dex-main-header [aria-label*="Menu"] { flex:0 0 auto; } [role="tab"] { min-height:30px !important; padding:0 8px !important; font-size:10px !important; } }
+/* Full-width overlay header: visually replaces the cramped native presentation without replacing its components. */
+.black-dex-main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  min-height: 56px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  background: rgb(9 9 10 / 98%);
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 28%);
+}
+
+.black-dex-main-header > div:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+}
+
+.black-dex-brand {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  margin-right: 14px;
+  padding-right: 14px;
+  border-right: 1px solid rgb(255 255 255 / 8%);
+  text-decoration: none;
+}
+
+.black-dex-brand img {
+  max-height: 30px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* The Orderly MainNav is rendered inside the existing header after secondary_logo. */
+.black-dex-native-main-nav {
+  display: flex !important;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.black-dex-native-main-nav > nav,
+.black-dex-native-main-nav nav {
+  display: flex !important;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.black-dex-native-main-nav nav::-webkit-scrollbar { display: none; }
+
+.black-dex-native-main-nav nav a,
+.black-dex-native-main-nav nav button {
+  min-height: 36px;
+  padding: 0 12px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: rgb(190 190 196);
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .015em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
+}
+
+.black-dex-native-main-nav nav a:hover,
+.black-dex-native-main-nav nav button:hover {
+  color: rgb(248 248 249);
+  background: rgb(255 255 255 / 5%);
+  border-color: rgb(255 255 255 / 9%);
+}
+
+.black-dex-native-main-nav nav a[aria-current="page"],
+.black-dex-native-main-nav nav a[data-active="true"],
+.black-dex-native-main-nav nav button[aria-current="page"],
+.black-dex-native-main-nav nav button[data-active="true"] {
+  color: rgb(245 214 120);
+  background: rgb(212 175 55 / 11%);
+  border-color: rgb(212 175 55 / 24%);
+  box-shadow: inset 0 -2px 0 rgb(212 175 55 / 90%);
+}
+
+.black-dex-header-actions {
+  flex: 0 0 auto;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.black-dex-header-actions > * { flex: 0 0 auto; }
+
+/* Keep the trading controls compact; these are the actual boolean switches, not action buttons. */
+[role="switch"] {
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 16px !important;
+  min-height: 16px !important;
+  padding: 1px !important;
+  border-radius: 9999px !important;
+}
+
+[role="switch"] > * {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+}
+
+label:has([role="switch"]),
+label:has(+ [role="switch"]) {
+  min-height: 20px;
+  gap: 6px;
+  font-size: 11px;
+}
+
+/* Native order tabs: Positions / Pending / TP/SL / History / Liquidation / Assets. */
+[role="tablist"] {
+  gap: 2px !important;
+  border-bottom-color: rgb(255 255 255 / 7%) !important;
+}
+
+[role="tab"] {
+  min-height: 32px !important;
+  padding: 0 10px !important;
+  border-radius: 5px 5px 0 0 !important;
+  color: rgb(148 148 157) !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
+}
+
+[role="tab"][aria-selected="true"] {
+  color: rgb(245 214 120) !important;
+  background: rgb(212 175 55 / 7%) !important;
+  box-shadow: inset 0 -2px 0 rgb(212 175 55);
+}
+
+[data-testid*="symbol"],
+[data-testid*="orderbook"],
+[data-testid*="create-order"],
+[data-testid*="trading-view"] {
+  border-color: rgb(255 255 255 / 6%);
+}
+
+@media (max-width: 767px) {
+  .black-dex-main-header {
+    min-height: 52px;
+    padding: 0 10px;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 24%);
+  }
+
+  .black-dex-brand {
+    height: 34px;
+    margin-right: 8px;
+    padding-right: 8px;
+  }
+
+  .black-dex-brand img { max-height: 26px; }
+
+  /* Mobile keeps the native LeftNav trigger. The desktop 8-item MainNav stays out of the mobile header. */
+  .black-dex-native-main-nav { display: none !important; }
+  .black-dex-header-actions { margin-left: auto; }
+
+  .black-dex-main-header [aria-label*="menu"],
+  .black-dex-main-header [aria-label*="Menu"] {
+    flex: 0 0 auto;
+  }
+
+  [role="tab"] {
+    min-height: 30px !important;
+    padding: 0 8px !important;
+    font-size: 10px !important;
+  }
+}
