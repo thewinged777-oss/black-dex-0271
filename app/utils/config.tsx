@@ -97,7 +97,6 @@ export const useOrderlyConfig = () => {
     const customMenus = getCustomMenuItems();
     const translatedEnabledMenus = enabledMenus.map((menu) => ({ name: menu.name, href: menu.href, target: menu.target, customRender: menu.customRender }));
     const allMainMenus = [...translatedEnabledMenus, ...customMenus];
-
     const bottomNavMenus = enabledMenus.filter((menu) => ["Trading", "Portfolio", "Markets", "Leaderboard"].includes(menu.id)).map((menu) => ({ name: menu.name, href: menu.href, target: menu.target, ...getBottomNavIcon(menu.id) }));
 
     const mainNavProps: MainNavWidgetProps = { initialMenu: "/", mainMenus: allMainMenus };
@@ -106,24 +105,26 @@ export const useOrderlyConfig = () => {
     }
 
     mainNavProps.customRender = (components) => (
-      <Flex justify="between" className="black-dex-main-header oui-w-full">
+      <Flex justify="between" className="oui-w-full">
         <Flex itemAlign="center" className={cn("oui-gap-3", "oui-overflow-hidden")}>
           {isMobile && <CustomLeftNav menus={translatedEnabledMenus} externalLinks={customMenus} />}
-          <Link to="/" className="black-dex-brand" aria-label="Black DEX home">
-            {getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO") ? <img src={withBasePath("/logo-secondary.webp")} alt="logo" style={{ height: isMobile ? "32px" : "30px", width: "auto" }} /> : components.title}
+          <Link to="/">
+            {isMobile && getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO") ? <img src={withBasePath("/logo-secondary.webp")} alt="logo" style={{ height: "32px" }} /> : components.title}
           </Link>
-          <div className="black-dex-native-main-nav">{components.mainNav}</div>
+          {components.mainNav}
         </Flex>
-        <Flex itemAlign="center" className="oui-gap-2 black-dex-header-actions">
-          {components.accountSummary}{components.linkDevice}{components.scanQRCode}{components.languageSwitcher}{components.subAccount}{components.chainMenu}{components.walletConnect}
+        <Flex itemAlign="center" className="oui-gap-2">
+          {components.accountSummary}
+          {components.linkDevice}
+          {components.scanQRCode}
+          {components.languageSwitcher}
+          {components.subAccount}
+          {components.chainMenu}
+          {components.walletConnect}
         </Flex>
       </Flex>
     );
 
-    return {
-      scaffold: { mainNavProps, bottomNavProps: { mainMenus: bottomNavMenus }, footerProps },
-      orderlyAppProvider: { appIcons },
-      tradingPage: { tradingViewConfig, sharePnLConfig },
-    };
+    return { scaffold: { mainNavProps, bottomNavProps: { mainMenus: bottomNavMenus }, footerProps }, orderlyAppProvider: { appIcons }, tradingPage: { tradingViewConfig, sharePnLConfig } };
   }, [appIcons, footerProps, isMobile, sharePnLConfig, t, tradingViewConfig]);
 };
