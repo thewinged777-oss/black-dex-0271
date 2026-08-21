@@ -1,232 +1,311 @@
-/* Black DEX Premium UX — presentation only. No new functionality. */
+/* Black DEX Premium Terminal
+ * Presentation-only overrides for the existing Orderly components.
+ * No data, order, wallet or authentication behavior is changed here.
+ */
 
-:root {
-  --bd-control-height: 42px;
-  --bd-control-radius: 8px;
-  --bd-panel-radius: 10px;
-  --bd-nav-height: 72px;
+.black-dex-terminal {
+  --bd-panel: rgb(var(--bd-surface));
+  --bd-panel-2: rgb(var(--bd-surface-2));
+  --bd-panel-3: rgb(var(--bd-surface-3));
+  --bd-rule: var(--bd-border);
+  color: rgb(var(--bd-text));
+  background: rgb(var(--bd-bg));
+  font-family: var(--oui-font-family);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Premium control language */
-button,
-a[role="button"],
-select,
-input {
-  transition: background-color .16s ease, border-color .16s ease, color .16s ease, box-shadow .16s ease, transform .16s ease !important;
+.black-dex-terminal *,
+.black-dex-terminal *::before,
+.black-dex-terminal *::after {
+  box-sizing: border-box;
 }
 
-button:not([aria-hidden="true"]),
-a[role="button"] {
-  border-radius: var(--bd-control-radius) !important;
+/* Keep the trading workspace flat and continuous. The SDK owns layout and data. */
+.black-dex-terminal [class*="oui-trading-page"],
+.black-dex-terminal [class*="oui-trading"] {
+  background: rgb(var(--bd-bg)) !important;
+  color: rgb(var(--bd-text));
 }
 
-button[class*="oui-button"],
-[class*="oui-button"] button,
-[class*="oui-button"] {
-  min-height: var(--bd-control-height);
-  border-radius: var(--bd-control-radius) !important;
-  letter-spacing: .005em;
+.black-dex-terminal [class*="oui-order-entry"],
+.black-dex-terminal [class*="oui-orderbook"],
+.black-dex-terminal [class*="oui-order-form"] {
+  background: rgb(var(--bd-panel)) !important;
+  border-color: var(--bd-border) !important;
+  box-shadow: none !important;
 }
 
-button:hover,
-a[role="button"]:hover {
-  border-color: rgba(212,175,55,.30) !important;
+/* Dense but readable trading data. */
+.black-dex-terminal table,
+.black-dex-terminal [class*="orderbook"],
+.black-dex-terminal [class*="orderBook"],
+.black-dex-terminal [class*="position"],
+.black-dex-terminal [class*="orders"] {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-button:focus-visible,
-a[role="button"]:focus-visible,
-input:focus-visible,
-select:focus-visible {
+.black-dex-terminal table thead {
+  color: rgb(var(--bd-text-3));
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.black-dex-terminal table tbody tr {
+  border-color: rgba(255,255,255,.055) !important;
+  transition: background-color var(--bd-fast) ease;
+}
+
+.black-dex-terminal table tbody tr:hover {
+  background: rgba(255,255,255,.022);
+}
+
+/* Orderbook depth should remain subtle: data first, decoration second. */
+.black-dex-terminal [class*="oui-orderbook"] [class*="ask"] {
+  background: linear-gradient(90deg, transparent 0%, rgba(239,68,68,.045) 100%) !important;
+}
+
+.black-dex-terminal [class*="oui-orderbook"] [class*="bid"] {
+  background: linear-gradient(90deg, transparent 0%, rgba(34,197,94,.045) 100%) !important;
+}
+
+.black-dex-terminal [class*="oui-orderbook"] [class*="row"] {
+  min-height: 22px;
+}
+
+/* Controls: one consistent exchange-grade language. */
+.black-dex-terminal button,
+.black-dex-terminal a[role="button"],
+.black-dex-terminal input,
+.black-dex-terminal select,
+.black-dex-terminal textarea {
+  transition: background-color var(--bd-fast) ease, border-color var(--bd-fast) ease, color var(--bd-fast) ease, box-shadow var(--bd-fast) ease;
+}
+
+.black-dex-terminal button,
+.black-dex-terminal a[role="button"] {
+  border-radius: var(--bd-radius) !important;
+}
+
+.black-dex-terminal button:focus-visible,
+.black-dex-terminal a[role="button"]:focus-visible,
+.black-dex-terminal input:focus-visible,
+.black-dex-terminal select:focus-visible,
+.black-dex-terminal textarea:focus-visible {
   outline: none !important;
-  box-shadow: 0 0 0 2px rgba(212,175,55,.12) !important;
+  box-shadow: 0 0 0 2px var(--bd-focus) !important;
 }
 
-/* Inputs: premium recessed controls, without changing their function. */
-input,
-select,
-textarea,
-[class*="oui-input"] {
-  min-height: 40px;
-  background: #0b0b0c !important;
-  border-color: #252529 !important;
-  border-radius: 8px !important;
+.black-dex-terminal input,
+.black-dex-terminal select,
+.black-dex-terminal textarea,
+.black-dex-terminal [class*="oui-input"] {
+  min-height: var(--bd-control-h);
+  background: #0b0b0d !important;
+  border: 1px solid rgba(255,255,255,.09) !important;
+  border-radius: var(--bd-radius) !important;
+  color: rgb(var(--bd-text)) !important;
 }
 
-input:hover,
-select:hover,
-textarea:hover,
-[class*="oui-input"]:hover {
-  border-color: #343438 !important;
+.black-dex-terminal input:hover,
+.black-dex-terminal select:hover,
+.black-dex-terminal textarea:hover,
+.black-dex-terminal [class*="oui-input"]:hover {
+  border-color: var(--bd-border-strong) !important;
 }
 
-/* Tabs and segmented controls */
-[role="tablist"] {
+.black-dex-terminal input::placeholder,
+.black-dex-terminal textarea::placeholder {
+  color: rgb(var(--bd-text-3));
+}
+
+/* Primary execution actions are intentionally stronger than secondary controls. */
+.black-dex-terminal button[class*="oui-bg-primary"],
+.black-dex-terminal button[class*="oui-button-primary"] {
+  min-height: var(--bd-control-h-lg) !important;
+  font-weight: 800;
+  letter-spacing: .015em;
+  box-shadow: 0 6px 20px rgba(212,175,55,.075) !important;
+}
+
+.black-dex-terminal button[class*="oui-bg-primary"]:hover,
+.black-dex-terminal button[class*="oui-button-primary"]:hover {
+  box-shadow: 0 8px 24px rgba(212,175,55,.11) !important;
+}
+
+/* Segmented controls and account tabs. */
+.black-dex-terminal [role="tablist"] {
   gap: 2px !important;
   padding: 3px !important;
-  border: 1px solid #202024 !important;
-  border-radius: 9px !important;
-  background: #0a0a0b !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+  border-radius: 8px !important;
+  background: #09090b !important;
 }
 
-[role="tab"] {
-  min-height: 34px !important;
-  padding: 0 13px !important;
-  border-radius: 6px !important;
+.black-dex-terminal [role="tab"] {
+  min-height: 32px !important;
+  padding: 0 11px !important;
+  border-radius: 5px !important;
+  color: rgb(var(--bd-text-3));
   background: transparent !important;
 }
 
-[role="tab"][aria-selected="true"] {
-  background: #171718 !important;
-  box-shadow: inset 0 0 0 1px rgba(212,175,55,.20), 0 2px 10px rgba(0,0,0,.25) !important;
+.black-dex-terminal [role="tab"]:hover {
+  color: rgb(var(--bd-text-2));
+  background: rgba(255,255,255,.025) !important;
 }
 
-/* Orderly panels: layered surfaces rather than a collection of flat boxes. */
-[class*="oui-order-entry"],
-[class*="oui-orderbook"],
-[class*="oui-order-form"],
-[class*="oui-card"],
-[class*="oui-panel"] {
-  border-color: #202024 !important;
-  border-radius: var(--bd-panel-radius) !important;
+.black-dex-terminal [role="tab"][aria-selected="true"] {
+  color: rgb(var(--bd-gold-bright)) !important;
+  background: rgba(212,175,55,.085) !important;
+  box-shadow: inset 0 0 0 1px rgba(212,175,55,.18) !important;
 }
 
-[class*="oui-order-entry"],
-[class*="oui-orderbook"],
-[class*="oui-order-form"] {
-  background: linear-gradient(180deg, #0c0c0d 0%, #09090a 100%) !important;
+/* Lightweight SDK cards use the same surface hierarchy as the terminal. */
+.black-dex-terminal [class*="oui-card"],
+.black-dex-terminal [class*="oui-panel"] {
+  border-color: rgba(255,255,255,.07) !important;
+  background: rgb(var(--bd-panel)) !important;
 }
 
-/* Market/orderbook typography: make numbers feel like a trading terminal. */
-table,
-[class*="orderbook"],
-[class*="orderBook"] {
-  font-variant-numeric: tabular-nums;
+/* The injected Black DEX header nav is deliberately compact. */
+.black-dex-terminal .black-dex-header-nav {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 10px;
+  overflow: hidden;
 }
 
-thead {
-  letter-spacing: .025em;
-  text-transform: uppercase;
+.black-dex-terminal .black-dex-header-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: rgb(var(--bd-text-3));
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .015em;
+  white-space: nowrap;
+}
+
+.black-dex-terminal .black-dex-header-nav a:hover {
+  color: rgb(var(--bd-text));
+  background: rgba(255,255,255,.035);
+}
+
+.black-dex-terminal .black-dex-header-nav a[data-black-active="true"] {
+  color: rgb(var(--bd-gold-bright));
+  background: rgba(212,175,55,.085);
+  border-color: rgba(212,175,55,.18);
+}
+
+/* Order switches are compact by design, while submit buttons remain large. */
+.black-dex-terminal .black-dex-compact-toggle {
+  min-height: 22px !important;
+  height: 22px !important;
+  padding: 0 6px !important;
+  border-radius: 5px !important;
+  gap: 4px !important;
+  font-size: 9px !important;
+  font-weight: 750 !important;
+  line-height: 1 !important;
+  background: rgba(255,255,255,.025) !important;
+  border: 1px solid rgba(255,255,255,.07) !important;
+  box-shadow: none !important;
+}
+
+.black-dex-terminal .black-dex-compact-toggle-control {
+  transform: scale(.62) !important;
+  transform-origin: center !important;
+}
+
+.black-dex-terminal .black-dex-compact-toggle[data-state="checked"],
+.black-dex-terminal .black-dex-compact-toggle[aria-checked="true"],
+.black-dex-terminal .black-dex-compact-toggle.is-active {
+  color: rgb(var(--bd-gold-bright)) !important;
+  background: rgba(212,175,55,.085) !important;
+  border-color: rgba(212,175,55,.24) !important;
+}
+
+.black-dex-terminal .black-dex-account-tab {
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 0 10px !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: rgb(var(--bd-text-3)) !important;
   font-size: 10px !important;
+  font-weight: 750 !important;
 }
 
-tbody tr {
-  border-color: #17171a !important;
+.black-dex-terminal .black-dex-account-tab[aria-selected="true"],
+.black-dex-terminal .black-dex-account-tab[data-state="active"],
+.black-dex-terminal .black-dex-account-tab[data-active="true"] {
+  color: rgb(var(--bd-gold-bright)) !important;
+  background: rgba(212,175,55,.085) !important;
+  border-color: rgba(212,175,55,.18) !important;
 }
 
-/* Primary execution controls: substantial, clean and deliberate. */
-button[class*="oui-bg-primary"],
-button[class*="oui-button-primary"] {
-  min-height: 44px !important;
-  border-radius: 8px !important;
-  letter-spacing: .02em;
-  box-shadow: 0 8px 24px rgba(212,175,55,.10) !important;
+/* Responsive terminal rails. The SDK still controls actual component layout. */
+@media (min-width: 1280px) {
+  .black-dex-terminal [class*="oui-order-entry"] {
+    min-width: 300px;
+    width: clamp(300px, 23vw, 360px);
+  }
+
+  .black-dex-terminal [class*="oui-orderbook"] {
+    min-width: 250px;
+    width: clamp(250px, 19vw, 310px);
+  }
 }
 
-/* Mobile: turn the existing bottom navigation into a premium floating dock. */
-@media (max-width: 768px) {
-  body { padding-bottom: calc(82px + env(safe-area-inset-bottom)) !important; }
+@media (max-width: 1279px) and (min-width: 768px) {
+  .black-dex-terminal [class*="oui-order-entry"] { min-width: 285px; }
+  .black-dex-terminal [class*="oui-orderbook"] { min-width: 230px; }
+}
 
-  nav[class*="bottom"],
-  nav[class*="Bottom"],
-  [class*="bottom-nav"],
-  [class*="BottomNav"] {
-    position: fixed !important;
-    left: 12px !important;
-    right: 12px !important;
-    bottom: calc(8px + env(safe-area-inset-bottom)) !important;
-    width: auto !important;
-    min-height: 64px !important;
-    height: 64px !important;
-    padding: 5px !important;
-    border: 1px solid #29292d !important;
-    border-radius: 16px !important;
-    background: rgba(10,10,11,.96) !important;
-    box-shadow: 0 18px 50px rgba(0,0,0,.60), 0 0 0 1px rgba(255,255,255,.015) inset !important;
-    backdrop-filter: blur(22px) saturate(120%) !important;
-    z-index: 100 !important;
+@media (max-width: 767px) {
+  .black-dex-terminal [class*="oui-order-entry"] {
+    border-left: 0 !important;
+    border-top: 1px solid rgba(255,255,255,.07) !important;
   }
 
-  nav[class*="bottom"] a,
-  nav[class*="bottom"] button,
-  nav[class*="Bottom"] a,
-  nav[class*="Bottom"] button,
-  [class*="bottom-nav"] a,
-  [class*="bottom-nav"] button,
-  [class*="BottomNav"] a,
-  [class*="BottomNav"] button {
-    min-height: 52px !important;
-    height: 52px !important;
-    margin: 0 !important;
-    border: 1px solid transparent !important;
-    border-radius: 11px !important;
-    background: transparent !important;
-    color: #77777f !important;
-    display: flex !important;
-    flex: 1 1 0 !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-direction: column !important;
-    gap: 3px !important;
-    font-size: 9px !important;
-    font-weight: 800 !important;
-    letter-spacing: .045em !important;
-    text-transform: uppercase !important;
+  .black-dex-terminal [class*="oui-orderbook"] {
+    border-left: 0 !important;
+    border-top: 1px solid rgba(255,255,255,.07) !important;
   }
 
-  nav[class*="bottom"] a:hover,
-  nav[class*="bottom"] button:hover,
-  nav[class*="Bottom"] a:hover,
-  nav[class*="Bottom"] button:hover,
-  [class*="bottom-nav"] a:hover,
-  [class*="bottom-nav"] button:hover {
-    background: #111113 !important;
-    color: #d4d4d8 !important;
-  }
-
-  nav[class*="bottom"] a[aria-current="page"],
-  nav[class*="bottom"] button[aria-current="page"],
-  nav[class*="bottom"] a[data-active="true"],
-  nav[class*="bottom"] button[data-active="true"],
-  nav[class*="Bottom"] a[aria-current="page"],
-  nav[class*="Bottom"] button[aria-current="page"] {
-    color: var(--bd-gold-bright) !important;
-    background: linear-gradient(180deg, rgba(212,175,55,.12), rgba(212,175,55,.035)) !important;
-    border-color: rgba(212,175,55,.17) !important;
-    box-shadow: inset 0 0 0 1px rgba(212,175,55,.035) !important;
-  }
-
-  nav[class*="bottom"] svg,
-  nav[class*="Bottom"] svg,
-  [class*="bottom-nav"] svg,
-  [class*="BottomNav"] svg {
-    width: 19px !important;
-    height: 19px !important;
-    stroke-width: 1.8 !important;
-  }
-
-  /* Keep trading controls comfortably tappable without oversized desktop cards. */
-  [class*="oui-order-entry"],
-  [class*="oui-orderbook"],
-  [class*="oui-order-form"] {
-    border-radius: 10px !important;
-  }
-
-  [class*="oui-order-entry"] button,
-  [class*="oui-order-form"] button {
+  .black-dex-terminal [class*="oui-order-entry"] button,
+  .black-dex-terminal [class*="oui-order-form"] button {
     min-height: 44px !important;
   }
-}
 
-/* Larger screens: disciplined panel rhythm and no excessive rounding. */
-@media (min-width: 769px) {
-  [class*="oui-order-entry"],
-  [class*="oui-orderbook"],
-  [class*="oui-order-form"] {
-    border-radius: 8px !important;
+  .black-dex-terminal [class*="oui-trading-view"],
+  .black-dex-terminal [class*="trading-view"] {
+    min-height: 320px;
   }
 
-  [class*="oui-trading-page"],
-  [class*="oui-trading"] {
-    gap: 0 !important;
+  .black-dex-terminal .black-dex-header-nav {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .black-dex-terminal *,
+  .black-dex-terminal *::before,
+  .black-dex-terminal *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }
