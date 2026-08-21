@@ -1,25 +1,48 @@
 import { FC, useCallback } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Sheet, SheetContent, modal, useModal, VectorIcon } from "@orderly.network/ui";
+import { Link } from "react-router-dom";
+import {
+  Sheet,
+  SheetContent,
+  modal,
+  useModal,
+  VectorIcon,
+} from "@orderly.network/ui";
 import { LeftNavProps, LeftNavItem } from "@orderly.network/ui-scaffold";
 import { ExternalLink } from "lucide-react";
-import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-config";
+import {
+  getRuntimeConfig,
+  getRuntimeConfigBoolean,
+} from "@/utils/runtime-config";
 import { withBasePath } from "@/utils/base-path";
-import "@/styles/navigation.css";
 
 type LeftNavUIProps = LeftNavProps & {
   className?: string;
-  logo?: { src: string; alt: string };
-  externalLinks?: Array<{ name: string; href: string; target?: string }>;
+  logo?: {
+    src: string;
+    alt: string;
+  };
+  externalLinks?: Array<{
+    name: string;
+    href: string;
+    target?: string;
+  }>;
 };
 
 const LeftNavUI: FC<LeftNavUIProps> = (props) => {
-  const showModal = useCallback(() => modal.show(LeftNavSheet, { ...props }), [props]);
+  const showModal = useCallback(() => {
+    modal.show(LeftNavSheet, {
+      ...props,
+    });
+  }, [props]);
+
   return (
     <button
       onClick={showModal}
-      className={`black-dex-menu-trigger ${props?.className || ""}`}
-      aria-label="Open Black DEX navigation"
+      className={props?.className}
+      aria-label="Open navigation menu"
+      style={{
+        zoom: "1.2",
+      }}
     >
       <VectorIcon />
     </button>
@@ -28,54 +51,56 @@ const LeftNavUI: FC<LeftNavUIProps> = (props) => {
 
 const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
   const { visible, hide, onOpenChange } = useModal();
+
   return (
     <Sheet open={visible} onOpenChange={onOpenChange}>
       <SheetContent
         side="left"
-        className="black-dex-nav-sheet oui-w-[320px] oui-bg-base-8 oui-border-r oui-border-line-12"
+        className="oui-w-[276px] oui-bg-base-8"
         closeable
         closeableSize={24}
-        closeOpacity={0.72}
+        closeOpacity={0.54}
       >
-        <div className="black-dex-nav-inner">
-          <div className="black-dex-nav-brand">
-            <Link to="/" onClick={hide} className="black-dex-nav-logo oui-no-underline">
-              {getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO") ? (
-                <img src={withBasePath("/logo.webp")} alt="Black DEX" />
-              ) : (
-                <div>
-                  <strong>BLACK DEX</strong>
-                  <span>.ONLINE</span>
-                </div>
-              )}
-            </Link>
+        <div className="oui-relative oui-flex oui-h-full oui-flex-col oui-gap-3">
+          <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center">
+            {getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO") ? (
+              <img
+                src={withBasePath("/logo.webp")}
+                alt="logo"
+                className="oui-h-[32px]"
+              />
+            ) : (
+              <h1 className="oui-text-base-contrast-80 oui-font-bold">
+                {getRuntimeConfig("VITE_ORDERLY_BROKER_NAME")}
+              </h1>
+            )}
           </div>
 
-          <div className="black-dex-nav-scroll">
+          <div className="oui-flex oui-h-[calc(100vh-120px)] oui-flex-col oui-items-start oui-overflow-y-auto">
             {Array.isArray(props?.menus) && props.menus.length > 0 && (
-              <div className="black-dex-nav-section">
-                <div className="black-dex-nav-label">TRADING</div>
-                <div className="black-dex-nav-menu">
-                  {props.menus.map((item) => (
-                    <NavItem item={item} key={`item-${item.name}`} onLinkClick={hide} />
-                  ))}
-                </div>
-              </div>
+              <>
+                {props.menus?.map((item) => (
+                  <NavItem
+                    item={item}
+                    key={`item-${item.name}`}
+                    onLinkClick={hide}
+                  />
+                ))}
+              </>
             )}
-            {Array.isArray(props?.externalLinks) && props.externalLinks.length > 0 && (
-              <div className="black-dex-nav-section black-dex-nav-external">
-                <div className="black-dex-nav-label">ECOSYSTEM</div>
-                <div className="black-dex-nav-menu">
-                  {props.externalLinks.map((item) => (
-                    <ExternalNavItem item={item} key={`external-${item.name}`} />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
 
-          <div className="black-dex-nav-footer">
-            <span>BLACK DEX</span>
+            {Array.isArray(props?.externalLinks) &&
+              props.externalLinks.length > 0 && (
+                <>
+                  <div className="oui-w-full oui-border-t oui-border-line-12 oui-my-2 oui-bg-base-3"></div>
+                  {props.externalLinks?.map((item) => (
+                    <ExternalNavItem
+                      item={item}
+                      key={`external-${item.name}`}
+                    />
+                  ))}
+                </>
+              )}
           </div>
         </div>
       </SheetContent>
@@ -83,27 +108,36 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
   );
 });
 
-type NavItemProps = { item: LeftNavItem; onLinkClick?: () => void };
+type NavItemProps = {
+  item: LeftNavItem;
+  onLinkClick?: () => void;
+};
+
 const NavItem: FC<NavItemProps> = ({ item, onLinkClick }) => {
   const { href, name, icon, trailing, customRender, target } = item;
-  const content = (
-    <>
-      <div className="black-dex-nav-icon">{icon}</div>
-      <div className="black-dex-nav-name">{name}</div>
-      {trailing}
-    </>
-  );
+
   if (customRender) {
     return (
       <button
         type="button"
         onClick={onLinkClick}
-        className="black-dex-nav-item oui-bg-transparent oui-border-none"
+        className="oui-flex oui-items-center oui-px-3 oui-py-4 oui-w-full hover:oui-bg-base-7 oui-bg-transparent oui-border-none"
       >
         {customRender({ name, href })}
       </button>
     );
   }
+
+  const content = (
+    <>
+      <div>{icon}</div>
+      <div className="oui-text-base oui-font-semibold oui-text-base-contrast-80">
+        {name}
+      </div>
+      {trailing}
+    </>
+  );
+
   if (target) {
     return (
       <a
@@ -111,37 +145,46 @@ const NavItem: FC<NavItemProps> = ({ item, onLinkClick }) => {
         target={target}
         rel={target === "_blank" ? "noopener noreferrer" : undefined}
         onClick={onLinkClick}
-        className="black-dex-nav-item"
+        className="oui-flex oui-items-center oui-px-3 oui-py-4 oui-w-full hover:oui-bg-base-7 oui-no-underline"
       >
         {content}
       </a>
     );
   }
+
   return (
-    <NavLink
+    <Link
       to={href}
       onClick={onLinkClick}
-      className={({ isActive }) => `black-dex-nav-item${isActive ? " is-active" : ""}`}
+      className="oui-flex oui-items-center oui-px-3 oui-py-4 oui-w-full hover:oui-bg-base-7 oui-no-underline"
     >
       {content}
-    </NavLink>
+    </Link>
   );
 };
 
-type ExternalNavItemProps = { item: { name: string; href: string; target?: string } };
-const ExternalNavItem: FC<ExternalNavItemProps> = ({ item }) => (
-  <a
-    href={item.href}
-    target={item.target || "_blank"}
-    rel="noopener noreferrer"
-    className="black-dex-nav-item"
-  >
-    <div className="black-dex-nav-icon">
-      <ExternalLink />
-    </div>
-    <div className="black-dex-nav-name">{item.name}</div>
-    <ExternalLink className="black-dex-nav-external-icon" />
-  </a>
-);
+type ExternalNavItemProps = {
+  item: {
+    name: string;
+    href: string;
+    target?: string;
+  };
+};
+
+const ExternalNavItem: FC<ExternalNavItemProps> = ({ item }) => {
+  return (
+    <a
+      href={item.href}
+      target={item.target || "_blank"}
+      rel="noopener noreferrer"
+      className="oui-flex oui-items-center oui-justify-between oui-px-3 oui-py-4 oui-w-full hover:oui-bg-base-7 oui-no-underline"
+    >
+      <div className="oui-text-base oui-font-semibold oui-text-base-contrast-80">
+        {item.name}
+      </div>
+      <ExternalLink className="oui-w-4 oui-h-4 oui-text-base-contrast-54 oui-flex-shrink-0" />
+    </a>
+  );
+};
 
 export default LeftNavUI;
