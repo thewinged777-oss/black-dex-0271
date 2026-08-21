@@ -1,3 +1,5 @@
+@import "./premium-ux.css";
+
 :root {
   --oui-font-family: 'Manrope', sans-serif;
 
@@ -8,13 +10,9 @@
   --oui-color-primary-contrast: 0 0 0;
   --oui-color-link: 212 175 55;
   --oui-color-link-light: 245 214 120;
-
-  /* Typography hierarchy */
   --oui-color-secondary: 248 248 249;
   --oui-color-tertiary: 190 190 196;
   --oui-color-quaternary: 132 132 141;
-
-  /* Trading states */
   --oui-color-danger: 239 68 68;
   --oui-color-danger-light: 248 113 113;
   --oui-color-danger-darken: 185 28 28;
@@ -27,8 +25,6 @@
   --oui-color-warning-light: 250 204 21;
   --oui-color-warning-darken: 161 98 7;
   --oui-color-warning-contrast: 0 0 0;
-
-  /* Black / graphite surfaces */
   --oui-color-fill: 17 17 19;
   --oui-color-fill-active: 28 28 31;
   --oui-color-base-1: 148 148 157;
@@ -45,14 +41,10 @@
   --oui-color-line: 255 255 255;
   --oui-color-base-static: 255 255 255;
   --oui-color-base-static-contrast: 0 0 0;
-
-  /* Trading */
   --oui-color-trading-loss: 239 68 68;
   --oui-color-trading-loss-contrast: 255 255 255;
   --oui-color-trading-profit: 34 197 94;
   --oui-color-trading-profit-contrast: 255 255 255;
-
-  /* Brand gradients */
   --oui-gradient-primary-start: 161 126 30;
   --oui-gradient-primary-end: 245 214 120;
   --oui-gradient-secondary-start: 39 39 42;
@@ -70,8 +62,6 @@
   --oui-gradient-warning-end: 234 179 55;
   --oui-gradient-neutral-start: 39 39 42;
   --oui-gradient-neutral-end: 15 15 16;
-
-  /* Shape */
   --oui-rounded-sm: 2px;
   --oui-rounded: 4px;
   --oui-rounded-md: 6px;
@@ -79,8 +69,6 @@
   --oui-rounded-xl: 10px;
   --oui-rounded-2xl: 14px;
   --oui-rounded-full: 9999px;
-
-  /* Spacing */
   --oui-spacing-xs: 0.25rem;
   --oui-spacing-sm: 0.5rem;
   --oui-spacing-md: 0.75rem;
