@@ -67,5 +67,5 @@ window.__RUNTIME_CONFIG__ = {
         "--oui-gradient-neutral-end": "10 10 10"
       }
     }
-  ]),
+  ])
 };
