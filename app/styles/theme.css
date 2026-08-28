@@ -1,97 +1,68 @@
 :root {
---oui-font-family: 'Manrope', sans-serif;
-
---oui-color-primary: 212 175 55;
---oui-color-primary-light: 235 202 95;
---oui-color-primary-darken: 158 125 28;
---oui-color-primary-contrast: 0 0 0;
-
---oui-color-link: 212 175 55;
---oui-color-link-light: 235 202 95;
-
---oui-color-secondary: 255 255 255;
---oui-color-tertiary: 190 190 190;
---oui-color-quaternary: 125 125 125;
-
---oui-color-danger: 239 68 68;
---oui-color-danger-light: 248 113 113;
---oui-color-danger-darken: 185 28 28;
---oui-color-danger-contrast: 255 255 255;
-
---oui-color-success: 34 197 94;
---oui-color-success-light: 74 222 128;
---oui-color-success-darken: 21 128 61;
---oui-color-success-contrast: 255 255 255;
-
---oui-color-warning: 212 175 55;
---oui-color-warning-light: 235 202 95;
---oui-color-warning-darken: 158 125 28;
---oui-color-warning-contrast: 0 0 0;
-
---oui-color-fill: 12 12 12;
---oui-color-fill-active: 24 24 24;
-
---oui-color-base-1: 235 235 235;
---oui-color-base-2: 200 200 200;
---oui-color-base-3: 150 150 150;
---oui-color-base-4: 105 105 105;
-
---oui-color-base-5: 42 42 42;
---oui-color-base-6: 30 30 30;
---oui-color-base-7: 22 22 22;
---oui-color-base-8: 15 15 15;
---oui-color-base-9: 0 0 0;
---oui-color-base-10: 10 10 10;
-
---oui-color-base-foreground: 255 255 255;
-
---oui-color-line: 55 55 55;
-
---oui-color-base-static: 255 255 255;
---oui-color-base-static-contrast: 0 0 0;
-
---oui-color-trading-loss: 239 68 68;
---oui-color-trading-loss-contrast: 255 255 255;
-
---oui-color-trading-profit: 34 197 94;
---oui-color-trading-profit-contrast: 255 255 255;
-
---oui-gradient-primary-start: 235 202 95;
---oui-gradient-primary-end: 158 125 28;
-
---oui-gradient-secondary-start: 55 55 55;
---oui-gradient-secondary-end: 120 120 120;
-
---oui-gradient-success-start: 21 128 61;
---oui-gradient-success-end: 34 197 94;
-
---oui-gradient-danger-start: 153 27 27;
---oui-gradient-danger-end: 239 68 68;
-
---oui-gradient-brand-start: 235 202 95;
---oui-gradient-brand-end: 158 125 28;
-
---oui-gradient-brand-stop-start: 6.62%;
---oui-gradient-brand-stop-end: 86.5%;
---oui-gradient-brand-angle: 17.44deg;
-
---oui-gradient-warning-start: 120 85 10;
---oui-gradient-warning-end: 212 175 55;
-
---oui-gradient-neutral-start: 30 30 30;
---oui-gradient-neutral-end: 10 10 10;
-
---oui-rounded-sm: 2px;
---oui-rounded: 4px;
---oui-rounded-md: 6px;
---oui-rounded-lg: 8px;
---oui-rounded-xl: 12px;
---oui-rounded-2xl: 16px;
---oui-rounded-full: 9999px;
-
---oui-spacing-xs: 20rem;
---oui-spacing-sm: 22.5rem;
---oui-spacing-md: 26.25rem;
---oui-spacing-lg: 30rem;
---oui-spacing-xl: 33.75rem;
+  --oui-font-family: 'Manrope', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --oui-color-primary: 225 230 238;
+  --oui-color-primary-light: 255 255 255;
+  --oui-color-primary-darken: 165 172 184;
+  --oui-color-primary-contrast: 10 12 16;
+  --oui-color-link: 220 226 235;
+  --oui-color-link-light: 255 255 255;
+  --oui-color-secondary: 245 247 250;
+  --oui-color-tertiary: 177 184 195;
+  --oui-color-quaternary: 112 120 132;
+  --oui-color-danger: 239 68 68;
+  --oui-color-danger-light: 248 113 113;
+  --oui-color-danger-darken: 185 28 28;
+  --oui-color-danger-contrast: 255 255 255;
+  --oui-color-success: 34 197 94;
+  --oui-color-success-light: 74 222 128;
+  --oui-color-success-darken: 21 128 61;
+  --oui-color-success-contrast: 255 255 255;
+  --oui-color-warning: 234 179 8;
+  --oui-color-warning-light: 250 204 21;
+  --oui-color-warning-darken: 161 98 7;
+  --oui-color-warning-contrast: 10 12 16;
+  --oui-color-fill: 11 13 17;
+  --oui-color-fill-active: 22 25 31;
+  --oui-color-base-1: 244 246 249;
+  --oui-color-base-2: 205 211 220;
+  --oui-color-base-3: 157 165 176;
+  --oui-color-base-4: 112 120 132;
+  --oui-color-base-5: 58 64 73;
+  --oui-color-base-6: 38 43 51;
+  --oui-color-base-7: 27 31 38;
+  --oui-color-base-8: 18 21 26;
+  --oui-color-base-9: 9 11 14;
+  --oui-color-base-10: 13 16 20;
+  --oui-color-base-foreground: 248 250 252;
+  --oui-color-line: 43 48 57;
+  --oui-color-base-static: 255 255 255;
+  --oui-color-base-static-contrast: 9 11 14;
+  --oui-color-trading-loss: 239 68 68;
+  --oui-color-trading-loss-contrast: 255 255 255;
+  --oui-color-trading-profit: 34 197 94;
+  --oui-color-trading-profit-contrast: 255 255 255;
+  --oui-gradient-primary-start: 255 255 255;
+  --oui-gradient-primary-end: 165 172 184;
+  --oui-gradient-secondary-start: 52 58 68;
+  --oui-gradient-secondary-end: 25 29 36;
+  --oui-gradient-success-start: 21 128 61;
+  --oui-gradient-success-end: 34 197 94;
+  --oui-gradient-danger-start: 153 27 27;
+  --oui-gradient-danger-end: 239 68 68;
+  --oui-gradient-brand-start: 245 247 250;
+  --oui-gradient-brand-end: 112 120 132;
+  --oui-gradient-brand-stop-start: 0%;
+  --oui-gradient-brand-stop-end: 100%;
+  --oui-gradient-brand-angle: 135deg;
+  --oui-gradient-warning-start: 161 98 7;
+  --oui-gradient-warning-end: 234 179 8;
+  --oui-gradient-neutral-start: 43 48 57;
+  --oui-gradient-neutral-end: 13 16 20;
+  --oui-rounded-sm: 2px;
+  --oui-rounded: 3px;
+  --oui-rounded-md: 5px;
+  --oui-rounded-lg: 7px;
+  --oui-rounded-xl: 9px;
+  --oui-rounded-2xl: 12px;
+  --oui-rounded-full: 9999px;
 }
