@@ -1,0 +1,9 @@
+html,body,#root{min-height:100%;background:rgb(9 11 14)}
+body{color:rgb(244 246 249);font-feature-settings:"cv02","cv03","cv04","cv11";letter-spacing:-.01em}
+.oui-box{border-color:rgb(43 48 57 / .9)}
+button,a,input,select{font-family:inherit}
+input,select{background-color:rgb(18 21 26);border-color:rgb(43 48 57)}
+button{transition:background-color 120ms ease,border-color 120ms ease,opacity 120ms ease}
+button:hover{opacity:.94}
+.oui-scaffold-main{background:rgb(9 11 14)}
+@media (min-width:768px){body{overflow-x:hidden}}
