@@ -1,12 +1,11 @@
 @import "@orderly.network/ui/dist/styles.css";
 @import "../styles/theme.css";
 @import "../styles/fonts.css";
+@import "../styles/exchange.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "../styles/exchange.css";
 
 /* hide trading rewards on mobile */
 .oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
