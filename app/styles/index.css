@@ -6,8 +6,37 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  background: #0b0e11;
+  color: #eaecef;
+  font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif;
+}
+
 /* hide trading rewards on mobile */
 .oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
   display: none;
 }
 
+/* Exchange-grade chrome: tighter panels, landing line color */
+.oui-card,
+.oui-dialog-content,
+.oui-sheet-content {
+  border-color: #2b3139;
+}
+
+.bd-navbar {
+  background: rgba(11, 14, 17, 0.92);
+  border-bottom: 1px solid #2b3139;
+  backdrop-filter: blur(16px);
+}
+
+.bd-footer {
+  background: #0b0e11;
+  border-top: 1px solid #2b3139;
+}
+
+.bd-root {
+  background: #0b0e11;
+}
