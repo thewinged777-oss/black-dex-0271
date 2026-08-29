@@ -9,7 +9,7 @@ import {
 } from "@orderly.network/ui";
 import { LeftNavProps, LeftNavItem } from "@orderly.network/ui-scaffold";
 import { ExternalLink } from "lucide-react";
-import { ThemeLogo } from "@/components/ThemeLogo";
+import { BrandMark } from "@/components/ThemeLogo";
 
 type LeftNavUIProps = LeftNavProps & {
   className?: string;
@@ -59,7 +59,7 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
       >
         <div className="oui-relative oui-flex oui-h-full oui-flex-col oui-gap-3">
           <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center">
-            <ThemeLogo className="bd-brand-title" />
+            <BrandMark />
           </div>
 
           <div className="oui-flex oui-h-[calc(100vh-120px)] oui-flex-col oui-items-start oui-overflow-y-auto">
