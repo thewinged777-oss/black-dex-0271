@@ -1,7 +1,6 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  answerDeskQuery,
   briefIdea,
   CarryIdea,
   formatPct,
@@ -12,30 +11,22 @@ import {
   sideLabel,
 } from "@/utils/funding-desk";
 
-type ChatTurn = { role: "user" | "desk"; text: string };
+type PageTab = "overview" | "comparison" | "desk";
+type Filter = "harvest" | "all" | "long" | "short";
+type SortKey = "name" | "est" | "ann" | "basis" | "volume" | "grade";
 
-const STARTERS = [
-  "Which names clear the carry screen?",
-  "Explain funding like a market maker",
-  "How do unlocks change funding?",
-  "What is wrong with farming meme funding?",
-  "ORDER tokenomics vs funding",
-];
+const GRADE_RANK: Record<string, number> = { A: 4, B: 3, C: 2, D: 1 };
 
 export default function FundingDesk() {
   const navigate = useNavigate();
   const [ideas, setIdeas] = useState<CarryIdea[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"harvest" | "all" | "long" | "short">("harvest");
+  const [page, setPage] = useState<PageTab>("desk");
+  const [filter, setFilter] = useState<Filter>("harvest");
   const [selected, setSelected] = useState<string | null>(null);
-  const [chat, setChat] = useState<ChatTurn[]>([
-    {
-      role: "desk",
-      text: "Funding Desk online. I read live Orderly mark, index, OI, 24h notional and estimated funding, then score carry the way a market-maker would — persistence, book depth, basis, sleeve tokenomics. I will not help lean on a book or force a print. Ask a ticker or ask for the screen.",
-    },
-  ]);
+  const [sortKey, setSortKey] = useState<SortKey>("grade");
+  const [sortDir, setSortDir] = useState<1 | -1>(-1);
 
   useEffect(() => {
     let live = true;
@@ -64,12 +55,45 @@ export default function FundingDesk() {
     };
   }, []);
 
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((dir) => (dir === 1 ? -1 : 1));
+      return;
+    }
+    setSortKey(key);
+    setSortDir(key === "name" ? 1 : -1);
+  };
+
+  const sortMark = (key: SortKey) => {
+    if (sortKey !== key) return "";
+    return sortDir === 1 ? " ↑" : " ↓";
+  };
+
+  const sorted = useMemo(() => {
+    const copy = [...ideas];
+    copy.sort((a, b) => {
+      let cmp = 0;
+      if (sortKey === "name") cmp = a.ticker.localeCompare(b.ticker);
+      if (sortKey === "est") cmp = a.est - b.est;
+      if (sortKey === "ann") cmp = a.annualized - b.annualized;
+      if (sortKey === "basis") cmp = a.basisBps - b.basisBps;
+      if (sortKey === "volume") cmp = a.volumeUsd - b.volumeUsd;
+      if (sortKey === "grade") {
+        cmp =
+          (GRADE_RANK[a.grade] || 0) - (GRADE_RANK[b.grade] || 0) ||
+          a.score - b.score;
+      }
+      return cmp * sortDir;
+    });
+    return copy;
+  }, [ideas, sortDir, sortKey]);
+
   const visible = useMemo(() => {
-    if (filter === "all") return ideas;
-    if (filter === "long") return ideas.filter((i) => i.side === "LONG_PERP");
-    if (filter === "short") return ideas.filter((i) => i.side === "SHORT_PERP");
-    return ideas.filter((i) => i.side !== "PASS");
-  }, [filter, ideas]);
+    if (filter === "all") return sorted;
+    if (filter === "long") return sorted.filter((i) => i.side === "LONG_PERP");
+    if (filter === "short") return sorted.filter((i) => i.side === "SHORT_PERP");
+    return sorted.filter((i) => i.side !== "PASS");
+  }, [filter, sorted]);
 
   const active = ideas.find((i) => i.symbol === selected) || visible[0] || ideas[0];
   const harvestCount = ideas.filter((i) => i.side !== "PASS").length;
@@ -79,21 +103,80 @@ export default function FundingDesk() {
     return vals[Math.floor(vals.length / 2)] || 0;
   }, [ideas]);
 
-  const ask = (text: string) => {
-    const clean = text.trim();
-    if (!clean) return;
-    setChat((prev) => [
-      ...prev,
-      { role: "user", text: clean },
-      { role: "desk", text: answerDeskQuery(clean, ideas) },
-    ]);
-    setQuery("");
-  };
+  const renderRows = (rows: CarryIdea[]) => (
+    <tbody>
+      {loading && !ideas.length ? (
+        <tr>
+          <td colSpan={6}>Loading Orderly futures…</td>
+        </tr>
+      ) : null}
+      {rows.slice(0, 80).map((idea) => (
+        <tr
+          key={idea.symbol}
+          className={active?.symbol === idea.symbol ? "is-on" : ""}
+          onClick={() => setSelected(idea.symbol)}
+        >
+          <td>
+            <strong>{idea.ticker}</strong>
+            <em>{idea.profile.sleeve}</em>
+          </td>
+          <td className={idea.est >= 0 ? "up" : "dn"}>
+            {formatRate(idea.est)}
+            <em>{formatRate(idea.last)}</em>
+          </td>
+          <td className={idea.annualized >= 0 ? "up" : "dn"}>
+            {formatPct(idea.annualized)}
+          </td>
+          <td>{idea.basisBps.toFixed(1)} bp</td>
+          <td>
+            {formatUsd(idea.volumeUsd)}
+            <em>{formatUsd(idea.oiUsd)}</em>
+          </td>
+          <td>
+            <span className={`bd-grade g-${idea.grade}`}>{idea.grade}</span>
+            <em>{sideLabel(idea.side)}</em>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  );
 
-  const onSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    ask(query);
-  };
+  const head = (
+    <thead>
+      <tr>
+        <th>
+          <button type="button" onClick={() => toggleSort("name")}>
+            Name{sortMark("name")}
+          </button>
+        </th>
+        <th>
+          <button type="button" onClick={() => toggleSort("est")}>
+            Est / last{sortMark("est")}
+          </button>
+        </th>
+        <th>
+          <button type="button" onClick={() => toggleSort("ann")}>
+            Ann.{sortMark("ann")}
+          </button>
+        </th>
+        <th>
+          <button type="button" onClick={() => toggleSort("basis")}>
+            Basis{sortMark("basis")}
+          </button>
+        </th>
+        <th>
+          <button type="button" onClick={() => toggleSort("volume")}>
+            24h / OI{sortMark("volume")}
+          </button>
+        </th>
+        <th>
+          <button type="button" onClick={() => toggleSort("grade")}>
+            Grade{sortMark("grade")}
+          </button>
+        </th>
+      </tr>
+    </thead>
+  );
 
   return (
     <div className="bd-desk">
@@ -103,9 +186,26 @@ export default function FundingDesk() {
           <h1>Funding Desk</h1>
           <p className="bd-desk-lead">
             Professional carry screen for Black DEX perps. Rates are a crowding tax,
-            not a free yield. The advisor speaks market-making and tokenomics — it
-            does not execute and it does not help anyone force a book.
+            not a free yield. No execution from this page — Trade opens the existing ticket.
           </p>
+          <div className="bd-desk-page-tabs">
+            {(
+              [
+                ["overview", "Overview"],
+                ["comparison", "Comparison"],
+                ["desk", "Desk"],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                className={page === id ? "is-on" : ""}
+                onClick={() => setPage(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="bd-desk-stats">
           <div>
@@ -125,159 +225,118 @@ export default function FundingDesk() {
 
       {error ? <div className="bd-desk-error">{error}</div> : null}
 
-      <div className="bd-desk-grid">
+      {page === "overview" ? (
         <section className="bd-desk-panel">
           <div className="bd-desk-toolbar">
-            <div className="bd-desk-tabs">
-              {(
-                [
-                  ["harvest", "Screen"],
-                  ["short", "Receive short"],
-                  ["long", "Receive long"],
-                  ["all", "All names"],
-                ] as const
-              ).map(([id, label]) => (
-                <button
-                  key={id}
-                  className={filter === id ? "is-on" : ""}
-                  onClick={() => setFilter(id)}
-                  type="button"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+            <p className="bd-desk-hint">Orderly funding overview across the live book.</p>
             <span className="bd-desk-hint">Refreshes from api.orderly.org every 45s</span>
           </div>
-
           <div className="bd-desk-table-wrap">
             <table className="bd-desk-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Est / last</th>
-                  <th>Ann.</th>
-                  <th>Basis</th>
-                  <th>24h / OI</th>
-                  <th>Grade</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading && !ideas.length ? (
-                  <tr>
-                    <td colSpan={6}>Loading Orderly futures…</td>
-                  </tr>
-                ) : null}
-                {visible.slice(0, 40).map((idea) => (
-                  <tr
-                    key={idea.symbol}
-                    className={active?.symbol === idea.symbol ? "is-on" : ""}
-                    onClick={() => {
-                      setSelected(idea.symbol);
-                      ask(idea.ticker);
-                    }}
-                  >
-                    <td>
-                      <strong>{idea.ticker}</strong>
-                      <em>{idea.profile.sleeve}</em>
-                    </td>
-                    <td className={idea.est >= 0 ? "up" : "dn"}>
-                      {formatRate(idea.est)}
-                      <em>{formatRate(idea.last)}</em>
-                    </td>
-                    <td className={idea.annualized >= 0 ? "up" : "dn"}>
-                      {formatPct(idea.annualized)}
-                    </td>
-                    <td>{idea.basisBps.toFixed(1)} bp</td>
-                    <td>
-                      {formatUsd(idea.volumeUsd)}
-                      <em>{formatUsd(idea.oiUsd)}</em>
-                    </td>
-                    <td>
-                      <span className={`bd-grade g-${idea.grade}`}>{idea.grade}</span>
-                      <em>{sideLabel(idea.side)}</em>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              {head}
+              {renderRows(sorted)}
             </table>
           </div>
         </section>
+      ) : null}
 
-        <aside className="bd-desk-side">
-          {active ? (
-            <article className="bd-desk-card">
-              <div className="bd-desk-card-top">
-                <div>
-                  <h2>{active.ticker}</h2>
-                  <p>{active.symbol}</p>
-                </div>
-                <button
-                  type="button"
-                  className="bd-desk-trade"
-                  onClick={() => navigate(`/perp/${active.symbol}`)}
-                >
-                  Trade
-                </button>
-              </div>
-              <dl>
-                <div>
-                  <dt>Receive</dt>
-                  <dd>{sideLabel(active.side)}</dd>
-                </div>
-                <div>
-                  <dt>Annualized</dt>
-                  <dd className={active.annualized >= 0 ? "up" : "dn"}>
-                    {formatPct(active.annualized)}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Interval</dt>
-                  <dd>{active.intervalHours}h</dd>
-                </div>
-                <div>
-                  <dt>Persist</dt>
-                  <dd>{active.persist ? "Yes" : "No"}</dd>
-                </div>
-              </dl>
-              <p>{briefIdea(active)}</p>
-              <ul>
-                {active.reasons.map((reason) => (
-                  <li key={reason}>{reason}</li>
+      {page === "comparison" ? (
+        <section className="bd-desk-panel">
+          <div className="bd-desk-toolbar">
+            <p className="bd-desk-hint">
+              Compare estimated vs last print and mark/index basis on the same book.
+            </p>
+            <span className="bd-desk-hint">Sorted by the column you press</span>
+          </div>
+          <div className="bd-desk-table-wrap">
+            <table className="bd-desk-table">
+              {head}
+              {renderRows([...sorted].sort((a, b) => Math.abs(b.basisBps) - Math.abs(a.basisBps)))}
+            </table>
+          </div>
+        </section>
+      ) : null}
+
+      {page === "desk" ? (
+        <div className="bd-desk-grid">
+          <section className="bd-desk-panel">
+            <div className="bd-desk-toolbar">
+              <div className="bd-desk-tabs">
+                {(
+                  [
+                    ["harvest", "Screen"],
+                    ["short", "Receive short"],
+                    ["long", "Receive long"],
+                    ["all", "All names"],
+                  ] as const
+                ).map(([id, label]) => (
+                  <button
+                    key={id}
+                    className={filter === id ? "is-on" : ""}
+                    onClick={() => setFilter(id)}
+                    type="button"
+                  >
+                    {label}
+                  </button>
                 ))}
-              </ul>
-            </article>
-          ) : null}
+              </div>
+              <span className="bd-desk-hint">Refreshes from api.orderly.org every 45s</span>
+            </div>
+            <div className="bd-desk-table-wrap">
+              <table className="bd-desk-table">
+                {head}
+                {renderRows(visible)}
+              </table>
+            </div>
+          </section>
 
-          <article className="bd-desk-chat">
-            <h3>Advisor</h3>
-            <div className="bd-desk-log">
-              {chat.map((turn, index) => (
-                <p key={`${turn.role}-${index}`} className={turn.role}>
-                  <span>{turn.role === "desk" ? "Desk" : "You"}</span>
-                  {turn.text}
-                </p>
-              ))}
-            </div>
-            <div className="bd-desk-starters">
-              {STARTERS.map((item) => (
-                <button key={item} type="button" onClick={() => ask(item)}>
-                  {item}
-                </button>
-              ))}
-            </div>
-            <form onSubmit={onSubmit}>
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Ask ORDER, funding, inventory, unlocks…"
-                aria-label="Ask the funding desk"
-              />
-              <button type="submit">Ask</button>
-            </form>
-          </article>
-        </aside>
-      </div>
+          <aside className="bd-desk-side">
+            {active ? (
+              <article className="bd-desk-card">
+                <div className="bd-desk-card-top">
+                  <div>
+                    <h2>{active.ticker}</h2>
+                    <p>{active.symbol}</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="bd-desk-trade"
+                    onClick={() => navigate(`/perp/${active.symbol}`)}
+                  >
+                    Trade
+                  </button>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Receive</dt>
+                    <dd>{sideLabel(active.side)}</dd>
+                  </div>
+                  <div>
+                    <dt>Annualized</dt>
+                    <dd className={active.annualized >= 0 ? "up" : "dn"}>
+                      {formatPct(active.annualized)}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Interval</dt>
+                    <dd>{active.intervalHours}h</dd>
+                  </div>
+                  <div>
+                    <dt>Persist</dt>
+                    <dd>{active.persist ? "Yes" : "No"}</dd>
+                  </div>
+                </dl>
+                <p>{briefIdea(active)}</p>
+                <ul>
+                  {active.reasons.map((reason) => (
+                    <li key={reason}>{reason}</li>
+                  ))}
+                </ul>
+              </article>
+            ) : null}
+          </aside>
+        </div>
+      ) : null}
     </div>
   );
 }
