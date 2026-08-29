@@ -134,6 +134,17 @@ export function SettingsIcon({ active, size, ...rest }: IconProps) {
   );
 }
 
+export function DeskIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <circle cx="12" cy="12" r="7.2" stroke={c} strokeWidth="1.6" />
+      <path d="M12 7.6v4.2l2.6 1.6" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+      <path d="M5 19.2h14" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+    </Base>
+  );
+}
+
 export function TradeActiveIcon(props: IconProps) {
   return <TradeIcon active {...props} />;
 }
