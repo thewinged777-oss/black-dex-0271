@@ -49,6 +49,45 @@ header img[alt="logo"] {
   object-fit: contain;
 }
 
+/*
+  Desk destinations: Trade, Portfolio, Markets, Leaderboard.
+  Segmented CEX chrome. Theme tokens unchanged.
+*/
+.bd-navbar a,
+.bd-navbar button,
+.bd-navbar [role="menuitem"],
+.bd-navbar [class*="mainNav"] a,
+.bd-navbar [class*="MainNav"] a {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bd-navbar a:hover,
+.bd-navbar [role="menuitem"]:hover,
+.bd-navbar [class*="mainNav"] a:hover {
+  color: #f0d78c !important;
+}
+
+.bd-navbar a[aria-current="page"],
+.bd-navbar a[data-active="true"],
+.bd-navbar [aria-current="page"],
+.bd-navbar [data-state="active"] {
+  color: #f0d78c !important;
+}
+
+.bd-navbar a[aria-current="page"]::after,
+.bd-navbar [data-state="active"]::after {
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, #f0d78c, #d4af37);
+  border-radius: 2px;
+}
+
 /* Compact the generic "No results found" void under Positions */
 .oui-empty {
   min-height: 132px !important;
@@ -66,6 +105,16 @@ header img[alt="logo"] {
   background: rgba(11, 14, 17, 0.96) !important;
   border-top: 1px solid #2b3139 !important;
   backdrop-filter: blur(18px);
+}
+
+.oui-bottom-nav a,
+.oui-bottom-nav button,
+[class*="oui-bottom-nav"] a,
+[class*="oui-bottomNav"] a {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 /*
