@@ -4,14 +4,6 @@ import { useTranslation } from "@orderly.network/i18n";
 import { AppLogos } from "@orderly.network/react-app";
 import { TradingPageProps } from "@orderly.network/trading";
 import {
-  PortfolioActiveIcon,
-  PortfolioInactiveIcon,
-  TradingActiveIcon,
-  TradingInactiveIcon,
-  LeaderboardActiveIcon,
-  LeaderboardInactiveIcon,
-  MarketsActiveIcon,
-  MarketsInactiveIcon,
   useScreen,
   Flex,
   cn,
@@ -25,6 +17,20 @@ import {
 import { CampaignsNavTitle } from "@/components/CampaignsNavTitle";
 import CustomLeftNav from "@/components/CustomLeftNav";
 import { OrderlyActiveIcon, OrderlyIcon } from "../components/icons/orderly";
+import {
+  TradeActiveIcon,
+  TradeInactiveIcon,
+  MarketsActiveIcon,
+  MarketsInactiveIcon,
+  PortfolioActiveIcon,
+  PortfolioInactiveIcon,
+  LeaderboardActiveIcon,
+  LeaderboardInactiveIcon,
+  TradeIcon,
+  MarketsIcon,
+  PortfolioIcon,
+  LeaderboardIcon,
+} from "../components/icons/desk";
 import { withBasePath } from "./base-path";
 import {
   getRuntimeConfig,
@@ -172,12 +178,27 @@ const getPnLBackgroundImages = (): string[] => {
   ];
 };
 
+const deskMark = (menuId: string) => {
+  switch (menuId) {
+    case "Trading":
+      return <TradeIcon size={14} />;
+    case "Markets":
+      return <MarketsIcon size={14} />;
+    case "Portfolio":
+      return <PortfolioIcon size={14} />;
+    case "Leaderboard":
+      return <LeaderboardIcon size={14} />;
+    default:
+      return null;
+  }
+};
+
 const getBottomNavIcon = (menuId: string) => {
   switch (menuId) {
     case "Trading":
       return {
-        activeIcon: <TradingActiveIcon />,
-        inactiveIcon: <TradingInactiveIcon />,
+        activeIcon: <TradeActiveIcon />,
+        inactiveIcon: <TradeInactiveIcon />,
       };
     case "Portfolio":
       return {
@@ -211,7 +232,7 @@ export const useOrderlyConfig = () => {
       twitterUrl: getRuntimeConfig("VITE_TWITTER_URL") || undefined,
       trailing: (
         <span className="oui-text-2xs oui-text-base-contrast-54">
-          Black DEX · non-custodial · Orderly matching ·{" "}
+          Charts powered by{" "}
           <a
             href="https://tradingview.com"
             target="_blank"
@@ -269,18 +290,41 @@ export const useOrderlyConfig = () => {
 
   return useMemo<OrderlyConfig>(() => {
     const allMenuItems: MenuConfigItem[] = [
-      { id: "Trading", href: "/", name: t("common.trading"), isDefault: true },
+      {
+        id: "Trading",
+        href: "/",
+        name: t("common.trading"),
+        isDefault: true,
+        customRender: () => (
+          <Flex itemAlign="center" className="oui-gap-1.5">
+            {deskMark("Trading")}
+            <span>{t("common.trading")}</span>
+          </Flex>
+        ),
+      },
       {
         id: "Portfolio",
         href: "/portfolio",
         name: t("common.portfolio"),
         isDefault: true,
+        customRender: () => (
+          <Flex itemAlign="center" className="oui-gap-1.5">
+            {deskMark("Portfolio")}
+            <span>{t("common.portfolio")}</span>
+          </Flex>
+        ),
       },
       {
         id: "Markets",
         href: "/markets",
         name: t("common.markets"),
         isDefault: true,
+        customRender: () => (
+          <Flex itemAlign="center" className="oui-gap-1.5">
+            {deskMark("Markets")}
+            <span>{t("common.markets")}</span>
+          </Flex>
+        ),
       },
       { id: "Swap", href: "/swap", name: t("extend.swap"), isDefault: true },
       {
@@ -288,6 +332,12 @@ export const useOrderlyConfig = () => {
         href: "/leaderboard",
         name: t("extend.tradingLeaderboard.leaderboard"),
         isDefault: true,
+        customRender: () => (
+          <Flex itemAlign="center" className="oui-gap-1.5">
+            {deskMark("Leaderboard")}
+            <span>{t("extend.tradingLeaderboard.leaderboard")}</span>
+          </Flex>
+        ),
       },
       {
         id: "Campaigns",
@@ -398,6 +448,8 @@ export const useOrderlyConfig = () => {
 
           <Flex itemAlign={"center"} className="oui-gap-2">
             {components.accountSummary}
+            {components.linkDevice}
+            {components.scanQRCode}
             {components.languageSwitcher}
             {components.subAccount}
             {components.chainMenu}
