@@ -15,7 +15,7 @@ body,
 }
 
 /* hide trading rewards on mobile */
-.oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
+.oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
   display: none;
 }
 
@@ -39,7 +39,6 @@ body,
 
 .bd-root {
   background: #0b0e11;
-  min-height: 100dvh;
 }
 
 .bd-navbar img,
@@ -48,82 +47,13 @@ header img[alt="logo"] {
   object-fit: contain;
 }
 
-.bd-navbar a,
-.bd-navbar button,
-.bd-navbar [role="menuitem"],
-.bd-navbar [class*="mainNav"] a,
-.bd-navbar [class*="MainNav"] a {
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.bd-navbar a:hover,
-.bd-navbar [role="menuitem"]:hover,
-.bd-navbar [class*="mainNav"] a:hover {
-  color: #f0d78c !important;
-}
-
-.bd-navbar a[aria-current="page"],
-.bd-navbar a[data-active="true"],
-.bd-navbar [aria-current="page"],
-.bd-navbar [data-state="active"] {
-  color: #f0d78c !important;
-}
-
-.bd-navbar a[aria-current="page"]::after,
-.bd-navbar [data-state="active"]::after {
-  content: "";
-  display: block;
-  height: 2px;
-  margin-top: 6px;
-  background: linear-gradient(90deg, #f0d78c, #d4af37);
-  border-radius: 2px;
-}
-
-/* Venue empty states — hide SDK cartoon + generic copy */
 .oui-empty {
-  position: relative;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 120px !important;
-  padding: 24px 16px !important;
+  min-height: 132px !important;
+  padding: 20px 12px !important;
 }
 
-.oui-empty svg,
-.oui-empty img {
-  display: none !important;
-}
-
-.oui-empty > * {
-  font-size: 0 !important;
-  line-height: 0 !important;
-  color: transparent !important;
-}
-
-.oui-empty::after {
-  content: "No open positions. Connect a wallet and size a market.";
-  max-width: 280px;
-  color: #848e9c;
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.55;
-  text-align: center;
-}
-
-[class*="order"] .oui-empty::after,
-[class*="Order"] .oui-empty::after {
-  content: "No open orders on this symbol.";
-}
-
-[class*="market"] .oui-empty::after,
-.oui-markets .oui-empty::after {
-  content: "No markets match.";
+.oui-empty svg {
+  opacity: 0.42;
 }
 
 .oui-bottom-nav,
@@ -134,72 +64,16 @@ header img[alt="logo"] {
   backdrop-filter: blur(18px);
 }
 
-.oui-bottom-nav a,
-.oui-bottom-nav button,
-[class*="oui-bottom-nav"] a,
-[class*="oui-bottomNav"] a {
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.bd-root {
+  min-height: 100dvh;
 }
 
 .bd-root > div {
   min-height: 100%;
 }
 
-.oui-trading-page,
-[class*="oui-tradingPage"] {
-  min-height: calc(100dvh - 104px);
-}
-
-.oui-trading-page [class*="markets"],
-.oui-markets,
-.oui-markets-page,
-[class*="oui-markets"] {
-  font-variant-numeric: tabular-nums;
-}
-
-.oui-markets table td,
-.oui-markets-page table td,
-[class*="oui-markets"] td {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  font-variant-numeric: tabular-nums;
-}
-
-.oui-orderbook table td,
-.oui-order-book table td,
-[class*="oui-orderbook"] td {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  font-variant-numeric: tabular-nums;
-}
-
-.oui-trading-page [class*="orderEntry"],
-[class*="oui-orderEntry"] {
-  min-width: 280px;
-}
-
-.oui-trading-page [class*="dataList"],
-[class*="oui-dataList"] {
-  min-height: 168px;
-}
-
 @media (min-width: 1024px) {
   .oui-empty {
-    min-height: 148px !important;
-  }
-
-  .oui-trading-page,
-  [class*="oui-tradingPage"] {
-    min-height: calc(100dvh - 96px);
-  }
-}
-
-@media (max-width: 767px) {
-  .oui-trading-page,
-  [class*="oui-tradingPage"] {
-    min-height: calc(100dvh - 132px);
+    min-height: 168px !important;
   }
 }
