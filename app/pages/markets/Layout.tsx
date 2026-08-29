@@ -14,6 +14,11 @@ export default function MarketsLayout() {
         initialMenu: "/markets",
       }}
       footerProps={config.scaffold.footerProps}
+      classNames={{
+        root: "bd-root",
+        topNavbar: "bd-navbar",
+        footer: "bd-footer",
+      }}
       routerAdapter={{
         onRouteChange,
       }}
@@ -23,4 +28,3 @@ export default function MarketsLayout() {
     </Scaffold>
   );
 }
-
