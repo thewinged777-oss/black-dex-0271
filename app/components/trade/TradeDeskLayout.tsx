@@ -5,9 +5,9 @@ function text(el: Element | null) {
 }
 
 function leaf(label: RegExp) {
-  return Array.from(document.querySelectorAll("div,span,p,button,h2,h3")).find((node) => {
+  return Array.from(document.querySelectorAll("div,span,p,button,h2,h3,label")).find((node) => {
     const value = text(node);
-    return label.test(value) && value.length < 40;
+    return label.test(value) && value.length < 48;
   }) as HTMLElement | undefined;
 }
 
@@ -43,7 +43,55 @@ function findBook() {
   return pane(leaf(/est\.?\s*funding rate/i) || leaf(/^mid$/i) || leaf(/^bbo$/i), 10);
 }
 
+function hideAdvancedToggles() {
+  const labels = Array.from(document.querySelectorAll("label, span, div"));
+  labels.forEach((node) => {
+    const value = text(node);
+    if (!/^(post only|ioc|fok|order confirm|hidden)$/i.test(value)) return;
+    const row = (node.closest("label") || node.parentElement) as HTMLElement | null;
+    if (row) row.classList.add("bd-ticket-advanced");
+  });
+}
+
+function colorSides() {
+  document.querySelectorAll("button").forEach((btn) => {
+    const value = text(btn);
+    if (/^buy$/i.test(value) || /buy\s*\/?\s*long/i.test(value)) {
+      btn.classList.add("bd-side-buy");
+    }
+    if (/^sell$/i.test(value) || /sell\s*\/?\s*short/i.test(value)) {
+      btn.classList.add("bd-side-sell");
+    }
+  });
+}
+
+function flattenEmptyPositions() {
+  const empty = Array.from(document.querySelectorAll("div")).find((node) =>
+    /no results found/i.test(text(node)) && text(node).length < 48,
+  ) as HTMLElement | undefined;
+  if (!empty || empty.dataset.bdEmpty === "1") return;
+
+  const symbol =
+    text(document.querySelector("[class*='symbol']")) ||
+    text(leaf(/^ETH$/) || null) ||
+    "ETH";
+  const pair = /PERP_/i.test(window.location.pathname)
+    ? window.location.pathname.split("/").pop()?.replace(/^PERP_/, "").replace(/_/g, "-") || "ETH-USDC"
+    : `${symbol}-USDC`;
+
+  const box = pane(empty, 6);
+  if (!box) return;
+  box.dataset.bdEmpty = "1";
+  box.classList.add("bd-pos-empty");
+  box.querySelectorAll("svg, img").forEach((node) => node.remove());
+  empty.textContent = `No open position · ${pair}`;
+}
+
 function layoutTradeDesk() {
+  hideAdvancedToggles();
+  colorSides();
+  flattenEmptyPositions();
+
   if (window.innerWidth < 720) return;
 
   const chart = findChart();
