@@ -15,11 +15,10 @@ body,
 }
 
 /* hide trading rewards on mobile */
-.oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
+.oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
   display: none;
 }
 
-/* Exchange-grade chrome: tighter panels, landing line color */
 .oui-card,
 .oui-dialog-content,
 .oui-sheet-content {
@@ -40,19 +39,15 @@ body,
 
 .bd-root {
   background: #0b0e11;
+  min-height: 100dvh;
 }
 
-/* Official shield: contain, never crop like an avatar */
 .bd-navbar img,
 .oui-left-nav img,
 header img[alt="logo"] {
   object-fit: contain;
 }
 
-/*
-  Desk destinations: Trade, Portfolio, Markets, Leaderboard.
-  Segmented CEX chrome. Theme tokens unchanged.
-*/
 .bd-navbar a,
 .bd-navbar button,
 .bd-navbar [role="menuitem"],
@@ -88,17 +83,49 @@ header img[alt="logo"] {
   border-radius: 2px;
 }
 
-/* Compact the generic "No results found" void under Positions */
+/* Venue empty states — hide SDK cartoon + generic copy */
 .oui-empty {
-  min-height: 132px !important;
-  padding: 20px 12px !important;
+  position: relative;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 120px !important;
+  padding: 24px 16px !important;
 }
 
-.oui-empty svg {
-  opacity: 0.42;
+.oui-empty svg,
+.oui-empty img {
+  display: none !important;
 }
 
-/* Mobile tab bar: venue chrome, four destinations */
+.oui-empty > * {
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+}
+
+.oui-empty::after {
+  content: "No open positions. Connect a wallet and size a market.";
+  max-width: 280px;
+  color: #848e9c;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  text-align: center;
+}
+
+[class*="order"] .oui-empty::after,
+[class*="Order"] .oui-empty::after {
+  content: "No open orders on this symbol.";
+}
+
+[class*="market"] .oui-empty::after,
+.oui-markets .oui-empty::after {
+  content: "No markets match.";
+}
+
 .oui-bottom-nav,
 [class*="oui-bottomNav"],
 [class*="oui-bottom-nav"] {
@@ -117,14 +144,6 @@ header img[alt="logo"] {
   text-transform: uppercase;
 }
 
-/*
-  Desk layout from Orderly TradingPage + CEX terminals.
-  Structure / density only. Theme tokens stay in theme.css + runtime config.
-*/
-.bd-root {
-  min-height: 100dvh;
-}
-
 .bd-root > div {
   min-height: 100%;
 }
@@ -134,13 +153,21 @@ header img[alt="logo"] {
   min-height: calc(100dvh - 104px);
 }
 
-/* Markets column: scan list, not a brochure card */
 .oui-trading-page [class*="markets"],
-.oui-markets {
+.oui-markets,
+.oui-markets-page,
+[class*="oui-markets"] {
   font-variant-numeric: tabular-nums;
 }
 
-/* Order book + last trades: tighter rows like a matching engine UI */
+.oui-markets table td,
+.oui-markets-page table td,
+[class*="oui-markets"] td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
 .oui-orderbook table td,
 .oui-order-book table td,
 [class*="oui-orderbook"] td {
@@ -149,13 +176,11 @@ header img[alt="logo"] {
   font-variant-numeric: tabular-nums;
 }
 
-/* Ticket column stays pinned and readable */
 .oui-trading-page [class*="orderEntry"],
 [class*="oui-orderEntry"] {
   min-width: 280px;
 }
 
-/* Positions / open orders strip under the chart */
 .oui-trading-page [class*="dataList"],
 [class*="oui-dataList"] {
   min-height: 168px;
@@ -163,7 +188,7 @@ header img[alt="logo"] {
 
 @media (min-width: 1024px) {
   .oui-empty {
-    min-height: 168px !important;
+    min-height: 148px !important;
   }
 
   .oui-trading-page,
