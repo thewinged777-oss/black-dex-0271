@@ -20,6 +20,8 @@ import { SettingsNavButton } from "@/components/SettingsNavButton";
 import { ThemeLogo } from "@/components/ThemeLogo";
 import { OrderlyActiveIcon, OrderlyIcon } from "../components/icons/orderly";
 import {
+  HomeActiveIcon,
+  HomeInactiveIcon,
   TradeActiveIcon,
   TradeInactiveIcon,
   MarketsActiveIcon,
@@ -28,6 +30,7 @@ import {
   PortfolioInactiveIcon,
   LeaderboardActiveIcon,
   LeaderboardInactiveIcon,
+  HomeIcon,
   TradeIcon,
   MarketsIcon,
   PortfolioIcon,
@@ -187,6 +190,8 @@ const getPnLBackgroundImages = (): string[] => {
 
 const deskMark = (menuId: string) => {
   switch (menuId) {
+    case "Home":
+      return <HomeIcon size={14} />;
     case "Trading":
       return <TradeIcon size={14} />;
     case "Markets":
@@ -219,6 +224,11 @@ const labeled = (id: string, label: string) => (
 
 const getBottomNavIcon = (menuId: string) => {
   switch (menuId) {
+    case "Home":
+      return {
+        activeIcon: <HomeActiveIcon />,
+        inactiveIcon: <HomeInactiveIcon />,
+      };
     case "Trading":
       return {
         activeIcon: <TradeActiveIcon />,
@@ -303,7 +313,16 @@ export const useOrderlyConfig = () => {
   );
 
   return useMemo<OrderlyConfig>(() => {
+    const homeMenu: MenuConfigItem = {
+      id: "Home",
+      href: "/home",
+      name: "Home",
+      isDefault: true,
+      customRender: () => labeled("Home", "Home"),
+    };
+
     const allMenuItems: MenuConfigItem[] = [
+      homeMenu,
       {
         id: "Trading",
         href: "/",
@@ -382,7 +401,15 @@ export const useOrderlyConfig = () => {
 
     const defaultEnabledMenus = allMenuItems.filter((menu) => menu.isDefault);
 
-    const enabledMenus = getEnabledMenus(allMenuItems, defaultEnabledMenus);
+    let enabledMenus = getEnabledMenus(allMenuItems, defaultEnabledMenus);
+    if (!enabledMenus.some((menu) => menu.id === "Home")) {
+      enabledMenus = [homeMenu, ...enabledMenus];
+    } else {
+      enabledMenus = [
+        homeMenu,
+        ...enabledMenus.filter((menu) => menu.id !== "Home"),
+      ];
+    }
     const customMenus = getCustomMenuItems();
 
     const translatedEnabledMenus = enabledMenus.map((menu) => ({
@@ -410,9 +437,10 @@ export const useOrderlyConfig = () => {
     ];
 
     const supportedBottomNavMenus = [
+      "Home",
       "Trading",
-      "Portfolio",
       "Markets",
+      "Portfolio",
       "Leaderboard",
     ];
     const bottomNavMenus = enabledMenus
@@ -463,7 +491,7 @@ export const useOrderlyConfig = () => {
                 externalLinks={customMenus}
               />
             )}
-            <Link to="/" className="oui-no-underline oui-flex oui-items-center">
+            <Link to="/home" className="oui-no-underline oui-flex oui-items-center">
               <ThemeLogo variant="secondary" height={28} />
             </Link>
             {components.mainNav}
