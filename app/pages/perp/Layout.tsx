@@ -11,6 +11,11 @@ export default function PerpLayout() {
     <Scaffold
       mainNavProps={config.scaffold.mainNavProps}
       footerProps={config.scaffold.footerProps}
+      classNames={{
+        root: "bd-root",
+        topNavbar: "bd-navbar",
+        footer: "bd-footer",
+      }}
       routerAdapter={{
         onRouteChange,
         currentPath: "/",
@@ -21,4 +26,3 @@ export default function PerpLayout() {
     </Scaffold>
   );
 }
-
