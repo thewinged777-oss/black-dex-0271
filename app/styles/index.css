@@ -24,6 +24,20 @@ body,
   border-color: rgb(var(--oui-color-line));
 }
 
+.oui-sheet-content,
+.bd-left-nav,
+[data-side="left"].oui-sheet-content {
+  background: rgb(var(--oui-color-base-9)) !important;
+}
+
+.bd-theme-logo,
+.bd-navbar img,
+.oui-left-nav img,
+header img[alt="logo"],
+img[alt="logo"] {
+  background: transparent !important;
+}
+
 .bd-navbar {
   background: rgba(var(--oui-color-base-9), 0.92);
   border-bottom: 1px solid rgb(var(--oui-color-line));
@@ -46,7 +60,6 @@ body,
 header img[alt="logo"],
 img[alt="logo"] {
   object-fit: contain;
-  background: rgb(var(--oui-color-base-8)) !important;
 }
 
 .oui-empty {

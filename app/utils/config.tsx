@@ -16,6 +16,7 @@ import {
 } from "@orderly.network/ui-scaffold";
 import { CampaignsNavTitle } from "@/components/CampaignsNavTitle";
 import CustomLeftNav from "@/components/CustomLeftNav";
+import { ThemeLogo } from "@/components/ThemeLogo";
 import { OrderlyActiveIcon, OrderlyIcon } from "../components/icons/orderly";
 import {
   TradeActiveIcon,
@@ -270,11 +271,7 @@ export const useOrderlyConfig = () => {
       main: getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO")
         ? {
             component: (
-              <img
-                src={withBasePath("/logo.svg")}
-                alt="logo"
-                style={{ height: "36px", background: "#0c1018" }}
-              />
+              <ThemeLogo variant="primary" height={36} className="bd-theme-logo" />
             ),
           }
         : { img: withBasePath("/orderly-logo.svg") },
@@ -450,10 +447,10 @@ export const useOrderlyConfig = () => {
             <Link to="/">
               {isMobile &&
               getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO") ? (
-                <img
-                  src={withBasePath("/logo-secondary.webp")}
-                  alt="logo"
-                  style={{ height: "32px", background: "#0c1018" }}
+                <ThemeLogo
+                  variant="secondary"
+                  height={32}
+                  className="bd-theme-logo"
                 />
               ) : (
                 components.title
