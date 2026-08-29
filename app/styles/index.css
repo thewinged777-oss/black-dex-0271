@@ -9,8 +9,8 @@
 html,
 body,
 #root {
-  background: #07090f;
-  color: #eaecef;
+  background: rgb(var(--oui-color-base-9));
+  color: rgb(var(--oui-color-base-foreground));
   font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif;
 }
 
@@ -21,23 +21,23 @@ body,
 .oui-card,
 .oui-dialog-content,
 .oui-sheet-content {
-  border-color: #2a3344;
+  border-color: rgb(var(--oui-color-line));
 }
 
 .bd-navbar {
-  background: rgba(7, 9, 15, 0.92);
-  border-bottom: 1px solid #2a3344;
+  background: rgba(var(--oui-color-base-9), 0.92);
+  border-bottom: 1px solid rgb(var(--oui-color-line));
   backdrop-filter: blur(16px);
   min-height: 56px;
 }
 
 .bd-footer {
-  background: #07090f;
-  border-top: 1px solid #2a3344;
+  background: rgb(var(--oui-color-base-9));
+  border-top: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-root {
-  background: #07090f;
+  background: rgb(var(--oui-color-base-9));
   min-height: 100dvh;
 }
 
@@ -46,7 +46,7 @@ body,
 header img[alt="logo"],
 img[alt="logo"] {
   object-fit: contain;
-  background: #0c1018 !important;
+  background: rgb(var(--oui-color-base-8)) !important;
 }
 
 .oui-empty {
@@ -61,8 +61,8 @@ img[alt="logo"] {
 .oui-bottom-nav,
 [class*="oui-bottomNav"],
 [class*="oui-bottom-nav"] {
-  background: rgba(7, 9, 15, 0.96) !important;
-  border-top: 1px solid #2a3344 !important;
+  background: rgba(var(--oui-color-base-9), 0.96) !important;
+  border-top: 1px solid rgb(var(--oui-color-line)) !important;
   backdrop-filter: blur(18px);
 }
 
