@@ -10,8 +10,10 @@
   justify-content: center;
 }
 
-.bd-swap-widget .dex {
+.bd-swap-widget .dex,
+.bd-swap-widget .dex .swap {
   width: 100%;
+  max-width: none;
 }
 
 .bd-swap-intel {
@@ -146,9 +148,10 @@
   cursor: default;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 860px) {
   .bd-swap-page {
-    width: min(760px, calc(100% - 32px));
+    width: min(1080px, calc(100% - 40px));
+    margin-top: 28px;
   }
 
   .bd-swap-intel-grid {
