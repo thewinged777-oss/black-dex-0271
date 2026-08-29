@@ -14,7 +14,6 @@ body,
   font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif;
 }
 
-/* hide trading rewards on mobile */
 .oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
   display: none;
 }
@@ -39,12 +38,15 @@ body,
 
 .bd-root {
   background: #0b0e11;
+  min-height: 100dvh;
 }
 
 .bd-navbar img,
 .oui-left-nav img,
-header img[alt="logo"] {
+header img[alt="logo"],
+img[alt="logo"] {
   object-fit: contain;
+  background: #0b0e11 !important;
 }
 
 .oui-empty {
@@ -62,10 +64,6 @@ header img[alt="logo"] {
   background: rgba(11, 14, 17, 0.96) !important;
   border-top: 1px solid #2b3139 !important;
   backdrop-filter: blur(18px);
-}
-
-.bd-root {
-  min-height: 100dvh;
 }
 
 .bd-root > div {
