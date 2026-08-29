@@ -4,6 +4,15 @@ import { useCollateral } from "@orderly.network/hooks";
 import { loadHomeMarkets, type HomeMarket } from "@/utils/home-markets";
 import { loadBlackDexPosts, type HomePost } from "@/utils/home-posts";
 import {
+  CarryIdea,
+  formatPct,
+  formatRate,
+  formatUsd,
+  loadOrderlyFutures,
+  scoreMarket,
+  sideLabel,
+} from "@/utils/funding-desk";
+import {
   LeaderboardIcon,
   RewardsIcon,
   VaultsIcon,
@@ -73,6 +82,53 @@ function MarketCard({ row }: { row: HomeMarket }) {
   );
 }
 
+function PassCard({ idea }: { idea: CarryIdea }) {
+  return (
+    <Link to={`/perp/${idea.symbol}`} className="bd-home-pass">
+      <header>
+        <div>
+          <strong>{idea.ticker}</strong>
+          <em>{idea.profile.sleeve}</em>
+        </div>
+        <span className={`bd-grade g-${idea.grade}`}>{idea.grade}</span>
+      </header>
+      <p className="bd-home-pass-side">{sideLabel(idea.side)} · score {idea.score}</p>
+      <dl>
+        <div>
+          <dt>Est / last</dt>
+          <dd className={idea.est >= 0 ? "is-up" : "is-dn"}>
+            {formatRate(idea.est)}
+            <i>{formatRate(idea.last)}</i>
+          </dd>
+        </div>
+        <div>
+          <dt>Ann.</dt>
+          <dd className={idea.annualized >= 0 ? "is-up" : "is-dn"}>{formatPct(idea.annualized)}</dd>
+        </div>
+        <div>
+          <dt>Basis</dt>
+          <dd>{idea.basisBps.toFixed(1)} bp</dd>
+        </div>
+        <div>
+          <dt>24h / OI</dt>
+          <dd>
+            {formatUsd(idea.volumeUsd)}
+            <i>{formatUsd(idea.oiUsd)}</i>
+          </dd>
+        </div>
+        <div>
+          <dt>Interval</dt>
+          <dd>{idea.intervalHours}h</dd>
+        </div>
+        <div>
+          <dt>Persist</dt>
+          <dd>{idea.persist ? "Yes" : "No"}</dd>
+        </div>
+      </dl>
+    </Link>
+  );
+}
+
 export default function HomeDesk() {
   const collateral = useCollateral();
   const total =
@@ -82,10 +138,20 @@ export default function HomeDesk() {
 
   const [markets, setMarkets] = useState<HomeMarket[]>([]);
   const [posts, setPosts] = useState<HomePost[]>([]);
+  const [passing, setPassing] = useState<CarryIdea[]>([]);
 
   useEffect(() => {
     loadHomeMarkets().then(setMarkets).catch(() => setMarkets([]));
     loadBlackDexPosts().then(setPosts).catch(() => setPosts([]));
+    loadOrderlyFutures()
+      .then((rows) => {
+        const ideas = rows
+          .map(scoreMarket)
+          .filter((row): row is CarryIdea => Boolean(row) && row.side !== "PASS")
+          .sort((a, b) => b.score - a.score);
+        setPassing(ideas);
+      })
+      .catch(() => setPassing([]));
   }, []);
 
   const { gainers, losers } = useMemo(() => {
@@ -152,6 +218,18 @@ export default function HomeDesk() {
           <div className="bd-home-grid">
             {losers.length ? losers.map((row) => <MarketCard key={row.symbol} row={row} />) : <p>No red books.</p>}
           </div>
+        </div>
+      </section>
+
+      <section className="bd-home-pass-list">
+        <h2>Passing screen</h2>
+        <p className="bd-home-pass-lead">
+          Names that clear the Funding Desk harvest filter. Same score, grade, and book stats as /desk.
+        </p>
+        <div className="bd-home-pass-grid">
+          {passing.length
+            ? passing.map((idea) => <PassCard key={idea.symbol} idea={idea} />)
+            : <p>No pair currently clears the screen.</p>}
         </div>
       </section>
 

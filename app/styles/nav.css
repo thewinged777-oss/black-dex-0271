@@ -5,24 +5,25 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgb(var(--oui-color-base-10) / 0.62);
   padding: 12px 12px 84px;
 }
 
 .bd-launcher {
   width: min(430px, 100%);
-  background: #14171d;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
   border-radius: 18px;
   padding: 10px 16px 16px;
   position: relative;
+  color: rgb(var(--oui-color-base-foreground));
 }
 
 .bd-launcher-handle {
   width: 36px;
   height: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgb(var(--oui-color-line));
   margin: 2px auto 10px;
 }
 
@@ -40,7 +41,7 @@
 
 .bd-launcher-close {
   border: 0;
-  background: #1a1d24;
+  background: rgb(var(--oui-color-base-7));
   width: 28px;
   height: 28px;
   border-radius: 999px;
@@ -73,8 +74,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #1a1d24;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgb(var(--oui-color-base-7));
+  border: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-launcher-tile span {
@@ -93,12 +94,12 @@
   gap: 8px;
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-launcher-links a {
-  color: #111;
-  background: #d4af37;
+  color: rgb(var(--oui-color-primary-contrast));
+  background: rgb(var(--oui-color-primary));
   font-size: 12px;
   font-weight: 650;
   text-decoration: none;
