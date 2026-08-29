@@ -26,6 +26,17 @@ function Base({
   );
 }
 
+export function HomeIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <path d="M4 11.2L12 4.5l8 6.7" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+      <path d="M7 10.8V19h10v-8.2" stroke={c} strokeWidth="1.6" />
+      <path d="M10 19v-5h4v5" stroke={c} strokeWidth="1.6" />
+    </Base>
+  );
+}
+
 export function TradeIcon({ active, size, ...rest }: IconProps) {
   const c = stroke(active);
   return (
@@ -145,6 +156,12 @@ export function DeskIcon({ active, size, ...rest }: IconProps) {
   );
 }
 
+export function HomeActiveIcon(props: IconProps) {
+  return <HomeIcon active {...props} />;
+}
+export function HomeInactiveIcon(props: IconProps) {
+  return <HomeIcon {...props} />;
+}
 export function TradeActiveIcon(props: IconProps) {
   return <TradeIcon active {...props} />;
 }
