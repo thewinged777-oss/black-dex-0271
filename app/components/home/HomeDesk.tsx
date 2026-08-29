@@ -13,15 +13,6 @@ import {
   sideLabel,
 } from "@/utils/funding-desk";
 import TokenMark from "@/components/TokenMark";
-import {
-  LeaderboardIcon,
-  RewardsIcon,
-  VaultsIcon,
-  PointsIcon,
-  DeskIcon,
-  SwapIcon,
-  TradeIcon,
-} from "@/components/icons/desk";
 
 function money(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) return "\u2014";
@@ -50,72 +41,40 @@ function pct(value: number) {
 }
 
 const SHORTCUTS = [
-  { href: "/leaderboard", label: "Leaderboard", icon: <LeaderboardIcon size={18} /> },
-  { href: "/rewards", label: "Rewards", icon: <RewardsIcon size={18} /> },
-  { href: "/vaults", label: "Vaults", icon: <VaultsIcon size={18} /> },
-  { href: "/points", label: "Points", icon: <PointsIcon size={18} /> },
-  { href: "/desk", label: "Desk", icon: <DeskIcon size={18} /> },
+  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/rewards", label: "Rewards" },
+  { href: "/vaults", label: "Vaults" },
+  { href: "/points", label: "Points" },
+  { href: "/desk", label: "Desk" },
 ];
 
-function MarketCard({ row }: { row: HomeMarket }) {
+function MarketRow({ row }: { row: HomeMarket }) {
   const up = row.change24h >= 0;
   return (
-    <Link to={`/perp/${row.symbol}`} className="bd-home-card">
-      <header>
-        <TokenMark symbol={row.symbol} label={row.base} size={20} />
-        <strong>{row.base}</strong>
-        <small className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</small>
-      </header>
-      <b>{money(row.price)}</b>
-      <dl>
-        <div>
-          <dt>Funding</dt>
-          <dd className={row.funding >= 0 ? "is-up" : "is-dn"}>{funding(row.funding)}</dd>
-        </div>
-        <div>
-          <dt>Volume</dt>
-          <dd>{volume(row.volume)}</dd>
-        </div>
-      </dl>
+    <Link to={`/perp/${row.symbol}`} className="bd-home-row">
+      <span className="bd-home-pair">
+        <TokenMark symbol={row.symbol} label={row.base} size={18} />
+        <strong>{row.base}-USDC</strong>
+      </span>
+      <span>{money(row.price)}</span>
+      <span className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</span>
+      <span>{volume(row.volume)}</span>
     </Link>
   );
 }
 
-function PassCard({ idea }: { idea: CarryIdea }) {
+function PassRow({ idea }: { idea: CarryIdea }) {
   return (
-    <Link to={`/perp/${idea.symbol}`} className="bd-home-pass">
-      <header>
-        <TokenMark symbol={idea.symbol} label={idea.ticker} size={20} />
+    <Link to={`/perp/${idea.symbol}`} className="bd-home-row bd-home-pass">
+      <span className="bd-home-pair">
+        <TokenMark symbol={idea.symbol} label={idea.ticker} size={18} />
         <strong>{idea.ticker}</strong>
-        <em>{sideLabel(idea.side)}</em>
-        <span className={`bd-grade g-${idea.grade}`}>{idea.grade} {idea.score}</span>
-      </header>
-      <dl>
-        <div>
-          <dt>Est</dt>
-          <dd className={idea.est >= 0 ? "is-up" : "is-dn"}>{formatRate(idea.est)}</dd>
-        </div>
-        <div>
-          <dt>Ann.</dt>
-          <dd className={idea.annualized >= 0 ? "is-up" : "is-dn"}>{formatPct(idea.annualized)}</dd>
-        </div>
-        <div>
-          <dt>Basis</dt>
-          <dd>{idea.basisBps.toFixed(1)} bp</dd>
-        </div>
-        <div>
-          <dt>24h</dt>
-          <dd>{formatUsd(idea.volumeUsd)}</dd>
-        </div>
-        <div>
-          <dt>OI</dt>
-          <dd>{formatUsd(idea.oiUsd)}</dd>
-        </div>
-        <div>
-          <dt>Int / persist</dt>
-          <dd>{idea.intervalHours}h · {idea.persist ? "Y" : "N"}</dd>
-        </div>
-      </dl>
+      </span>
+      <span className={`bd-grade g-${idea.grade}`}>{idea.grade} {idea.score}</span>
+      <span>{sideLabel(idea.side)}</span>
+      <span className={idea.est >= 0 ? "is-up" : "is-dn"}>{formatRate(idea.est)}</span>
+      <span className={idea.annualized >= 0 ? "is-up" : "is-dn"}>{formatPct(idea.annualized)}</span>
+      <span>{formatUsd(idea.volumeUsd)}</span>
     </Link>
   );
 }
@@ -149,33 +108,33 @@ export default function HomeDesk() {
     const live = markets.filter((row) => Number.isFinite(row.change24h) && row.price > 0);
     const sorted = [...live].sort((a, b) => b.change24h - a.change24h);
     return {
-      gainers: sorted.filter((row) => row.change24h > 0).slice(0, 4),
-      losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 4),
+      gainers: sorted.filter((row) => row.change24h > 0).slice(0, 5),
+      losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 5),
     };
   }, [markets]);
 
   return (
     <div className="bd-home">
       <section className="bd-home-hero">
-        <div className="bd-home-balance">
-          <span>Total assets</span>
-          <strong>
-            {money(total)} <small>USDC</small>
-          </strong>
-          <Link to="/portfolio" className="bd-home-pnl">
-            Open portfolio
-          </Link>
+        <p className="bd-home-kicker">Perpetual futures exchange</p>
+        <div className="bd-home-hero-row">
+          <div>
+            <span className="bd-home-label">Total assets</span>
+            <h1>
+              {money(total)} <small>USDC</small>
+            </h1>
+          </div>
+          <div className="bd-home-cta">
+            <Link to="/portfolio" className="bd-btn-gold">Deposit</Link>
+            <Link to="/portfolio" className="bd-btn-ghost">Open portfolio</Link>
+          </div>
         </div>
-        <Link to="/portfolio" className="bd-home-deposit">
-          Deposit
-        </Link>
       </section>
 
-      <nav className="bd-home-shortcuts">
+      <nav className="bd-home-seg">
         {SHORTCUTS.map((item) => (
-          <Link key={item.href} to={item.href} className="bd-home-chip">
-            <i>{item.icon}</i>
-            <span>{item.label}</span>
+          <Link key={item.href} to={item.href}>
+            {item.label}
           </Link>
         ))}
       </nav>
@@ -184,41 +143,46 @@ export default function HomeDesk() {
         <Link to="/" className="bd-home-promo">
           <em>Perps</em>
           <b>Trade the book</b>
-          <span>
-            <TradeIcon size={14} /> Open desk
-          </span>
+          <span>Open desk</span>
         </Link>
         <Link to="/swap" className="bd-home-promo">
           <em>Swap</em>
           <b>Move spot size</b>
-          <span>
-            <SwapIcon size={14} /> Swap now
-          </span>
+          <span>Swap now</span>
         </Link>
       </section>
 
-      <section className="bd-home-movers">
-        <div>
-          <h2>Top gainers</h2>
-          <div className="bd-home-grid">
-            {gainers.length ? gainers.map((row) => <MarketCard key={row.symbol} row={row} />) : <p>No green books.</p>}
+      <section className="bd-home-board">
+        <article>
+          <header>
+            <h2>Top gainers</h2>
+            <span>Market · Last · 24h · Vol</span>
+          </header>
+          <div className="bd-home-table">
+            {gainers.length ? gainers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No green books.</p>}
           </div>
-        </div>
-        <div>
-          <h2>Top losers</h2>
-          <div className="bd-home-grid">
-            {losers.length ? losers.map((row) => <MarketCard key={row.symbol} row={row} />) : <p>No red books.</p>}
+        </article>
+        <article>
+          <header>
+            <h2>Top losers</h2>
+            <span>Market · Last · 24h · Vol</span>
+          </header>
+          <div className="bd-home-table">
+            {losers.length ? losers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No red books.</p>}
           </div>
-        </div>
+        </article>
       </section>
 
-      <section className="bd-home-pass-list">
-        <h2>Passing screen</h2>
-        <div className="bd-home-pass-grid">
-          {passing.length
-            ? passing.map((idea) => <PassCard key={idea.symbol} idea={idea} />)
-            : <p>No pair currently clears the screen.</p>}
-        </div>
+      <section className="bd-home-board is-wide">
+        <article>
+          <header>
+            <h2>Passing screen</h2>
+            <span>Pair · Grade · Side · Est · Ann. · 24h</span>
+          </header>
+          <div className="bd-home-table">
+            {passing.length ? passing.map((idea) => <PassRow key={idea.symbol} idea={idea} />) : <p>No pair currently clears the screen.</p>}
+          </div>
+        </article>
       </section>
 
       <section className="bd-home-feed">
