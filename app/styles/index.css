@@ -3,6 +3,7 @@
 @import "../styles/fonts.css";
 @import "../styles/desk.css";
 @import "../styles/swap.css";
+@import "../styles/trade.css";
 
 @tailwind base;
 @tailwind components;
