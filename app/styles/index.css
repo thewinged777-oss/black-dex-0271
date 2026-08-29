@@ -30,6 +30,7 @@ body,
   background: rgba(11, 14, 17, 0.92);
   border-bottom: 1px solid #2b3139;
   backdrop-filter: blur(16px);
+  min-height: 56px;
 }
 
 .bd-footer {
@@ -67,9 +68,64 @@ header img[alt="logo"] {
   backdrop-filter: blur(18px);
 }
 
-/* Desktop trading desk: less dead canvas under the ticket */
+/*
+  Desk layout from Orderly TradingPage + CEX terminals.
+  Structure / density only. Theme tokens stay in theme.css + runtime config.
+*/
+.bd-root {
+  min-height: 100dvh;
+}
+
+.bd-root > div {
+  min-height: 100%;
+}
+
+.oui-trading-page,
+[class*="oui-tradingPage"] {
+  min-height: calc(100dvh - 104px);
+}
+
+/* Markets column: scan list, not a brochure card */
+.oui-trading-page [class*="markets"],
+.oui-markets {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Order book + last trades: tighter rows like a matching engine UI */
+.oui-orderbook table td,
+.oui-order-book table td,
+[class*="oui-orderbook"] td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ticket column stays pinned and readable */
+.oui-trading-page [class*="orderEntry"],
+[class*="oui-orderEntry"] {
+  min-width: 280px;
+}
+
+/* Positions / open orders strip under the chart */
+.oui-trading-page [class*="dataList"],
+[class*="oui-dataList"] {
+  min-height: 168px;
+}
+
 @media (min-width: 1024px) {
   .oui-empty {
     min-height: 168px !important;
+  }
+
+  .oui-trading-page,
+  [class*="oui-tradingPage"] {
+    min-height: calc(100dvh - 96px);
+  }
+}
+
+@media (max-width: 767px) {
+  .oui-trading-page,
+  [class*="oui-tradingPage"] {
+    min-height: calc(100dvh - 132px);
   }
 }
