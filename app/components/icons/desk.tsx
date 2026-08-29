@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactNode, SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement> & {
   active?: boolean;
@@ -8,11 +8,10 @@ type IconProps = SVGProps<SVGSVGElement> & {
 const stroke = (active?: boolean) => (active ? "#d4af37" : "#848e9c");
 
 function Base({
-  active,
   size = 20,
   children,
   ...rest
-}: IconProps & { children: React.ReactNode }) {
+}: IconProps & { children: ReactNode }) {
   return (
     <svg
       width={size}
@@ -30,7 +29,7 @@ function Base({
 export function TradeIcon({ active, size, ...rest }: IconProps) {
   const c = stroke(active);
   return (
-    <Base active={active} size={size} {...rest}>
+    <Base size={size} {...rest}>
       <path d="M4 18V8" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
       <path d="M4 11h3v4H4" stroke={c} strokeWidth="1.6" />
       <path d="M11 18V5" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
@@ -44,7 +43,7 @@ export function TradeIcon({ active, size, ...rest }: IconProps) {
 export function MarketsIcon({ active, size, ...rest }: IconProps) {
   const c = stroke(active);
   return (
-    <Base active={active} size={size} {...rest}>
+    <Base size={size} {...rest}>
       <rect x="3.5" y="3.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
       <rect x="13.5" y="3.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
       <rect x="3.5" y="13.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
@@ -56,7 +55,7 @@ export function MarketsIcon({ active, size, ...rest }: IconProps) {
 export function PortfolioIcon({ active, size, ...rest }: IconProps) {
   const c = stroke(active);
   return (
-    <Base active={active} size={size} {...rest}>
+    <Base size={size} {...rest}>
       <rect x="3.5" y="7.5" width="17" height="12" rx="1.5" stroke={c} strokeWidth="1.6" />
       <path d="M8 7.5V6.2A2.2 2.2 0 0 1 10.2 4h3.6A2.2 2.2 0 0 1 16 6.2v1.3" stroke={c} strokeWidth="1.6" />
       <path d="M3.5 13h17" stroke={c} strokeWidth="1.6" />
@@ -67,7 +66,7 @@ export function PortfolioIcon({ active, size, ...rest }: IconProps) {
 export function LeaderboardIcon({ active, size, ...rest }: IconProps) {
   const c = stroke(active);
   return (
-    <Base active={active} size={size} {...rest}>
+    <Base size={size} {...rest}>
       <path d="M5 19V11h4v8H5Z" stroke={c} strokeWidth="1.6" />
       <path d="M10 19V6h4v13h-4Z" stroke={c} strokeWidth="1.6" />
       <path d="M15 19v-6h4v6h-4Z" stroke={c} strokeWidth="1.6" />
