@@ -24,6 +24,10 @@ export default function SwapIndex() {
       {renderSEOTags(pageMeta, pageTitle)}
       <div className="bd-swap-page">
         <div className="bd-swap-widget">
+          <div className="bd-swap-intel-kicker">
+            <span>Swap</span>
+            <p>Ticket for the pair. Route and quote come from WooFi.</p>
+          </div>
           <Suspense fallback={<LoadingSpinner />}>
             <WooFiWidget />
           </Suspense>
