@@ -1,0 +1,157 @@
+.bd-swap-page {
+  width: min(520px, calc(100% - 24px));
+  margin: 18px auto 96px;
+  display: grid;
+  gap: 14px;
+}
+
+.bd-swap-widget {
+  display: flex;
+  justify-content: center;
+}
+
+.bd-swap-widget .dex {
+  width: 100%;
+}
+
+.bd-swap-intel {
+  display: grid;
+  gap: 10px;
+}
+
+.bd-swap-intel-kicker span {
+  display: block;
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.bd-swap-intel-kicker p {
+  margin: 4px 0 0;
+  color: rgb(var(--oui-color-base-foreground) / 0.5);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.bd-swap-intel-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.bd-swap-intel-card {
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
+  border-radius: 12px;
+  padding: 14px 14px 12px;
+}
+
+.bd-swap-intel-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 0;
+}
+
+.bd-swap-intel-card header span {
+  color: rgb(var(--oui-color-base-foreground) / 0.45);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bd-swap-intel-card header strong {
+  text-align: right;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.bd-swap-intel-card header em {
+  display: block;
+  margin-top: 2px;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgb(var(--oui-color-base-foreground) / 0.45);
+}
+
+.bd-swap-intel-name {
+  margin: 8px 0 12px;
+  color: rgb(var(--oui-color-base-foreground) / 0.62);
+  font-size: 13px;
+}
+
+.bd-swap-intel-card dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px 8px;
+  margin: 0;
+}
+
+.bd-swap-intel-card dt {
+  color: rgb(var(--oui-color-base-foreground) / 0.42);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.bd-swap-intel-card dd {
+  margin: 3px 0 0;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.bd-swap-intel-card .is-up {
+  color: #0ecb81;
+}
+
+.bd-swap-intel-card .is-dn {
+  color: #f6465d;
+}
+
+.bd-swap-intel-contract {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgb(var(--oui-color-line));
+  font-size: 12px;
+}
+
+.bd-swap-intel-contract span {
+  color: rgb(var(--oui-color-base-foreground) / 0.42);
+}
+
+.bd-swap-intel-contract button,
+.bd-swap-intel-contract a {
+  border: 1px solid rgb(var(--oui-color-line));
+  background: rgb(var(--oui-color-base-9));
+  color: #f0d78c;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bd-swap-intel-contract button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (min-width: 720px) {
+  .bd-swap-page {
+    width: min(760px, calc(100% - 32px));
+  }
+
+  .bd-swap-intel-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

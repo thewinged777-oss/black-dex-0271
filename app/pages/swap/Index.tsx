@@ -3,6 +3,7 @@ import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
 import { lazy, Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import SwapTokenIntel from "@/components/swap/SwapTokenIntel";
 
 const WooFiWidget = lazy(() => import("@/components/WooFiWidget"));
 
@@ -13,12 +14,14 @@ export default function SwapIndex() {
   return (
     <>
       {renderSEOTags(pageMeta, pageTitle)}
-      <div className="w-full h-full flex items-center justify-center p-4 pt-8">
-        <Suspense fallback={<LoadingSpinner />}>
-          <WooFiWidget />
-        </Suspense>
+      <div className="bd-swap-page">
+        <div className="bd-swap-widget">
+          <Suspense fallback={<LoadingSpinner />}>
+            <WooFiWidget />
+          </Suspense>
+        </div>
+        <SwapTokenIntel />
       </div>
     </>
   );
 }
-
