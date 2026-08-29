@@ -1,39 +1,41 @@
-@media (min-width: 1024px) {
-  .bd-trade-desk {
-    display: grid;
-    gap: 8px;
-    width: 100%;
+/* Compact Orderly ticket + book on the perp desk. */
+
+[class*="order-entry"] input,
+[class*="OrderEntry"] input,
+[class*="orderEntry"] input {
+  height: 28px !important;
+  min-height: 28px !important;
+  font-size: 12px !important;
+}
+
+[class*="order-entry"] button,
+[class*="OrderEntry"] button {
+  min-height: 28px !important;
+  height: auto !important;
+  font-size: 12px !important;
+}
+
+[class*="order-entry"],
+[class*="OrderEntry"] {
+  font-size: 12px !important;
+}
+
+[class*="orderbook"] td,
+[class*="orderBook"] td,
+[class*="OrderBook"] td,
+[class*="orderbook"] span,
+[class*="OrderBook"] span {
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+}
+
+@media (min-width: 720px) {
+  .bd-trade-top {
     min-height: 0;
   }
 
-  .bd-trade-top {
-    display: grid;
-    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
-    gap: 8px;
-    align-items: stretch;
-    min-height: 420px;
-  }
-
-  .bd-trade-top > * {
-    min-width: 0;
-    min-height: 420px;
-    background: rgb(var(--oui-color-base-8));
-    border: 1px solid rgb(var(--oui-color-line));
-    border-radius: 10px;
-    overflow: auto;
-  }
-
   .bd-trade-chart {
-    min-height: 460px;
-    height: min(56vh, 620px);
-    background: rgb(var(--oui-color-base-8));
-    border: 1px solid rgb(var(--oui-color-line));
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .bd-trade-chart > * {
-    height: 100% !important;
-    min-height: 460px;
+    min-height: 380px;
+    margin-top: 8px;
   }
 }
