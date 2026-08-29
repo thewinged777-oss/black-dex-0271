@@ -65,9 +65,10 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
           <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center">
             {getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO") ? (
               <img
-                src={withBasePath("/logo.webp")}
+                src={withBasePath("/logo.svg")}
                 alt="logo"
                 className="oui-h-[32px]"
+                style={{ background: "#0b0e11" }}
               />
             ) : (
               <h1 className="oui-text-base-contrast-80 oui-font-bold">
