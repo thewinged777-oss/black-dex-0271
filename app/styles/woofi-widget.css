@@ -18,6 +18,9 @@
   color: rgba(var(--oui-color-base-foreground), 0.4) !important;
 }
 
+.bd-swap-widget,
+.bd-swap-widget .dex,
+.bd-swap-widget .dex > div,
 .dex,
 .dex .swap {
   width: 100% !important;
@@ -93,6 +96,7 @@
   font-size: 14px !important;
   border-radius: 10px !important;
   letter-spacing: 0.01em !important;
+  width: 100% !important;
 }
 
 .dex .swap-info,
@@ -164,54 +168,22 @@
   background: rgb(var(--oui-color-base-9)) !important;
 }
 
-@media (min-width: 860px) {
-  .dex .swap {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) !important;
-    grid-template-areas:
-      "tools tools tools"
-      "from flip to"
-      "meta meta meta"
-      "cta cta cta" !important;
-    align-items: center !important;
-    column-gap: 10px !important;
-    row-gap: 14px !important;
-    padding: 16px 18px 18px !important;
+@media (min-width: 720px) {
+  .bd-swap-pair {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
   }
 
-  .dex .swap > *:first-child {
-    grid-area: tools;
-  }
-
-  .dex .swap-input-view:nth-of-type(1),
-  .dex .swap > .swap-input-view:first-of-type {
-    grid-area: from;
+  .bd-swap-pair .swap-input-view {
+    flex: 1 1 0;
     min-width: 0;
   }
 
-  .dex .swap-icon-view,
-  .dex .swap .swap-icon-view {
-    grid-area: flip;
-    justify-self: center;
+  .bd-swap-pair .swap-icon-view {
+    flex: 0 0 40px;
     align-self: center;
     transform: rotate(90deg);
-  }
-
-  .dex .swap-input-view:nth-of-type(2),
-  .dex .swap > .swap-input-view:last-of-type {
-    grid-area: to;
-    min-width: 0;
-  }
-
-  .dex .swap-info,
-  .dex .swap .price-row,
-  .dex .swap .swap-info {
-    grid-area: meta;
-  }
-
-  .dex .swap-btn,
-  .dex .swap .el-button--primary {
-    grid-area: cta;
-    width: 100% !important;
   }
 }
