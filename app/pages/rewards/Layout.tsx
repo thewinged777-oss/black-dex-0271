@@ -11,8 +11,10 @@ export default function RewardsLayout() {
   return (
     <Scaffold
       classNames={{
+        root: "bd-root",
         content: "lg:oui-mb-0",
-        topNavbar: "oui-bg-base-9",
+        topNavbar: "bd-navbar",
+        footer: "bd-footer",
       }}
       mainNavProps={{
         ...config.scaffold.mainNavProps,
@@ -28,4 +30,3 @@ export default function RewardsLayout() {
     </Scaffold>
   );
 }
-
