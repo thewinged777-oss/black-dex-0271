@@ -36,6 +36,7 @@ import {
   RewardsIcon,
   VaultsIcon,
   PointsIcon,
+  DeskIcon,
 } from "../components/icons/desk";
 import { withBasePath } from "./base-path";
 import {
@@ -202,6 +203,8 @@ const deskMark = (menuId: string) => {
       return <VaultsIcon size={14} />;
     case "Points":
       return <PointsIcon size={14} />;
+    case "Desk":
+      return <DeskIcon size={14} />;
     default:
       return null;
   }
@@ -369,6 +372,12 @@ export const useOrderlyConfig = () => {
         name: t("extend.tradingPoints.points"),
         customRender: () => labeled("Points", t("extend.tradingPoints.points")),
       },
+      {
+        id: "Desk",
+        href: "/desk",
+        name: "Desk",
+        customRender: () => labeled("Desk", "Desk"),
+      },
     ];
 
     const defaultEnabledMenus = allMenuItems.filter((menu) => menu.isDefault);
@@ -383,7 +392,22 @@ export const useOrderlyConfig = () => {
       customRender: menu.customRender,
     }));
 
-    const allMainMenus = [...translatedEnabledMenus, ...customMenus];
+    const deskMenu = allMenuItems.find((menu) => menu.id === "Desk");
+    const hasDesk = translatedEnabledMenus.some((menu) => menu.href === "/desk");
+    const allMainMenus = [
+      ...translatedEnabledMenus,
+      ...(!hasDesk && deskMenu
+        ? [
+            {
+              name: deskMenu.name,
+              href: deskMenu.href,
+              target: deskMenu.target,
+              customRender: deskMenu.customRender,
+            },
+          ]
+        : []),
+      ...customMenus,
+    ];
 
     const supportedBottomNavMenus = [
       "Trading",
@@ -435,7 +459,7 @@ export const useOrderlyConfig = () => {
           >
             {isMobile && (
               <CustomLeftNav
-                menus={translatedEnabledMenus}
+                menus={allMainMenus.filter((menu) => !menu.target)}
                 externalLinks={customMenus}
               />
             )}
