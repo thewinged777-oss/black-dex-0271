@@ -1,39 +1,26 @@
-/* Compact Orderly ticket + book on the perp desk. */
-
-[class*="order-entry"] input,
-[class*="OrderEntry"] input,
-[class*="orderEntry"] input {
-  height: 28px !important;
+.bd-perp-page input,
+.bd-perp-page textarea {
   min-height: 28px !important;
   font-size: 12px !important;
 }
 
-[class*="order-entry"] button,
-[class*="OrderEntry"] button {
+.bd-perp-page button {
+  font-size: 12px !important;
+}
+
+.bd-perp-page [class*="oui-input"],
+.bd-perp-page [class*="oui-field"] {
   min-height: 28px !important;
-  height: auto !important;
-  font-size: 12px !important;
 }
 
-[class*="order-entry"],
-[class*="OrderEntry"] {
-  font-size: 12px !important;
-}
-
-[class*="orderbook"] td,
-[class*="orderBook"] td,
-[class*="OrderBook"] td,
-[class*="orderbook"] span,
-[class*="OrderBook"] span {
+.bd-perp-page [class*="orderbook"] td,
+.bd-perp-page [class*="OrderBook"] td,
+.bd-perp-page [class*="orderBook"] div {
   font-size: 11px !important;
-  line-height: 1.15 !important;
+  line-height: 16px !important;
 }
 
 @media (min-width: 720px) {
-  .bd-trade-top {
-    min-height: 0;
-  }
-
   .bd-trade-chart {
     min-height: 380px;
     margin-top: 8px;
