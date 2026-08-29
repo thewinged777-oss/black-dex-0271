@@ -9,6 +9,11 @@ export default function VaultsLayout() {
 
   return (
     <Scaffold
+      classNames={{
+        root: "bd-root",
+        topNavbar: "bd-navbar",
+        footer: "bd-footer",
+      }}
       mainNavProps={{
         ...config.scaffold.mainNavProps,
         initialMenu: "/vaults",
@@ -23,4 +28,3 @@ export default function VaultsLayout() {
     </Scaffold>
   );
 }
-
