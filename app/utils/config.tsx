@@ -30,6 +30,10 @@ import {
   MarketsIcon,
   PortfolioIcon,
   LeaderboardIcon,
+  SwapIcon,
+  RewardsIcon,
+  VaultsIcon,
+  PointsIcon,
 } from "../components/icons/desk";
 import { withBasePath } from "./base-path";
 import {
@@ -188,10 +192,25 @@ const deskMark = (menuId: string) => {
       return <PortfolioIcon size={14} />;
     case "Leaderboard":
       return <LeaderboardIcon size={14} />;
+    case "Swap":
+      return <SwapIcon size={14} />;
+    case "Rewards":
+      return <RewardsIcon size={14} />;
+    case "Vaults":
+      return <VaultsIcon size={14} />;
+    case "Points":
+      return <PointsIcon size={14} />;
     default:
       return null;
   }
 };
+
+const labeled = (id: string, label: string) => (
+  <Flex itemAlign="center" className="oui-gap-1.5">
+    {deskMark(id)}
+    <span>{label}</span>
+  </Flex>
+);
 
 const getBottomNavIcon = (menuId: string) => {
   switch (menuId) {
@@ -252,9 +271,9 @@ export const useOrderlyConfig = () => {
         ? {
             component: (
               <img
-                src={withBasePath("/logo.webp")}
+                src={withBasePath("/logo.svg")}
                 alt="logo"
-                style={{ height: "42px" }}
+                style={{ height: "36px", background: "#0b0e11" }}
               />
             ),
           }
@@ -295,49 +314,36 @@ export const useOrderlyConfig = () => {
         href: "/",
         name: t("common.trading"),
         isDefault: true,
-        customRender: () => (
-          <Flex itemAlign="center" className="oui-gap-1.5">
-            {deskMark("Trading")}
-            <span>{t("common.trading")}</span>
-          </Flex>
-        ),
+        customRender: () => labeled("Trading", t("common.trading")),
       },
       {
         id: "Portfolio",
         href: "/portfolio",
         name: t("common.portfolio"),
         isDefault: true,
-        customRender: () => (
-          <Flex itemAlign="center" className="oui-gap-1.5">
-            {deskMark("Portfolio")}
-            <span>{t("common.portfolio")}</span>
-          </Flex>
-        ),
+        customRender: () => labeled("Portfolio", t("common.portfolio")),
       },
       {
         id: "Markets",
         href: "/markets",
         name: t("common.markets"),
         isDefault: true,
-        customRender: () => (
-          <Flex itemAlign="center" className="oui-gap-1.5">
-            {deskMark("Markets")}
-            <span>{t("common.markets")}</span>
-          </Flex>
-        ),
+        customRender: () => labeled("Markets", t("common.markets")),
       },
-      { id: "Swap", href: "/swap", name: t("extend.swap"), isDefault: true },
+      {
+        id: "Swap",
+        href: "/swap",
+        name: t("extend.swap"),
+        isDefault: true,
+        customRender: () => labeled("Swap", t("extend.swap")),
+      },
       {
         id: "Leaderboard",
         href: "/leaderboard",
         name: t("extend.tradingLeaderboard.leaderboard"),
         isDefault: true,
-        customRender: () => (
-          <Flex itemAlign="center" className="oui-gap-1.5">
-            {deskMark("Leaderboard")}
-            <span>{t("extend.tradingLeaderboard.leaderboard")}</span>
-          </Flex>
-        ),
+        customRender: () =>
+          labeled("Leaderboard", t("extend.tradingLeaderboard.leaderboard")),
       },
       {
         id: "Campaigns",
@@ -353,13 +359,23 @@ export const useOrderlyConfig = () => {
           );
         },
       },
-
-      { id: "Rewards", href: "/rewards", name: t("tradingRewards.rewards") },
-      { id: "Vaults", href: "/vaults", name: t("common.vaults") },
+      {
+        id: "Rewards",
+        href: "/rewards",
+        name: t("tradingRewards.rewards"),
+        customRender: () => labeled("Rewards", t("tradingRewards.rewards")),
+      },
+      {
+        id: "Vaults",
+        href: "/vaults",
+        name: t("common.vaults"),
+        customRender: () => labeled("Vaults", t("common.vaults")),
+      },
       {
         id: "Points",
         href: "/points",
         name: t("extend.tradingPoints.points"),
+        customRender: () => labeled("Points", t("extend.tradingPoints.points")),
       },
     ];
 
@@ -437,7 +453,7 @@ export const useOrderlyConfig = () => {
                 <img
                   src={withBasePath("/logo-secondary.webp")}
                   alt="logo"
-                  style={{ height: "32px" }}
+                  style={{ height: "32px", background: "#0b0e11" }}
                 />
               ) : (
                 components.title
