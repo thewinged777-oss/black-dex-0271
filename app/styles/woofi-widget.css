@@ -1,46 +1,159 @@
-/* WooFi Widget Color Overrides */
+/* Black DEX — WooFi swap skin. Shell/theme elsewhere stays untouched. */
 
 .el-button.el-button--primary {
-  background: rgb(var(--oui-color-primary)) !important;
-  border-color: rgb(var(--oui-color-primary)) !important;
-  color: rgb(var(--oui-color-primary-contrast)) !important;
+  background: linear-gradient(180deg, #f0d78c, #d4af37) !important;
+  border-color: #d4af37 !important;
+  color: #0b0e11 !important;
+  font-weight: 700 !important;
 }
 
 .el-button.el-button--primary:hover {
-  background: rgb(var(--oui-color-primary-light)) !important;
-  border-color: rgb(var(--oui-color-primary-light)) !important;
+  background: linear-gradient(180deg, #f7e7b0, #e0c056) !important;
+  border-color: #e0c056 !important;
 }
 
 .el-button.el-button--primary.is-disabled {
-  background: rgb(var(--oui-color-base-3)) !important;
-  border-color: rgb(var(--oui-color-base-3)) !important;
+  background: rgb(var(--oui-color-base-6)) !important;
+  border-color: rgb(var(--oui-color-line)) !important;
   color: rgba(var(--oui-color-base-foreground), 0.4) !important;
 }
 
 .dex .swap {
-  background: linear-gradient(135deg, rgb(var(--oui-gradient-primary-start)) 0%, rgb(var(--oui-gradient-primary-end)) 100%) !important;
-  border-radius: var(--oui-rounded-lg) !important;
-  border: 1px solid rgba(var(--oui-color-primary), 0.2) !important;
+  background: rgb(var(--oui-color-base-9)) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(212, 175, 55, 0.38) !important;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.08) !important;
 }
 
 .dex .swap .block {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+.dex .swap-input-view .network-row {
+  color: rgb(var(--oui-color-base-foreground) / 0.72) !important;
+  font-weight: 600 !important;
+}
+
+.dex .coin-input,
+.dex .coin-input .input-main,
+.dex .swap .coin-input,
+.dex .swap .input-main {
   background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgba(var(--oui-color-line), 0.1) !important;
-  border-radius: var(--oui-rounded-lg) !important;
-}
-
-.el-dialog {
-  background: rgb(var(--oui-color-base-8)) !important;
-  border-radius: var(--oui-rounded-lg) !important;
-  border: 1px solid rgb(var(--oui-color-line) / 0.06) !important;
-}
-
-.coin-input .input-main {
-  background: rgb(var(--oui-color-base-3)) !important;
-  border-radius: var(--oui-rounded-xl) !important;
-}
-
-.dex .swap input {
-  background: rgb(var(--oui-color-base-3)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border-radius: 12px !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.dex .coin-input:focus-within,
+.dex .coin-input .input-main:focus-within {
+  border-color: rgba(212, 175, 55, 0.55) !important;
+}
+
+.dex .swap input,
+.dex .coin-input input {
+  background: transparent !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  font-weight: 600 !important;
+}
+
+.dex .coin-input .symbol,
+.dex .coin-input .token-symbol {
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  font-weight: 700 !important;
+}
+
+.dex .coin-input .max,
+.dex .coin-input button.max,
+.dex .swap .max {
+  background: rgba(212, 175, 55, 0.16) !important;
+  color: #f0d78c !important;
+  border: 1px solid rgba(212, 175, 55, 0.28) !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+
+.dex .swap-icon-view,
+.dex .swap .swap-icon {
+  background: rgb(var(--oui-color-base-8)) !important;
+  border: 1px solid rgba(212, 175, 55, 0.35) !important;
+  color: #f0d78c !important;
+}
+
+.dex .swap-btn,
+.dex .swap .el-button--primary {
+  height: 42px !important;
+  min-height: 42px !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+  letter-spacing: 0.01em !important;
+}
+
+.dex .swap-info,
+.dex .swap .price-row {
+  color: rgb(var(--oui-color-base-foreground) / 0.55) !important;
+  font-size: 12px !important;
+}
+
+.el-dialog,
+.el-dialog__wrapper .el-dialog,
+.el-overlay-dialog .el-dialog {
+  background: rgb(var(--oui-color-base-8)) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.el-dialog__title,
+.el-dialog__header {
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  font-weight: 700 !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close,
+.el-dialog .el-icon {
+  color: rgb(var(--oui-color-base-foreground) / 0.7) !important;
+}
+
+.el-dialog .el-button,
+.el-dialog [class*="slip"],
+.el-dialog [class*="percent"] {
+  border-radius: 8px !important;
+}
+
+.el-dialog .is-active,
+.el-dialog .active,
+.el-dialog button.is-active,
+.el-dialog .el-button--primary:not(.swap-btn) {
+  background: rgba(212, 175, 55, 0.16) !important;
+  color: #f0d78c !important;
+  border-color: rgba(212, 175, 55, 0.45) !important;
+}
+
+.el-dialog input {
+  background: rgb(var(--oui-color-base-9)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border-radius: 8px !important;
+}
+
+.el-dialog .el-button--primary {
+  background: linear-gradient(180deg, #f0d78c, #d4af37) !important;
+  border-color: #d4af37 !important;
+  color: #0b0e11 !important;
+  height: 42px !important;
+  font-weight: 700 !important;
+}
+
+.dex .token-list,
+.el-dialog .token-list,
+.el-dialog .search-input,
+[class*="token-select"] {
+  background: rgb(var(--oui-color-base-8)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.el-dialog .search-input input,
+.el-dialog input[placeholder*="Search"] {
+  background: rgb(var(--oui-color-base-9)) !important;
 }
