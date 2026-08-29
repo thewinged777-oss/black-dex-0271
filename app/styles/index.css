@@ -40,3 +40,36 @@ body,
 .bd-root {
   background: #0b0e11;
 }
+
+/* Official shield: contain, never crop like an avatar */
+.bd-navbar img,
+.oui-left-nav img,
+header img[alt="logo"] {
+  object-fit: contain;
+}
+
+/* Compact the generic "No results found" void under Positions */
+.oui-empty {
+  min-height: 132px !important;
+  padding: 20px 12px !important;
+}
+
+.oui-empty svg {
+  opacity: 0.42;
+}
+
+/* Mobile tab bar: venue chrome, four destinations */
+.oui-bottom-nav,
+[class*="oui-bottomNav"],
+[class*="oui-bottom-nav"] {
+  background: rgba(11, 14, 17, 0.96) !important;
+  border-top: 1px solid #2b3139 !important;
+  backdrop-filter: blur(18px);
+}
+
+/* Desktop trading desk: less dead canvas under the ticket */
+@media (min-width: 1024px) {
+  .oui-empty {
+    min-height: 168px !important;
+  }
+}
