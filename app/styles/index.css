@@ -5,6 +5,7 @@
 @import "../styles/swap.css";
 @import "../styles/trade.css";
 @import "../styles/home.css";
+@import "../styles/nav.css";
 
 @tailwind base;
 @tailwind components;
