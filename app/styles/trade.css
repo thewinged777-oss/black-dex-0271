@@ -20,62 +20,6 @@
   line-height: 16px !important;
 }
 
-.bd-ticket-advanced {
-  display: none !important;
-}
-
-.bd-perp-page button.bd-side-buy {
-  color: #0ecb81 !important;
-  border-color: rgba(14, 203, 129, 0.45) !important;
-}
-
-.bd-perp-page button.bd-side-buy[aria-pressed="true"],
-.bd-perp-page button.bd-side-buy[data-state="active"] {
-  background: rgba(14, 203, 129, 0.16) !important;
-  color: #0ecb81 !important;
-}
-
-.bd-perp-page button.bd-side-sell {
-  color: #f6465d !important;
-  border-color: rgba(246, 70, 93, 0.45) !important;
-}
-
-.bd-perp-page button.bd-side-sell[aria-pressed="true"],
-.bd-perp-page button.bd-side-sell[data-state="active"] {
-  background: rgba(246, 70, 93, 0.16) !important;
-  color: #f6465d !important;
-}
-
-.bd-perp-page button.bd-side-buy[class*="oui-button"] {
-  background: #0ecb81 !important;
-  color: #04140d !important;
-  border-color: #0ecb81 !important;
-  opacity: 1 !important;
-}
-
-.bd-perp-page button.bd-side-sell[class*="oui-button"] {
-  background: #f6465d !important;
-  color: #fff !important;
-  border-color: #f6465d !important;
-  opacity: 1 !important;
-}
-
-.bd-pos-empty {
-  min-height: 48px !important;
-  height: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  padding: 10px 12px !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.55) !important;
-  font-size: 12px !important;
-}
-
-.bd-pos-empty svg,
-.bd-pos-empty img {
-  display: none !important;
-}
-
 @media (min-width: 720px) {
   .bd-trade-chart {
     min-height: 380px;
