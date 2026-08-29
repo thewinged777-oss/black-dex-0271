@@ -1,4 +1,9 @@
-import { embedChartUrl } from "@/utils/swap-token-intel";
+function embedChartUrl(pairUrl: string | null): string | null {
+  if (!pairUrl) return null;
+  const clean = pairUrl.split("?")[0];
+  if (!clean.includes("dexscreener.com")) return pairUrl;
+  return `${clean}?embed=1&theme=dark&info=0&trades=0`;
+}
 
 export default function SwapChart({
   pairUrl,
@@ -17,11 +22,7 @@ export default function SwapChart({
       </div>
       <div className="bd-swap-chart-frame">
         {src ? (
-          <iframe
-            title="Pair chart"
-            src={src}
-            allow="clipboard-write"
-          />
+          <iframe title="Pair chart" src={src} allow="clipboard-write" />
         ) : (
           <p className="bd-swap-chart-empty">Chart loads with the pair on the ticket.</p>
         )}
