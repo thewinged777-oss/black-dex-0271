@@ -1,0 +1,139 @@
+.bd-home {
+  width: min(920px, calc(100% - 24px));
+  margin: 16px auto 96px;
+  display: grid;
+  gap: 16px;
+}
+
+.bd-home-value {
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 4px;
+}
+
+.bd-home-value span,
+.bd-home h2 {
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.bd-home-value strong {
+  font-size: 28px;
+  letter-spacing: 0.01em;
+}
+
+.bd-home-value a,
+.bd-home-post time {
+  color: rgb(var(--oui-color-base-foreground) / 0.5);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.bd-home-movers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bd-home-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.bd-home-card,
+.bd-home-post {
+  display: grid;
+  gap: 2px;
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bd-home-card header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bd-home-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  background: rgba(212, 175, 55, 0.16);
+  color: #f0d78c;
+}
+
+.bd-home-dot[data-up="0"] {
+  background: rgba(246, 70, 93, 0.16);
+  color: #f6465d;
+}
+
+.bd-home-card em {
+  font-style: normal;
+  font-size: 11px;
+  color: rgb(var(--oui-color-base-foreground) / 0.45);
+}
+
+.bd-home-card b {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.bd-home-card small,
+.bd-home .is-up {
+  color: #0ecb81;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.bd-home .is-dn {
+  color: #f6465d;
+}
+
+.bd-home-posts {
+  display: grid;
+  gap: 8px;
+}
+
+.bd-home-post header {
+  color: #f0d78c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bd-home-post p {
+  margin: 4px 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgb(var(--oui-color-base-foreground) / 0.82);
+}
+
+@media (max-width: 640px) {
+  .bd-home-movers {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .bd-home-card {
+    padding: 8px 10px;
+  }
+
+  .bd-home-value strong {
+    font-size: 24px;
+  }
+}
