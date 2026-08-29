@@ -90,17 +90,16 @@ function TokenCard({
             Explorer
           </a>
         ) : null}
-        {token?.pairUrl ? (
-          <a href={token.pairUrl} target="_blank" rel="noreferrer">
-            Chart
-          </a>
-        ) : null}
       </div>
     </article>
   );
 }
 
-export default function SwapTokenIntel() {
+export default function SwapTokenIntel({
+  onChartPair,
+}: {
+  onChartPair?: (pairUrl: string | null, label: string) => void;
+}) {
   const seed = useMemo(() => defaultSwapPair(), []);
   const [pair, setPair] = useState<PairState>(seed);
   const [fromIntel, setFromIntel] = useState<TokenIntel | null>(null);
@@ -137,6 +136,12 @@ export default function SwapTokenIntel() {
         if (!live) return;
         setFromIntel(from);
         setToIntel(to);
+        const chartToken =
+          from.symbol === "USDC" || from.symbol === "USDT" || from.symbol === "USDC.E" ? to : from;
+        onChartPair?.(
+          chartToken.pairUrl,
+          `${pair.from.symbol} / ${pair.to.symbol} · ${pair.from.chainLabel}`,
+        );
       })
       .catch(() => {
         if (!live) return;
@@ -147,13 +152,13 @@ export default function SwapTokenIntel() {
     return () => {
       live = false;
     };
-  }, [pair.from.chain, pair.from.symbol, pair.to.chain, pair.to.symbol, pair.from.chainLabel, pair.to.chainLabel]);
+  }, [pair.from.chain, pair.from.symbol, pair.to.chain, pair.to.symbol, pair.from.chainLabel, pair.to.chainLabel, onChartPair]);
 
   return (
     <section className="bd-swap-intel" aria-label="Token information">
       <div className="bd-swap-intel-kicker">
         <span>Token intel</span>
-        <p>Live price, liquidity and contract for the pair on the ticket. Sourced from public DEX books.</p>
+        <p>Live price, liquidity and contract for the pair on the ticket.</p>
       </div>
       <div className="bd-swap-intel-grid">
         <TokenCard side="From" token={fromIntel} loading={loading && !fromIntel} />

@@ -18,25 +18,18 @@
   color: rgba(var(--oui-color-base-foreground), 0.4) !important;
 }
 
-.bd-swap-widget,
-.bd-swap-widget .dex,
-.bd-swap-widget .dex > div,
-.dex,
 .dex .swap {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.dex .swap {
-  background: rgb(var(--oui-color-base-9)) !important;
-  border-radius: 14px !important;
-  border: 1px solid rgba(212, 175, 55, 0.38) !important;
-  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.08) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
 }
 
 .dex .swap .block {
   background: transparent !important;
   border: 0 !important;
+  box-shadow: none !important;
 }
 
 .dex .swap-input-view .network-row {
@@ -52,11 +45,12 @@
   border: 1px solid rgb(var(--oui-color-line)) !important;
   border-radius: 12px !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
+  box-shadow: none !important;
 }
 
 .dex .coin-input:focus-within,
 .dex .coin-input .input-main:focus-within {
-  border-color: rgba(212, 175, 55, 0.55) !important;
+  border-color: rgb(var(--oui-color-line)) !important;
 }
 
 .dex .swap input,
@@ -85,7 +79,7 @@
 .dex .swap-icon-view,
 .dex .swap .swap-icon {
   background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgba(212, 175, 55, 0.35) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
   color: #f0d78c !important;
 }
 
@@ -96,7 +90,6 @@
   font-size: 14px !important;
   border-radius: 10px !important;
   letter-spacing: 0.01em !important;
-  width: 100% !important;
 }
 
 .dex .swap-info,
@@ -125,16 +118,9 @@
   color: rgb(var(--oui-color-base-foreground) / 0.7) !important;
 }
 
-.el-dialog .el-button,
-.el-dialog [class*="slip"],
-.el-dialog [class*="percent"] {
-  border-radius: 8px !important;
-}
-
 .el-dialog .is-active,
 .el-dialog .active,
-.el-dialog button.is-active,
-.el-dialog .el-button--primary:not(.swap-btn) {
+.el-dialog button.is-active {
   background: rgba(212, 175, 55, 0.16) !important;
   color: #f0d78c !important;
   border-color: rgba(212, 175, 55, 0.45) !important;
@@ -153,37 +139,4 @@
   color: #0b0e11 !important;
   height: 42px !important;
   font-weight: 700 !important;
-}
-
-.dex .token-list,
-.el-dialog .token-list,
-.el-dialog .search-input,
-[class*="token-select"] {
-  background: rgb(var(--oui-color-base-8)) !important;
-  color: rgb(var(--oui-color-base-foreground)) !important;
-}
-
-.el-dialog .search-input input,
-.el-dialog input[placeholder*="Search"] {
-  background: rgb(var(--oui-color-base-9)) !important;
-}
-
-@media (min-width: 720px) {
-  .bd-swap-pair {
-    display: flex;
-    align-items: stretch;
-    gap: 12px;
-    width: 100%;
-  }
-
-  .bd-swap-pair .swap-input-view {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .bd-swap-pair .swap-icon-view {
-    flex: 0 0 40px;
-    align-self: center;
-    transform: rotate(90deg);
-  }
 }
