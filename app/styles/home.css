@@ -30,7 +30,7 @@
 }
 
 .bd-home h2 {
-  color: #d4af37;
+  color: rgb(var(--oui-color-primary));
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -62,8 +62,8 @@
   height: 36px;
   padding: 0 16px;
   border-radius: 999px;
-  background: #d4af37;
-  color: #111;
+  background: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-primary-contrast));
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -99,8 +99,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #1a1d24;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-home-chip span {
@@ -124,8 +124,8 @@
   min-height: 108px;
   padding: 14px;
   border-radius: 14px;
-  background: #14171d;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -150,7 +150,7 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #d4af37;
+  color: rgb(var(--oui-color-primary));
 }
 
 .bd-home-movers {
@@ -159,36 +159,64 @@
   gap: 8px;
 }
 
-.bd-home-grid {
+.bd-home-grid,
+.bd-home-pass-grid {
   display: grid;
   gap: 6px;
 }
 
+.bd-home-pass-lead {
+  margin: -2px 0 8px;
+  font-size: 12px;
+  color: rgb(var(--oui-color-base-foreground) / 0.5);
+}
+
+.bd-home-pass-grid {
+  grid-template-columns: 1fr;
+}
+
 .bd-home-card,
-.bd-home-post {
+.bd-home-post,
+.bd-home-pass {
   display: grid;
   gap: 2px;
-  background: #14171d;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
   border-radius: 14px;
   padding: 12px;
   text-decoration: none;
   color: inherit;
 }
 
-.bd-home-card header {
+.bd-home-card header,
+.bd-home-pass header {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.bd-home-card header strong {
+.bd-home-pass header {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.bd-home-card header strong,
+.bd-home-pass header strong {
+  font-size: 13px;
+  display: block;
+}
+
+.bd-home-pass header em {
+  display: block;
+  font-style: normal;
+  font-size: 11px;
+  color: rgb(var(--oui-color-base-foreground) / 0.45);
+}
+
+.bd-home-pass-side {
+  margin: 6px 0 8px;
   font-size: 12px;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: rgb(var(--oui-color-base-foreground) / 0.72);
 }
 
 .bd-home-dot {
@@ -200,14 +228,14 @@
   justify-content: center;
   font-size: 7px;
   font-weight: 700;
-  background: rgba(212, 175, 55, 0.16);
-  color: #f0d78c;
+  background: rgb(var(--oui-color-primary) / 0.16);
+  color: rgb(var(--oui-color-primary-light));
   flex: none;
 }
 
 .bd-home-dot[data-up="0"] {
-  background: rgba(246, 70, 93, 0.16);
-  color: #f6465d;
+  background: rgb(var(--oui-color-danger) / 0.16);
+  color: rgb(var(--oui-color-danger));
 }
 
 .bd-home-card b {
@@ -216,35 +244,48 @@
   font-variant-numeric: tabular-nums;
 }
 
-.bd-home-card dl {
+.bd-home-card dl,
+.bd-home-pass dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   margin: 0;
 }
 
-.bd-home-card dt {
+.bd-home-pass dl {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.bd-home-card dt,
+.bd-home-pass dt {
   display: block;
   font-size: 10px;
   color: rgb(var(--oui-color-base-foreground) / 0.4);
 }
 
-.bd-home-card dd {
+.bd-home-card dd,
+.bd-home-pass dd {
   margin: 1px 0 0;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   color: rgb(var(--oui-color-base-foreground) / 0.82);
 }
 
+.bd-home-pass dd i {
+  display: block;
+  font-style: normal;
+  color: rgb(var(--oui-color-base-foreground) / 0.45);
+}
+
 .bd-home-card small,
 .bd-home .is-up {
-  color: #0ecb81;
+  color: rgb(var(--oui-color-success));
   font-size: 11px;
   font-weight: 650;
 }
 
 .bd-home .is-dn {
-  color: #f6465d;
+  color: rgb(var(--oui-color-danger));
 }
 
 .bd-home-posts {
@@ -253,7 +294,7 @@
 }
 
 .bd-home-post header {
-  color: #f0d78c;
+  color: rgb(var(--oui-color-primary-light));
   font-size: 11px;
   font-weight: 700;
 }
@@ -263,4 +304,10 @@
   font-size: 12px;
   line-height: 1.35;
   color: rgb(var(--oui-color-base-foreground) / 0.82);
+}
+
+@media (min-width: 720px) {
+  .bd-home-pass-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
