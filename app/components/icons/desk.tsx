@@ -119,6 +119,21 @@ export function PointsIcon({ active, size, ...rest }: IconProps) {
   );
 }
 
+export function SettingsIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <circle cx="12" cy="12" r="2.7" stroke={c} strokeWidth="1.6" />
+      <path
+        d="M10.4 3.6h3.2l.4 2.2 1.9.8 1.9-1.2 2.3 2.3-1.2 1.9.8 1.9 2.2.4v3.2l-2.2.4-.8 1.9 1.2 1.9-2.3 2.3-1.9-1.2-1.9.8-.4 2.2h-3.2l-.4-2.2-1.9-.8-1.9 1.2-2.3-2.3 1.2-1.9-.8-1.9-2.2-.4v-3.2l2.2-.4.8-1.9-1.2-1.9 2.3-2.3 1.9 1.2 1.9-.8.4-2.2Z"
+        stroke={c}
+        strokeWidth="1.6"
+        strokeLinejoin="miter"
+      />
+    </Base>
+  );
+}
+
 export function TradeActiveIcon(props: IconProps) {
   return <TradeIcon active {...props} />;
 }

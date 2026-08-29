@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Settings } from "lucide-react";
+import { SettingsIcon } from "@/components/icons/desk";
 
 export const SettingsNavButton: FC = () => {
   return (
@@ -8,9 +8,9 @@ export const SettingsNavButton: FC = () => {
       to="/portfolio/setting"
       aria-label="Settings"
       title="Settings"
-      className="oui-flex oui-h-8 oui-w-8 oui-items-center oui-justify-center oui-rounded oui-text-base-contrast-80 hover:oui-bg-base-7 oui-no-underline"
+      className="bd-header-control oui-flex oui-h-8 oui-w-8 oui-shrink-0 oui-items-center oui-justify-center oui-no-underline"
     >
-      <Settings className="oui-h-5 oui-w-5" strokeWidth={1.75} />
+      <SettingsIcon size={20} />
     </Link>
   );
 };

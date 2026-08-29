@@ -22,12 +22,13 @@ export const ThemeLogo: FC<ThemeLogoProps> = ({
       <img
         src={withBasePath("/logo-secondary.webp")}
         alt={alt}
-        className={className}
+        className={["bd-header-shield", className].filter(Boolean).join(" ")}
         style={{
-          height: height ?? 32,
-          width: "auto",
+          height: height ?? 28,
+          width: height ?? 28,
           objectFit: "contain",
           background: "transparent",
+          display: "block",
           ...style,
         }}
       />
@@ -43,18 +44,6 @@ export const ThemeLogo: FC<ThemeLogoProps> = ({
       aria-label={name}
     >
       BLACK DEX
-    </span>
-  );
-};
-
-export const BrandMark: FC<{ className?: string; height?: number }> = ({
-  className,
-  height = 32,
-}) => {
-  return (
-    <span className={["oui-inline-flex oui-items-center oui-gap-2", className].filter(Boolean).join(" ")}>
-      <ThemeLogo variant="secondary" height={height} />
-      <ThemeLogo />
     </span>
   );
 };
