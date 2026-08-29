@@ -41,10 +41,37 @@ body,
   background: transparent !important;
 }
 
+.bd-header-row,
+.bd-navbar,
+header {
+  min-height: 56px;
+}
+
+.bd-header-row {
+  align-items: center;
+}
+
+.bd-header-shield {
+  height: 28px !important;
+  width: 28px !important;
+  display: block;
+  object-fit: contain;
+  background: transparent !important;
+}
+
+.bd-header-control {
+  height: 32px;
+  width: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .bd-theme-logo,
 .bd-navbar img,
 .oui-left-nav img,
 header img[alt="logo"],
+header img[alt="Black DEX"],
 img[alt="logo"] {
   background: transparent !important;
 }

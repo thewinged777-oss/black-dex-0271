@@ -17,7 +17,7 @@ import {
 import { CampaignsNavTitle } from "@/components/CampaignsNavTitle";
 import CustomLeftNav from "@/components/CustomLeftNav";
 import { SettingsNavButton } from "@/components/SettingsNavButton";
-import { BrandMark } from "@/components/ThemeLogo";
+import { ThemeLogo } from "@/components/ThemeLogo";
 import { OrderlyActiveIcon, OrderlyIcon } from "../components/icons/orderly";
 import {
   TradeActiveIcon,
@@ -270,7 +270,7 @@ export const useOrderlyConfig = () => {
   const appIcons = useMemo<AppLogos>(
     () => ({
       main: {
-        component: <BrandMark />,
+        component: <ThemeLogo variant="secondary" height={28} />,
       },
       secondary: {
         img: withBasePath("/logo-secondary.webp"),
@@ -428,7 +428,7 @@ export const useOrderlyConfig = () => {
 
     mainNavProps.customRender = (components) => {
       return (
-        <Flex justify="between" className="oui-w-full">
+        <Flex justify="between" itemAlign="center" className="oui-w-full bd-header-row">
           <Flex
             itemAlign={"center"}
             className={cn("oui-gap-3", "oui-overflow-hidden")}
@@ -439,8 +439,8 @@ export const useOrderlyConfig = () => {
                 externalLinks={customMenus}
               />
             )}
-            <Link to="/" className="oui-no-underline">
-              <BrandMark />
+            <Link to="/" className="oui-no-underline oui-flex oui-items-center">
+              <ThemeLogo variant="secondary" height={28} />
             </Link>
             {components.mainNav}
           </Flex>
