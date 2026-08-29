@@ -257,14 +257,14 @@ export const useOrderlyConfig = () => {
   const sharePnLConfig = useMemo<TradingPageProps["sharePnLConfig"]>(
     () => ({
       backgroundImages: getPnLBackgroundImages(),
-      color: "rgba(255, 255, 255, 0.98)",
-      profitColor: "rgba(41, 223, 169, 1)",
-      lossColor: "rgba(245, 97, 139, 1)",
-      brandColor: "rgba(255, 255, 255, 0.98)",
+      color: "rgba(234, 236, 239, 0.98)",
+      profitColor: "rgba(14, 203, 129, 1)",
+      lossColor: "rgba(246, 70, 93, 1)",
+      brandColor: "rgba(212, 175, 55, 1)",
       refLink:
         typeof window !== "undefined" ? window.location.origin : undefined,
       refSlogan:
-        getRuntimeConfig("VITE_ORDERLY_BROKER_NAME") || "Orderly Network",
+        getRuntimeConfig("VITE_ORDERLY_BROKER_NAME") || "Black DEX",
     }),
     [],
   );
