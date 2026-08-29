@@ -7,6 +7,7 @@ import { formatSymbol, generatePageTitle } from "@/utils/utils";
 import { useOrderlyConfig } from "@/utils/config";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
+import TradeDeskLayout from "@/components/trade/TradeDeskLayout";
 
 export default function PerpSymbol() {
   const params = useParams();
@@ -29,7 +30,7 @@ export default function PerpSymbol() {
 
       navigate(`/perp/${symbol}${queryString}`);
     },
-    [navigate, searchParams]
+    [navigate, searchParams],
   );
 
   const pageMeta = getPageMeta();
@@ -38,6 +39,7 @@ export default function PerpSymbol() {
   return (
     <div className="h-full">
       {renderSEOTags(pageMeta, pageTitle)}
+      <TradeDeskLayout />
       <TradingPage
         symbol={symbol}
         onSymbolChange={onSymbolChange}
