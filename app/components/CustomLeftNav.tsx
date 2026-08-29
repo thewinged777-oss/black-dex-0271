@@ -13,7 +13,7 @@ import {
   getRuntimeConfig,
   getRuntimeConfigBoolean,
 } from "@/utils/runtime-config";
-import { withBasePath } from "@/utils/base-path";
+import { ThemeLogo } from "@/components/ThemeLogo";
 
 type LeftNavUIProps = LeftNavProps & {
   className?: string;
@@ -56,8 +56,7 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
     <Sheet open={visible} onOpenChange={onOpenChange}>
       <SheetContent
         side="left"
-        className="oui-w-[276px]"
-        style={{ background: "#0c1018" }}
+        className="oui-w-[276px] oui-bg-base-9 bd-left-nav"
         closeable
         closeableSize={24}
         closeOpacity={0.54}
@@ -65,11 +64,10 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
         <div className="oui-relative oui-flex oui-h-full oui-flex-col oui-gap-3">
           <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center">
             {getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO") ? (
-              <img
-                src={withBasePath("/logo.svg")}
-                alt="logo"
-                className="oui-h-[32px]"
-                style={{ background: "#0c1018" }}
+              <ThemeLogo
+                variant="primary"
+                className="oui-h-[32px] bd-theme-logo"
+                height={32}
               />
             ) : (
               <h1 className="oui-text-base-contrast-80 oui-font-bold">
@@ -119,14 +117,28 @@ const NavItem: FC<NavItemProps> = ({ item, onLinkClick }) => {
   const { href, name, icon, trailing, customRender, target } = item;
 
   if (customRender) {
+    const rendered = customRender({ name, href });
+    const className =
+      "oui-flex oui-items-center oui-px-3 oui-py-4 oui-w-full hover:oui-bg-base-7 oui-bg-transparent oui-border-none oui-no-underline";
+
+    if (target) {
+      return (
+        <a
+          href={href}
+          target={target}
+          rel={target === "_blank" ? "noopener noreferrer" : undefined}
+          onClick={onLinkClick}
+          className={className}
+        >
+          {rendered}
+        </a>
+      );
+    }
+
     return (
-      <button
-        type="button"
-        onClick={onLinkClick}
-        className="oui-flex oui-items-center oui-px-3 oui-py-4 oui-w-full hover:oui-bg-base-7 oui-bg-transparent oui-border-none"
-      >
-        {customRender({ name, href })}
-      </button>
+      <Link to={href || "/"} onClick={onLinkClick} className={className}>
+        {rendered}
+      </Link>
     );
   }
 
