@@ -9,6 +9,11 @@ export default function SwapLayout() {
 
   return (
     <Scaffold
+      classNames={{
+        root: "bd-root",
+        topNavbar: "bd-navbar",
+        footer: "bd-footer",
+      }}
       mainNavProps={{
         ...config.scaffold.mainNavProps,
         initialMenu: "/swap",
@@ -23,4 +28,3 @@ export default function SwapLayout() {
     </Scaffold>
   );
 }
-
