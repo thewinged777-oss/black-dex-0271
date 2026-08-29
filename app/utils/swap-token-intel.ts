@@ -125,10 +125,10 @@ const REGISTRY: Record<SwapChainId, Record<string, KnownToken>> = {
   },
 };
 
+const STABLES = new Set(["USDC", "USDT", "USDC.E", "DAI"]);
+
 export function normalizeChain(label: string | null | undefined): SwapChainId {
-  const key = (label || "arbitrum")
-    .toLowerCase()
-    .replace(/[^a-z]/g, "");
+  const key = (label || "arbitrum").toLowerCase().replace(/[^a-z]/g, "");
   return CHAIN_ALIASES[key] || "arbitrum";
 }
 
@@ -139,29 +139,44 @@ export function defaultSwapPair(): { from: SwapTokenRef; to: SwapTokenRef } {
   };
 }
 
+function text(el: Element | null | undefined): string {
+  return (el?.textContent || "").replace(/\s+/g, " ").trim();
+}
+
+function symbolFromView(view: Element, fallback: string): string {
+  const node =
+    view.querySelector(".symbol") ||
+    view.querySelector(".token-symbol") ||
+    view.querySelector("[class*='symbol']");
+  const raw = text(node).replace(/[\u25be\u25bc\u25b2\u25b8▶]/g, "").trim();
+  const token = raw.split(" ")[0];
+  return (token || fallback).toUpperCase();
+}
+
 export function readSwapPairFromDom(): { from: SwapTokenRef; to: SwapTokenRef } | null {
   const views = Array.from(document.querySelectorAll(".dex .swap-input-view"));
   if (views.length < 2) return null;
 
-  const parse = (view: Element, fallbackSymbol: string): SwapTokenRef => {
-    const network =
-      view.querySelector(".network-row")?.textContent?.replace(/\s+/g, " ").trim() || "";
+  const parsed = views.map((view, index) => {
+    const network = text(view.querySelector(".network-row"));
+    const side = /^to\b/i.test(network) ? "to" : /^from\b/i.test(network) ? "from" : index === 0 ? "from" : "to";
     const chainLabel =
       network.replace(/^(From|To)\s+/i, "").replace(/\s*[\u25be\u25bc\u25b2\u25b8].*$/, "").trim() ||
       "Arbitrum";
-    const symbol =
-      view.querySelector(".symbol")?.textContent?.trim() || fallbackSymbol;
     return {
-      chainLabel,
-      chain: normalizeChain(chainLabel),
-      symbol: symbol.toUpperCase(),
+      side,
+      ref: {
+        chainLabel,
+        chain: normalizeChain(chainLabel),
+        symbol: symbolFromView(view, index === 0 ? "ETH" : "USDC"),
+      } as SwapTokenRef,
     };
-  };
+  });
 
-  return {
-    from: parse(views[0], "ETH"),
-    to: parse(views[1], "USDC"),
-  };
+  const from = parsed.find((item) => item.side === "from")?.ref || parsed[0].ref;
+  const to = parsed.find((item) => item.side === "to")?.ref || parsed[1].ref;
+  if (!from.symbol || !to.symbol) return null;
+  return { from, to };
 }
 
 type DexPair = {
@@ -178,31 +193,58 @@ type DexPair = {
   quoteToken?: { address?: string; name?: string; symbol?: string };
 };
 
-function pickPair(pairs: DexPair[], chain: SwapChainId, symbol: string): DexPair | null {
-  const wanted = symbol.toUpperCase();
-  const onChain = pairs.filter((pair) => (pair.chainId || "").toLowerCase() === chain);
-  const pool = onChain.length ? onChain : pairs;
+function onChain(pair: DexPair, chain: SwapChainId) {
+  return (pair.chainId || "").toLowerCase() === chain;
+}
+
+function pairSymbols(pair: DexPair) {
+  return {
+    base: (pair.baseToken?.symbol || "").toUpperCase(),
+    quote: (pair.quoteToken?.symbol || "").toUpperCase(),
+  };
+}
+
+function aliases(symbol: string) {
+  const upper = symbol.toUpperCase();
+  if (upper === "ETH") return ["ETH", "WETH"];
+  if (upper === "WETH") return ["WETH", "ETH"];
+  if (upper === "USDC") return ["USDC", "USDC.E"];
+  if (upper === "USDC.E") return ["USDC.E", "USDC"];
+  return [upper];
+}
+
+function pickOnChainPair(pairs: DexPair[], chain: SwapChainId, symbol: string): DexPair | null {
+  const wanted = aliases(symbol);
+  const pool = pairs.filter((pair) => onChain(pair, chain));
   const matched = pool.filter((pair) => {
-    const base = (pair.baseToken?.symbol || "").toUpperCase();
-    const quote = (pair.quoteToken?.symbol || "").toUpperCase();
-    return base === wanted || quote === wanted;
+    const { base, quote } = pairSymbols(pair);
+    return wanted.includes(base) || wanted.includes(quote);
   });
-  const ranked = (matched.length ? matched : pool).sort(
-    (a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0),
-  );
-  return ranked[0] || null;
+  return matched.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0] || null;
+}
+
+function pickTicketPair(pairs: DexPair[], from: SwapTokenRef, to: SwapTokenRef): DexPair | null {
+  const chain = from.chain;
+  const left = aliases(from.symbol);
+  const right = aliases(to.symbol);
+  const pool = pairs.filter((pair) => onChain(pair, chain));
+  const matched = pool.filter((pair) => {
+    const { base, quote } = pairSymbols(pair);
+    return (left.includes(base) && right.includes(quote)) || (left.includes(quote) && right.includes(base));
+  });
+  return matched.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0] || null;
 }
 
 function tokenFromPair(pair: DexPair, symbol: string, known?: KnownToken) {
-  const wanted = symbol.toUpperCase();
+  const wanted = aliases(symbol);
   const base = pair.baseToken;
   const quote = pair.quoteToken;
-  const useQuote = (quote?.symbol || "").toUpperCase() === wanted && (base?.symbol || "").toUpperCase() !== wanted;
+  const useQuote = wanted.includes((quote?.symbol || "").toUpperCase()) && !wanted.includes((base?.symbol || "").toUpperCase());
   const token = useQuote ? quote : base;
   return {
     address: known?.address || token?.address || "",
     name: known?.name || token?.name || symbol,
-    symbol: token?.symbol || symbol,
+    symbol: symbol.toUpperCase(),
   };
 }
 
@@ -212,46 +254,35 @@ async function fetchJson(url: string): Promise<unknown> {
   return res.json();
 }
 
-export async function loadTokenIntel(ref: SwapTokenRef): Promise<SwapTokenIntel> {
-  const symbol = ref.symbol.toUpperCase();
-  const known = REGISTRY[ref.chain]?.[symbol];
-  let pairs: DexPair[] = [];
-
-  if (known?.address) {
+async function pairsForToken(chain: SwapChainId, address?: string, symbol?: string): Promise<DexPair[]> {
+  if (address) {
     try {
-      const data = await fetchJson(
-        `https://api.dexscreener.com/tokens/v1/${ref.chain}/${known.address}`,
-      );
-      pairs = Array.isArray(data) ? (data as DexPair[]) : [];
+      const data = await fetchJson(`https://api.dexscreener.com/tokens/v1/${chain}/${address}`);
+      if (Array.isArray(data)) return data as DexPair[];
     } catch {
-      pairs = [];
+      /* search fallback */
     }
   }
+  if (!symbol) return [];
+  const data = (await fetchJson(
+    `https://api.dexscreener.com/latest/dex/search?q=${encodeURIComponent(`${symbol}`)}`,
+  )) as { pairs?: DexPair[] };
+  return data.pairs || [];
+}
 
-  if (!pairs.length) {
-    const data = (await fetchJson(
-      `https://api.dexscreener.com/latest/dex/search?q=${encodeURIComponent(symbol)}`,
-    )) as { pairs?: DexPair[] };
-    pairs = data.pairs || [];
-  }
-
-  const pair = pickPair(pairs, ref.chain, symbol);
-  const token = pair ? tokenFromPair(pair, symbol, known) : {
+function toIntel(ref: SwapTokenRef, pair: DexPair | null, known?: KnownToken): SwapTokenIntel {
+  const token = pair ? tokenFromPair(pair, ref.symbol, known) : {
     address: known?.address || "",
-    name: known?.name || symbol,
-    symbol,
+    name: known?.name || ref.symbol,
+    symbol: ref.symbol,
   };
-
-  const address = token.address;
-  const native = Boolean(known?.native);
-
   return {
-    symbol,
+    symbol: ref.symbol.toUpperCase(),
     name: token.name,
     chain: ref.chain,
     chainLabel: ref.chainLabel,
-    address,
-    native,
+    address: token.address,
+    native: Boolean(known?.native),
     priceUsd: pair?.priceUsd ? Number(pair.priceUsd) : null,
     change24h: pair?.priceChange?.h24 ?? null,
     liquidityUsd: pair?.liquidity?.usd ?? null,
@@ -260,7 +291,36 @@ export async function loadTokenIntel(ref: SwapTokenRef): Promise<SwapTokenIntel>
     marketCap: pair?.marketCap ?? null,
     dex: pair?.dexId || null,
     pairUrl: pair?.url || null,
-    explorerUrl: address ? `${EXPLORERS[ref.chain]}${address}` : null,
+    explorerUrl: token.address ? `${EXPLORERS[ref.chain]}${token.address}` : null,
+  };
+}
+
+export async function loadTokenIntel(ref: SwapTokenRef): Promise<SwapTokenIntel> {
+  const known = REGISTRY[ref.chain]?.[ref.symbol.toUpperCase()];
+  const pairs = await pairsForToken(ref.chain, known?.address, ref.symbol);
+  const pair = pickOnChainPair(pairs, ref.chain, ref.symbol);
+  return toIntel(ref, pair, known);
+}
+
+export async function loadTicketBook(from: SwapTokenRef, to: SwapTokenRef): Promise<{
+  from: SwapTokenIntel;
+  to: SwapTokenIntel;
+  chartUrl: string | null;
+  label: string;
+}> {
+  const fromKnown = REGISTRY[from.chain]?.[from.symbol.toUpperCase()];
+  const toKnown = REGISTRY[to.chain]?.[to.symbol.toUpperCase()];
+  const pairs = await pairsForToken(from.chain, fromKnown?.address || toKnown?.address, from.symbol);
+  const ticket = pickTicketPair(pairs, from, to);
+  const fromPair = ticket || pickOnChainPair(pairs, from.chain, from.symbol);
+  const toPairs = await pairsForToken(to.chain, toKnown?.address, to.symbol);
+  const toPair = ticket || pickOnChainPair(toPairs, to.chain, to.symbol);
+
+  return {
+    from: toIntel(from, fromPair, fromKnown),
+    to: toIntel(to, toPair, toKnown),
+    chartUrl: ticket?.url || (STABLES.has(from.symbol.toUpperCase()) ? toPair?.url : fromPair?.url) || null,
+    label: `${from.symbol} / ${to.symbol} · ${from.chainLabel}`,
   };
 }
 

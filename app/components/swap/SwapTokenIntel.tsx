@@ -3,7 +3,7 @@ import {
   defaultSwapPair,
   formatPct,
   formatUsd,
-  loadTokenIntel,
+  loadTicketBook,
   readSwapPairFromDom,
   shortAddress,
   type SwapTokenIntel as TokenIntel,
@@ -16,7 +16,7 @@ type PairState = {
 };
 
 function sameRef(a: SwapTokenRef, b: SwapTokenRef) {
-  return a.chain === b.chain && a.symbol === b.symbol;
+  return a.chain === b.chain && a.symbol === b.symbol && a.chainLabel === b.chainLabel;
 }
 
 function TokenCard({
@@ -111,14 +111,12 @@ export default function SwapTokenIntel({
       const next = readSwapPairFromDom();
       if (!next) return;
       setPair((prev) => {
-        if (sameRef(prev.from, next.from) && sameRef(prev.to, next.to) && prev.from.chainLabel === next.from.chainLabel) {
-          return prev;
-        }
+        if (sameRef(prev.from, next.from) && sameRef(prev.to, next.to)) return prev;
         return next;
       });
     };
     pull();
-    const tick = window.setInterval(pull, 900);
+    const tick = window.setInterval(pull, 700);
     const root = document.querySelector(".dex") || document.body;
     const observer = new MutationObserver(pull);
     observer.observe(root, { subtree: true, childList: true, characterData: true });
@@ -131,17 +129,12 @@ export default function SwapTokenIntel({
   useEffect(() => {
     let live = true;
     setLoading(true);
-    Promise.all([loadTokenIntel(pair.from), loadTokenIntel(pair.to)])
-      .then(([from, to]) => {
+    loadTicketBook(pair.from, pair.to)
+      .then((book) => {
         if (!live) return;
-        setFromIntel(from);
-        setToIntel(to);
-        const chartToken =
-          from.symbol === "USDC" || from.symbol === "USDT" || from.symbol === "USDC.E" ? to : from;
-        onChartPair?.(
-          chartToken.pairUrl,
-          `${pair.from.symbol} / ${pair.to.symbol} · ${pair.from.chainLabel}`,
-        );
+        setFromIntel(book.from);
+        setToIntel(book.to);
+        onChartPair?.(book.chartUrl, book.label);
       })
       .catch(() => {
         if (!live) return;
@@ -152,13 +145,13 @@ export default function SwapTokenIntel({
     return () => {
       live = false;
     };
-  }, [pair.from.chain, pair.from.symbol, pair.to.chain, pair.to.symbol, pair.from.chainLabel, pair.to.chainLabel, onChartPair]);
+  }, [pair.from.chain, pair.from.symbol, pair.to.chain, pair.to.symbol, pair.from.chainLabel, onChartPair]);
 
   return (
     <section className="bd-swap-intel" aria-label="Token information">
       <div className="bd-swap-intel-kicker">
         <span>Token intel</span>
-        <p>Live price, liquidity and contract for the pair on the ticket.</p>
+        <p>Same-chain book for the pair on the ticket.</p>
       </div>
       <div className="bd-swap-intel-grid">
         <TokenCard side="From" token={fromIntel} loading={loading && !fromIntel} />
