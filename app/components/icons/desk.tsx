@@ -74,6 +74,51 @@ export function LeaderboardIcon({ active, size, ...rest }: IconProps) {
   );
 }
 
+export function SwapIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <path d="M7 7h11" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+      <path d="M15 4l3 3-3 3" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+      <path d="M17 17H6" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+      <path d="M9 20l-3-3 3-3" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+    </Base>
+  );
+}
+
+export function RewardsIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <path d="M8 5h8l1.5 3.5H6.5L8 5Z" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+      <path d="M7 8.5h10v3.5l-5 2-5-2V8.5Z" stroke={c} strokeWidth="1.6" />
+      <path d="M12 14v5" stroke={c} strokeWidth="1.6" />
+      <path d="M8 19h8" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+    </Base>
+  );
+}
+
+export function VaultsIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <rect x="4" y="7" width="16" height="13" rx="1.5" stroke={c} strokeWidth="1.6" />
+      <path d="M4 11h16" stroke={c} strokeWidth="1.6" />
+      <circle cx="12" cy="15.5" r="1.6" stroke={c} strokeWidth="1.6" />
+      <path d="M9 7V5.8A3 3 0 0 1 12 2.8 3 3 0 0 1 15 5.8V7" stroke={c} strokeWidth="1.6" />
+    </Base>
+  );
+}
+
+export function PointsIcon({ active, size, ...rest }: IconProps) {
+  const c = stroke(active);
+  return (
+    <Base size={size} {...rest}>
+      <path d="M12 3.5l2.1 4.4 4.8.6-3.5 3.3.9 4.8L12 14.4 7.7 16.6l.9-4.8L5.1 8.5l4.8-.6L12 3.5Z" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+    </Base>
+  );
+}
+
 export function TradeActiveIcon(props: IconProps) {
   return <TradeIcon active {...props} />;
 }
