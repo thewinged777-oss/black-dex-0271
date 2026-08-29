@@ -16,7 +16,8 @@ import {
 } from "@orderly.network/ui-scaffold";
 import { CampaignsNavTitle } from "@/components/CampaignsNavTitle";
 import CustomLeftNav from "@/components/CustomLeftNav";
-import { ThemeLogo } from "@/components/ThemeLogo";
+import { SettingsNavButton } from "@/components/SettingsNavButton";
+import { BrandMark } from "@/components/ThemeLogo";
 import { OrderlyActiveIcon, OrderlyIcon } from "../components/icons/orderly";
 import {
   TradeActiveIcon,
@@ -269,7 +270,7 @@ export const useOrderlyConfig = () => {
   const appIcons = useMemo<AppLogos>(
     () => ({
       main: {
-        component: <ThemeLogo className="bd-brand-title" />,
+        component: <BrandMark />,
       },
       secondary: {
         img: withBasePath("/logo-secondary.webp"),
@@ -438,8 +439,8 @@ export const useOrderlyConfig = () => {
                 externalLinks={customMenus}
               />
             )}
-            <Link to="/">
-              <ThemeLogo className="bd-brand-title" />
+            <Link to="/" className="oui-no-underline">
+              <BrandMark />
             </Link>
             {components.mainNav}
           </Flex>
@@ -447,8 +448,7 @@ export const useOrderlyConfig = () => {
           <Flex itemAlign={"center"} className="oui-gap-2">
             {components.accountSummary}
             {components.linkDevice}
-            {components.scanQRCode}
-            {components.languageSwitcher}
+            <SettingsNavButton />
             {components.subAccount}
             {components.chainMenu}
             {components.walletConnect}
