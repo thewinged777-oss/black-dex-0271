@@ -12,6 +12,7 @@ import {
   scoreMarket,
   sideLabel,
 } from "@/utils/funding-desk";
+import TokenMark from "@/components/TokenMark";
 import {
   LeaderboardIcon,
   RewardsIcon,
@@ -61,9 +62,7 @@ function MarketCard({ row }: { row: HomeMarket }) {
   return (
     <Link to={`/perp/${row.symbol}`} className="bd-home-card">
       <header>
-        <span className="bd-home-dot" data-up={up ? "1" : "0"}>
-          {row.base.slice(0, 3)}
-        </span>
+        <TokenMark symbol={row.symbol} label={row.base} size={20} />
         <strong>{row.base}</strong>
         <small className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</small>
       </header>
@@ -86,20 +85,15 @@ function PassCard({ idea }: { idea: CarryIdea }) {
   return (
     <Link to={`/perp/${idea.symbol}`} className="bd-home-pass">
       <header>
-        <div>
-          <strong>{idea.ticker}</strong>
-          <em>{idea.profile.sleeve}</em>
-        </div>
-        <span className={`bd-grade g-${idea.grade}`}>{idea.grade}</span>
+        <TokenMark symbol={idea.symbol} label={idea.ticker} size={20} />
+        <strong>{idea.ticker}</strong>
+        <em>{sideLabel(idea.side)}</em>
+        <span className={`bd-grade g-${idea.grade}`}>{idea.grade} {idea.score}</span>
       </header>
-      <p className="bd-home-pass-side">{sideLabel(idea.side)} · score {idea.score}</p>
       <dl>
         <div>
-          <dt>Est / last</dt>
-          <dd className={idea.est >= 0 ? "is-up" : "is-dn"}>
-            {formatRate(idea.est)}
-            <i>{formatRate(idea.last)}</i>
-          </dd>
+          <dt>Est</dt>
+          <dd className={idea.est >= 0 ? "is-up" : "is-dn"}>{formatRate(idea.est)}</dd>
         </div>
         <div>
           <dt>Ann.</dt>
@@ -110,19 +104,16 @@ function PassCard({ idea }: { idea: CarryIdea }) {
           <dd>{idea.basisBps.toFixed(1)} bp</dd>
         </div>
         <div>
-          <dt>24h / OI</dt>
-          <dd>
-            {formatUsd(idea.volumeUsd)}
-            <i>{formatUsd(idea.oiUsd)}</i>
-          </dd>
+          <dt>24h</dt>
+          <dd>{formatUsd(idea.volumeUsd)}</dd>
         </div>
         <div>
-          <dt>Interval</dt>
-          <dd>{idea.intervalHours}h</dd>
+          <dt>OI</dt>
+          <dd>{formatUsd(idea.oiUsd)}</dd>
         </div>
         <div>
-          <dt>Persist</dt>
-          <dd>{idea.persist ? "Yes" : "No"}</dd>
+          <dt>Int / persist</dt>
+          <dd>{idea.intervalHours}h · {idea.persist ? "Y" : "N"}</dd>
         </div>
       </dl>
     </Link>
@@ -223,9 +214,6 @@ export default function HomeDesk() {
 
       <section className="bd-home-pass-list">
         <h2>Passing screen</h2>
-        <p className="bd-home-pass-lead">
-          Names that clear the Funding Desk harvest filter. Same score, grade, and book stats as /desk.
-        </p>
         <div className="bd-home-pass-grid">
           {passing.length
             ? passing.map((idea) => <PassCard key={idea.symbol} idea={idea} />)

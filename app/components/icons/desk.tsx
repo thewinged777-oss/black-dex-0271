@@ -5,8 +5,6 @@ type IconProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-const stroke = (active?: boolean) => (active ? "#d4af37" : "#848e9c");
-
 function Base({
   size = 20,
   children,
@@ -26,132 +24,142 @@ function Base({
   );
 }
 
+function paint(active?: boolean) {
+  return active ? "#d4af37" : "currentColor";
+}
+
 export function HomeIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M4 11.2L12 4.5l8 6.7" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
-      <path d="M7 10.8V19h10v-8.2" stroke={c} strokeWidth="1.6" />
-      <path d="M10 19v-5h4v5" stroke={c} strokeWidth="1.6" />
+      <path
+        d="M4.6 11.2 12 4.8l7.4 6.4V19a1.4 1.4 0 0 1-1.4 1.4H6A1.4 1.4 0 0 1 4.6 19V11.2Z"
+        stroke={c}
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+        fill={active ? "rgba(212,175,55,0.16)" : "none"}
+      />
+      <path d="M10 20.2v-5.2h4v5.2" stroke={c} strokeWidth="1.7" strokeLinejoin="round" />
     </Base>
   );
 }
 
 export function TradeIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M4 18V8" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
-      <path d="M4 11h3v4H4" stroke={c} strokeWidth="1.6" />
-      <path d="M11 18V5" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
-      <path d="M11 8h3v7h-3" stroke={c} strokeWidth="1.6" />
-      <path d="M18 18V10" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
-      <path d="M18 12h3v4h-3" stroke={c} strokeWidth="1.6" />
+      <path d="M5 18V8" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M5 11.2h3.2V16H5" stroke={c} strokeWidth="1.7" strokeLinejoin="round" />
+      <path d="M10.8 18V5.6" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M10.8 8.4H14V16h-3.2" stroke={c} strokeWidth="1.7" strokeLinejoin="round" />
+      <path d="M16.6 18v-6.6" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M16.6 12.6H19.8V16h-3.2" stroke={c} strokeWidth="1.7" strokeLinejoin="round" />
     </Base>
   );
 }
 
 export function MarketsIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <rect x="3.5" y="3.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
-      <rect x="13.5" y="3.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
-      <rect x="3.5" y="13.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
-      <rect x="13.5" y="13.5" width="7" height="7" rx="1" stroke={c} strokeWidth="1.6" />
+      <path d="M4 16.4 8.2 12l3.1 3 8.7-8.4" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15.2 6.6H20v4.8" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
     </Base>
   );
 }
 
 export function PortfolioIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <rect x="3.5" y="7.5" width="17" height="12" rx="1.5" stroke={c} strokeWidth="1.6" />
-      <path d="M8 7.5V6.2A2.2 2.2 0 0 1 10.2 4h3.6A2.2 2.2 0 0 1 16 6.2v1.3" stroke={c} strokeWidth="1.6" />
-      <path d="M3.5 13h17" stroke={c} strokeWidth="1.6" />
+      <rect x="3.6" y="8" width="16.8" height="11.4" rx="2.2" stroke={c} strokeWidth="1.7" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
+      <path d="M8.2 8V6.6A2.4 2.4 0 0 1 10.6 4.2h2.8A2.4 2.4 0 0 1 15.8 6.6V8" stroke={c} strokeWidth="1.7" />
+      <path d="M3.6 12.6h16.8" stroke={c} strokeWidth="1.7" />
     </Base>
   );
 }
 
 export function LeaderboardIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M5 19V11h4v8H5Z" stroke={c} strokeWidth="1.6" />
-      <path d="M10 19V6h4v13h-4Z" stroke={c} strokeWidth="1.6" />
-      <path d="M15 19v-6h4v6h-4Z" stroke={c} strokeWidth="1.6" />
+      <path d="M8.2 19.2V12H5.4v7.2h2.8Z" stroke={c} strokeWidth="1.7" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.16)" : "none"} />
+      <path d="M13.4 19.2V5.8h-2.8v13.4h2.8Z" stroke={c} strokeWidth="1.7" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.22)" : "none"} />
+      <path d="M18.6 19.2v-5.2h-2.8v5.2h2.8Z" stroke={c} strokeWidth="1.7" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
     </Base>
   );
 }
 
 export function SwapIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M7 7h11" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
-      <path d="M15 4l3 3-3 3" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
-      <path d="M17 17H6" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
-      <path d="M9 20l-3-3 3-3" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+      <path d="M7.2 8.2h10.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M14.8 5.4 17.4 8.2 14.8 11" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16.8 15.8H6.6" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M9.2 18.6 6.6 15.8 9.2 13" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
     </Base>
   );
 }
 
 export function RewardsIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M8 5h8l1.5 3.5H6.5L8 5Z" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
-      <path d="M7 8.5h10v3.5l-5 2-5-2V8.5Z" stroke={c} strokeWidth="1.6" />
-      <path d="M12 14v5" stroke={c} strokeWidth="1.6" />
-      <path d="M8 19h8" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+      <path d="M7.4 9.2h9.2v8.2a2 2 0 0 1-2 2H9.4a2 2 0 0 1-2-2V9.2Z" stroke={c} strokeWidth="1.7" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
+      <path d="M7.4 9.2C7.4 6.8 9.4 5 12 5s4.6 1.8 4.6 4.2" stroke={c} strokeWidth="1.7" />
+      <path d="M12 12.2v4.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
     </Base>
   );
 }
 
 export function VaultsIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <rect x="4" y="7" width="16" height="13" rx="1.5" stroke={c} strokeWidth="1.6" />
-      <path d="M4 11h16" stroke={c} strokeWidth="1.6" />
-      <circle cx="12" cy="15.5" r="1.6" stroke={c} strokeWidth="1.6" />
-      <path d="M9 7V5.8A3 3 0 0 1 12 2.8 3 3 0 0 1 15 5.8V7" stroke={c} strokeWidth="1.6" />
+      <rect x="4.2" y="8.2" width="15.6" height="11.4" rx="2.2" stroke={c} strokeWidth="1.7" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
+      <path d="M9 8.2V6.4A3 3 0 0 1 12 3.6 3 3 0 0 1 15 6.4v1.8" stroke={c} strokeWidth="1.7" />
+      <circle cx="12" cy="14.4" r="1.5" stroke={c} strokeWidth="1.7" />
     </Base>
   );
 }
 
 export function PointsIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M12 3.5l2.1 4.4 4.8.6-3.5 3.3.9 4.8L12 14.4 7.7 16.6l.9-4.8L5.1 8.5l4.8-.6L12 3.5Z" stroke={c} strokeWidth="1.6" strokeLinejoin="miter" />
+      <path
+        d="M12 3.8 13.9 8.4l5 .6-3.7 3.4.9 4.9L12 15.1 7.9 17.3l.9-4.9L5.1 9l5-.6L12 3.8Z"
+        stroke={c}
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+        fill={active ? "rgba(212,175,55,0.16)" : "none"}
+      />
     </Base>
   );
 }
 
 export function SettingsIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <circle cx="12" cy="12" r="2.7" stroke={c} strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="2.5" stroke={c} strokeWidth="1.7" />
       <path
-        d="M10.4 3.6h3.2l.4 2.2 1.9.8 1.9-1.2 2.3 2.3-1.2 1.9.8 1.9 2.2.4v3.2l-2.2.4-.8 1.9 1.2 1.9-2.3 2.3-1.9-1.2-1.9.8-.4 2.2h-3.2l-.4-2.2-1.9-.8-1.9 1.2-2.3-2.3 1.2-1.9-.8-1.9-2.2-.4v-3.2l2.2-.4.8-1.9-1.2-1.9 2.3-2.3 1.9 1.2 1.9-.8.4-2.2Z"
+        d="M10.6 3.8h2.8l.3 2 1.8.8 1.7-1.1 2 2-1.1 1.7.8 1.8 2 .3v2.8l-2 .3-.8 1.8 1.1 1.7-2 2-1.7-1.1-1.8.8-.3 2h-2.8l-.3-2-1.8-.8-1.7 1.1-2-2 1.1-1.7-.8-1.8-2-.3v-2.8l2-.3.8-1.8-1.1-1.7 2-2 1.7 1.1 1.8-.8.3-2Z"
         stroke={c}
-        strokeWidth="1.6"
-        strokeLinejoin="miter"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
       />
     </Base>
   );
 }
 
 export function DeskIcon({ active, size, ...rest }: IconProps) {
-  const c = stroke(active);
+  const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <circle cx="12" cy="12" r="7.2" stroke={c} strokeWidth="1.6" />
-      <path d="M12 7.6v4.2l2.6 1.6" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
-      <path d="M5 19.2h14" stroke={c} strokeWidth="1.6" strokeLinecap="square" />
+      <circle cx="12" cy="12" r="7" stroke={c} strokeWidth="1.7" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
+      <path d="M12 8v4.1l2.4 1.5" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
     </Base>
   );
 }
