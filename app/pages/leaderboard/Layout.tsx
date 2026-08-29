@@ -9,6 +9,11 @@ export default function LeaderboardLayout() {
 
   return (
     <Scaffold
+      classNames={{
+        root: "bd-root",
+        topNavbar: "bd-navbar",
+        footer: "bd-footer",
+      }}
       mainNavProps={{
         ...config.scaffold.mainNavProps,
         initialMenu: "/leaderboard",
@@ -23,4 +28,3 @@ export default function LeaderboardLayout() {
     </Scaffold>
   );
 }
-
