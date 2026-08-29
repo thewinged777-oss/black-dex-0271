@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
 
 html,
 body,
@@ -7,7 +7,7 @@ body,
 .chart-container-border,
 #tv_chart_container,
 iframe {
-    background: #0a0a0a !important;
+    background: #0b0e11 !important;
 }
 
 html,
@@ -16,9 +16,9 @@ canvas,
 input,
 button,
 span {
-    font-family: "Manrope", roboto, ubuntu, sans-serif !important;
+    font-family: "IBM Plex Sans", "Manrope", roboto, ubuntu, sans-serif !important;
     font-weight: 600;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.01em;
 }
 
 div[data-section-name="tradingConfirmEnabled"] { display: none; }
@@ -32,7 +32,7 @@ div[data-section-name="tradingOrders"] { display: none; }
 div[data-section-name="tradingExecutions"] { display: none; }
 div[data-section-name="extendLeftTradingLine"] { display: none; }
 
-.loading-indicator { font-family: "Manrope", roboto, ubuntu, sans-serif; color: #d4af37; }
+.loading-indicator { font-family: "IBM Plex Sans", "Manrope", roboto, ubuntu, sans-serif; color: #d4af37; }
 .wrapper-3X2QgaDd { flex-direction: row-reverse; }
 .calculator-3AwNSLGC .calculator__input-3AwNSLGC { display: flex !important; }
 [data-name="legend-source-exchange"] { display: none !important; }
