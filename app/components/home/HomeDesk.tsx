@@ -14,7 +14,22 @@ import {
 function money(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) return "\u2014";
   if (Math.abs(value) >= 1000) return `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
-  return `$${value.toFixed(2)}`;
+  if (Math.abs(value) >= 1) return `$${value.toFixed(2)}`;
+  return `$${value.toFixed(4)}`;
+}
+
+function volume(value: number) {
+  if (!value) return "\u2014";
+  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
+  return `$${value.toFixed(0)}`;
+}
+
+function funding(value: number) {
+  const rate = value * 100;
+  const sign = rate > 0 ? "+" : "";
+  return `${sign}${rate.toFixed(4)}%`;
 }
 
 function pct(value: number) {
@@ -39,9 +54,19 @@ function MarketCard({ row }: { row: HomeMarket }) {
           {row.base.slice(0, 3)}
         </span>
         <strong>{row.base}</strong>
+        <small className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</small>
       </header>
       <b>{money(row.price)}</b>
-      <small className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</small>
+      <dl>
+        <div>
+          <dt>Funding</dt>
+          <dd className={row.funding >= 0 ? "is-up" : "is-dn"}>{funding(row.funding)}</dd>
+        </div>
+        <div>
+          <dt>Volume</dt>
+          <dd>{volume(row.volume)}</dd>
+        </div>
+      </dl>
     </Link>
   );
 }
