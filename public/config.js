@@ -19,7 +19,7 @@ window.__RUNTIME_CONFIG__ = {
   "VITE_APP_DESCRIPTION": "Non-custodial omnichain perpetual futures. Your keys. Your trades.",
   "VITE_HAS_PRIMARY_LOGO": "true",
   "VITE_HAS_SECONDARY_LOGO": "true",
-  "VITE_ENABLED_MENUS": "Trading,Markets,Portfolio",
+  "VITE_ENABLED_MENUS": "Trading,Markets,Portfolio,Leaderboard",
   "VITE_CUSTOM_MENUS": "Launch,https://main.black-dex.online;List a market,https://blackdexlisting.lovable.app",
   "VITE_ENABLE_SERVICE_DISCLAIMER_DIALOG": "false",
   "VITE_ENABLE_CAMPAIGNS": "false",
