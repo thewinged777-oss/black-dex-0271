@@ -57,7 +57,7 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
       <SheetContent
         side="left"
         className="oui-w-[276px]"
-        style={{ background: "#0c1018" }}
+        style={{ background: "#12151c" }}
         closeable
         closeableSize={24}
         closeOpacity={0.54}
@@ -69,7 +69,7 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
                 src={withBasePath("/logo.svg")}
                 alt="logo"
                 className="oui-h-[32px]"
-                style={{ background: "#0c1018" }}
+                style={{ background: "#12151c" }}
               />
             ) : (
               <h1 className="oui-text-base-contrast-80 oui-font-bold">
