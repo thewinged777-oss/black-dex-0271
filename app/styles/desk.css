@@ -24,11 +24,31 @@
   letter-spacing: -0.03em;
 }
 .bd-desk-lead {
-  margin: 0;
+  margin: 0 0 14px;
   max-width: 640px;
   color: rgb(var(--oui-color-base-foreground) / 0.62);
   line-height: 1.6;
   font-size: 14px;
+}
+.bd-desk-page-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bd-desk-page-tabs button {
+  border: 1px solid rgb(var(--oui-color-line));
+  background: transparent;
+  color: rgb(var(--oui-color-base-foreground) / 0.72);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.bd-desk-page-tabs button.is-on {
+  background: linear-gradient(180deg, #f0d78c, #d4af37);
+  color: #0b0e11;
+  border-color: #d4af37;
 }
 .bd-desk-stats {
   display: grid;
@@ -64,8 +84,7 @@
   gap: 14px;
 }
 .bd-desk-panel,
-.bd-desk-card,
-.bd-desk-chat {
+.bd-desk-card {
   background: rgb(var(--oui-color-base-8));
   border: 1px solid rgb(var(--oui-color-line));
   border-radius: 10px;
@@ -80,9 +99,7 @@
 }
 .bd-desk-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .bd-desk-tabs button,
-.bd-desk-starters button,
-.bd-desk-trade,
-.bd-desk-chat form button {
+.bd-desk-trade {
   border: 1px solid rgb(var(--oui-color-line));
   background: transparent;
   color: rgb(var(--oui-color-base-foreground) / 0.72);
@@ -93,8 +110,7 @@
   cursor: pointer;
 }
 .bd-desk-tabs button.is-on,
-.bd-desk-trade,
-.bd-desk-chat form button {
+.bd-desk-trade {
   background: linear-gradient(180deg, #f0d78c, #d4af37);
   color: #0b0e11;
   border-color: #d4af37;
@@ -102,6 +118,7 @@
 .bd-desk-hint {
   color: rgb(var(--oui-color-base-foreground) / 0.42);
   font-size: 11px;
+  margin: 0;
 }
 .bd-desk-table-wrap { overflow: auto; max-height: 640px; }
 .bd-desk-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -109,10 +126,18 @@
   text-align: left;
   color: rgb(var(--oui-color-base-foreground) / 0.42);
   font-weight: 500;
-  padding: 10px 12px;
+  padding: 6px 8px;
   position: sticky;
   top: 0;
   background: rgb(var(--oui-color-base-8));
+}
+.bd-desk-table th button {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  padding: 4px 4px;
+  cursor: pointer;
 }
 .bd-desk-table td {
   padding: 10px 12px;
@@ -144,19 +169,16 @@
 .g-C { background: rgba(132, 142, 156, 0.16); color: #848e9c; }
 .g-D { background: rgba(246, 70, 93, 0.12); color: #f6465d; }
 .bd-desk-side { display: grid; gap: 14px; align-content: start; }
-.bd-desk-card,
-.bd-desk-chat { padding: 16px; }
+.bd-desk-card { padding: 16px; }
 .bd-desk-card-top {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   align-items: flex-start;
 }
-.bd-desk-card h2,
-.bd-desk-chat h3 { margin: 0; }
+.bd-desk-card h2 { margin: 0; }
 .bd-desk-card p,
-.bd-desk-card li,
-.bd-desk-chat p {
+.bd-desk-card li {
   color: rgb(var(--oui-color-base-foreground) / 0.72);
   font-size: 13px;
   line-height: 1.55;
@@ -173,33 +195,6 @@
 }
 .bd-desk-card dd { margin: 4px 0 0; font-weight: 600; }
 .bd-desk-card ul { margin: 0; padding-left: 16px; }
-.bd-desk-log {
-  max-height: 280px;
-  overflow: auto;
-  display: grid;
-  gap: 10px;
-  margin: 12px 0;
-}
-.bd-desk-log p { margin: 0; white-space: pre-wrap; }
-.bd-desk-log span {
-  display: block;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #d4af37;
-  margin-bottom: 4px;
-}
-.bd-desk-log .user span { color: rgb(var(--oui-color-base-foreground) / 0.45); }
-.bd-desk-starters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-.bd-desk-chat form { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
-.bd-desk-chat input {
-  background: rgb(var(--oui-color-base-9));
-  border: 1px solid rgb(var(--oui-color-line));
-  color: inherit;
-  border-radius: 6px;
-  padding: 10px 12px;
-  font: inherit;
-}
 @media (max-width: 960px) {
   .bd-desk-hero,
   .bd-desk-grid { grid-template-columns: 1fr; }
