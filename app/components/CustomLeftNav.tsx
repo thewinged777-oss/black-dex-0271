@@ -70,15 +70,21 @@ const LauncherSheet = modal.create<LeftNavUIProps>((props) => {
   return (
     <div className="bd-launcher-root" onClick={() => onOpenChange(false)}>
       <div className="bd-launcher" onClick={(event) => event.stopPropagation()}>
-        <button className="bd-launcher-close" onClick={hide} aria-label="Close">
-          ×
-        </button>
+        <div className="bd-launcher-handle" />
+        <header className="bd-launcher-head">
+          <span>Menu</span>
+          <button className="bd-launcher-close" onClick={hide} aria-label="Close">
+            ×
+          </button>
+        </header>
         <div className="bd-launcher-grid">
           {TILES.map((tile) => {
             const Icon = tile.icon;
             return (
               <Link key={tile.href} to={tile.href} onClick={hide} className="bd-launcher-tile">
-                <Icon size={18} />
+                <i>
+                  <Icon size={18} />
+                </i>
                 <span>{tile.label}</span>
               </Link>
             );
