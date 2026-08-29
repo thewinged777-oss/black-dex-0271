@@ -58,7 +58,8 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
         closeOpacity={0.54}
       >
         <div className="oui-relative oui-flex oui-h-full oui-flex-col oui-gap-3">
-          <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center">
+          <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center oui-px-3">
+            <span className="oui-mr-1.5 oui-inline-block oui-w-[14px]" aria-hidden />
             <ThemeLogo />
           </div>
 
