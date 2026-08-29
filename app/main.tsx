@@ -9,6 +9,8 @@ import { withBasePath } from "./utils/base-path";
 import "./styles/index.css";
 
 const IndexPage = lazy(() => import("./pages/Index"));
+const HomeLayout = lazy(() => import("./pages/home/Layout"));
+const HomeIndex = lazy(() => import("./pages/home/Index"));
 const PerpLayout = lazy(() => import("./pages/perp/Layout"));
 const PerpIndex = lazy(() => import("./pages/perp/Index"));
 const PerpSymbol = lazy(() => import("./pages/perp/Symbol"));
@@ -63,6 +65,11 @@ const router = createBrowserRouter(
       errorElement: <ErrorBoundary />,
       children: [
         { index: true, element: <IndexPage /> },
+        {
+          path: "home",
+          element: <HomeLayout />,
+          children: [{ index: true, element: <HomeIndex /> }],
+        },
         {
           path: "perp",
           element: <PerpLayout />,
