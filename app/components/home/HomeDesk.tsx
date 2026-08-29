@@ -9,13 +9,15 @@ import {
   VaultsIcon,
   PointsIcon,
   DeskIcon,
+  SwapIcon,
+  TradeIcon,
 } from "@/components/icons/desk";
 
 function money(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) return "\u2014";
-  if (Math.abs(value) >= 1000) return `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
-  if (Math.abs(value) >= 1) return `$${value.toFixed(2)}`;
-  return `$${value.toFixed(4)}`;
+  if (Math.abs(value) >= 1000) return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  if (Math.abs(value) >= 1) return value.toFixed(2);
+  return value.toFixed(4);
 }
 
 function volume(value: number) {
@@ -38,11 +40,11 @@ function pct(value: number) {
 }
 
 const SHORTCUTS = [
-  { href: "/leaderboard", label: "Leaderboard", icon: <LeaderboardIcon size={16} /> },
-  { href: "/rewards", label: "Rewards", icon: <RewardsIcon size={16} /> },
-  { href: "/vaults", label: "Vaults", icon: <VaultsIcon size={16} /> },
-  { href: "/points", label: "Points", icon: <PointsIcon size={16} /> },
-  { href: "/desk", label: "Desk", icon: <DeskIcon size={16} /> },
+  { href: "/leaderboard", label: "Leaderboard", icon: <LeaderboardIcon size={18} /> },
+  { href: "/rewards", label: "Rewards", icon: <RewardsIcon size={18} /> },
+  { href: "/vaults", label: "Vaults", icon: <VaultsIcon size={18} /> },
+  { href: "/points", label: "Points", icon: <PointsIcon size={18} /> },
+  { href: "/desk", label: "Desk", icon: <DeskIcon size={18} /> },
 ];
 
 function MarketCard({ row }: { row: HomeMarket }) {
@@ -97,18 +99,45 @@ export default function HomeDesk() {
 
   return (
     <div className="bd-home">
-      <section className="bd-home-value">
-        <span>Portfolio value</span>
-        <strong>{money(total)}</strong>
-        <Link to="/portfolio">Open portfolio</Link>
-        <nav className="bd-home-shortcuts">
-          {SHORTCUTS.map((item) => (
-            <Link key={item.href} to={item.href} className="bd-home-chip">
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
+      <section className="bd-home-hero">
+        <div className="bd-home-balance">
+          <span>Total assets</span>
+          <strong>
+            {money(total)} <small>USDC</small>
+          </strong>
+          <Link to="/portfolio" className="bd-home-pnl">
+            Open portfolio
+          </Link>
+        </div>
+        <Link to="/portfolio" className="bd-home-deposit">
+          Deposit
+        </Link>
+      </section>
+
+      <nav className="bd-home-shortcuts">
+        {SHORTCUTS.map((item) => (
+          <Link key={item.href} to={item.href} className="bd-home-chip">
+            <i>{item.icon}</i>
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </nav>
+
+      <section className="bd-home-promos">
+        <Link to="/" className="bd-home-promo">
+          <em>Perps</em>
+          <b>Trade the book</b>
+          <span>
+            <TradeIcon size={14} /> Open desk
+          </span>
+        </Link>
+        <Link to="/swap" className="bd-home-promo">
+          <em>Swap</em>
+          <b>Move spot size</b>
+          <span>
+            <SwapIcon size={14} /> Swap now
+          </span>
+        </Link>
       </section>
 
       <section className="bd-home-movers">
