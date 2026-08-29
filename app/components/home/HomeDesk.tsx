@@ -3,9 +3,16 @@ import { Link } from "react-router-dom";
 import { useCollateral } from "@orderly.network/hooks";
 import { loadHomeMarkets, type HomeMarket } from "@/utils/home-markets";
 import { loadBlackDexPosts, type HomePost } from "@/utils/home-posts";
+import {
+  LeaderboardIcon,
+  RewardsIcon,
+  VaultsIcon,
+  PointsIcon,
+  DeskIcon,
+} from "@/components/icons/desk";
 
 function money(value: number | null | undefined) {
-  if (value == null || Number.isNaN(value)) return "—";
+  if (value == null || Number.isNaN(value)) return "\u2014";
   if (Math.abs(value) >= 1000) return `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
   return `$${value.toFixed(2)}`;
 }
@@ -14,6 +21,14 @@ function pct(value: number) {
   const sign = value > 0 ? "+" : "";
   return `${sign}${value.toFixed(2)}%`;
 }
+
+const SHORTCUTS = [
+  { href: "/leaderboard", label: "Leaderboard", icon: <LeaderboardIcon size={16} /> },
+  { href: "/rewards", label: "Rewards", icon: <RewardsIcon size={16} /> },
+  { href: "/vaults", label: "Vaults", icon: <VaultsIcon size={16} /> },
+  { href: "/points", label: "Points", icon: <PointsIcon size={16} /> },
+  { href: "/desk", label: "Desk", icon: <DeskIcon size={16} /> },
+];
 
 function MarketCard({ row }: { row: HomeMarket }) {
   const up = row.change24h >= 0;
@@ -25,7 +40,6 @@ function MarketCard({ row }: { row: HomeMarket }) {
         </span>
         <strong>{row.base}</strong>
       </header>
-      <em>{row.base}-USDC</em>
       <b>{money(row.price)}</b>
       <small className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</small>
     </Link>
@@ -62,6 +76,14 @@ export default function HomeDesk() {
         <span>Portfolio value</span>
         <strong>{money(total)}</strong>
         <Link to="/portfolio">Open portfolio</Link>
+        <nav className="bd-home-shortcuts">
+          {SHORTCUTS.map((item) => (
+            <Link key={item.href} to={item.href} className="bd-home-chip">
+              {item.icon}
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </nav>
       </section>
 
       <section className="bd-home-movers">
