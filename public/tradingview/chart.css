@@ -32,7 +32,7 @@ div[data-section-name="tradingOrders"] { display: none; }
 div[data-section-name="tradingExecutions"] { display: none; }
 div[data-section-name="extendLeftTradingLine"] { display: none; }
 
-.loading-indicator { font-family: Trebuchet MS, roboto, ubuntu, sans-serif; color: #d4af37; }
+.loading-indicator { font-family: "Manrope", roboto, ubuntu, sans-serif; color: #d4af37; }
 .wrapper-3X2QgaDd { flex-direction: row-reverse; }
 .calculator-3AwNSLGC .calculator__input-3AwNSLGC { display: flex !important; }
 [data-name="legend-source-exchange"] { display: none !important; }
