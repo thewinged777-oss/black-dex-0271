@@ -1,19 +1,19 @@
 .bd-swap-page {
-  width: min(520px, calc(100% - 24px));
+  width: min(1080px, calc(100% - 24px));
   margin: 18px auto 96px;
   display: grid;
   gap: 14px;
 }
 
 .bd-swap-widget {
-  display: flex;
-  justify-content: center;
+  display: block;
+  width: 100%;
 }
 
 .bd-swap-widget .dex,
 .bd-swap-widget .dex .swap {
-  width: 100%;
-  max-width: none;
+  width: 100% !important;
+  max-width: none !important;
 }
 
 .bd-swap-intel {
@@ -148,10 +148,10 @@
   cursor: default;
 }
 
-@media (min-width: 860px) {
+@media (min-width: 720px) {
   .bd-swap-page {
     width: min(1080px, calc(100% - 40px));
-    margin-top: 28px;
+    margin-top: 24px;
   }
 
   .bd-swap-intel-grid {
