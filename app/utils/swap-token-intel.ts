@@ -75,6 +75,7 @@ const REGISTRY: Record<SwapChainId, Record<string, KnownToken>> = {
     USDT: { address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", name: "Tether USD" },
     WBTC: { address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599", name: "Wrapped Bitcoin" },
     WOO: { address: "0x4691937a7508860F876c9c0a2a617E7d9E945D4B", name: "WOO" },
+    ORDER: { address: "0xABD4C63d2616A5201454168269031355f4764337", name: "Orderly Network" },
   },
   arbitrum: {
     ETH: { address: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1", name: "Ether", native: true },
@@ -85,18 +86,20 @@ const REGISTRY: Record<SwapChainId, Record<string, KnownToken>> = {
     ARB: { address: "0x912CE59144191C1204E64559FE8253a0e49E6548", name: "Arbitrum" },
     WBTC: { address: "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f", name: "Wrapped Bitcoin" },
     WOO: { address: "0xcAFcD85D8ca7Ad1e1C6F82F3484a445af66dcdF9", name: "WOO" },
-    ORDER: { address: "0x4E200fE2f3eFb905d4f785C1C89D663876E93f6", name: "Orderly Network" },
+    ORDER: { address: "0x4E200fE2f3eFb977d5fd9c430A41531FB04d97B8", name: "Orderly Network" },
   },
   optimism: {
     ETH: { address: "0x4200000000000000000000000000000000000006", name: "Ether", native: true },
     USDC: { address: "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", name: "USD Coin" },
     USDT: { address: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58", name: "Tether USD" },
     OP: { address: "0x4200000000000000000000000000000000000042", name: "Optimism" },
+    ORDER: { address: "0x4E200fE2f3eFb977d5fd9c430A41531FB04d97B8", name: "Orderly Network" },
   },
   base: {
     ETH: { address: "0x4200000000000000000000000000000000000006", name: "Ether", native: true },
     USDC: { address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", name: "USD Coin" },
     USDT: { address: "0xfde4C96c8593536E31F229EA8d028A32A4b6237E", name: "Tether USD" },
+    ORDER: { address: "0x4E200fE2f3eFb977d5fd9c430A41531FB04d97B8", name: "Orderly Network" },
   },
   polygon: {
     POL: { address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", name: "POL", native: true },
@@ -105,17 +108,20 @@ const REGISTRY: Record<SwapChainId, Record<string, KnownToken>> = {
     "USDC.E": { address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", name: "Bridged USDC" },
     USDT: { address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", name: "Tether USD" },
     WETH: { address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619", name: "Wrapped Ether" },
+    ORDER: { address: "0x4E200fE2f3eFb977d5fd9c430A41531FB04d97B8", name: "Orderly Network" },
   },
   bsc: {
     BNB: { address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", name: "BNB", native: true },
     USDC: { address: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", name: "USD Coin" },
     USDT: { address: "0x55d398326f99059fF775485246999027B3197955", name: "Tether USD" },
     ETH: { address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8", name: "Ethereum Token" },
+    ORDER: { address: "0x4E200fE2f3eFb977d5fd9c430A41531FB04d97B8", name: "Orderly Network" },
   },
   avalanche: {
     AVAX: { address: "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7", name: "Avalanche", native: true },
     USDC: { address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", name: "USD Coin" },
     USDT: { address: "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7", name: "Tether USD" },
+    ORDER: { address: "0x4E200fE2f3eFb977d5fd9c430A41531FB04d97B8", name: "Orderly Network" },
   },
 };
 
@@ -141,7 +147,7 @@ export function readSwapPairFromDom(): { from: SwapTokenRef; to: SwapTokenRef } 
     const network =
       view.querySelector(".network-row")?.textContent?.replace(/\s+/g, " ").trim() || "";
     const chainLabel =
-      network.replace(/^(From|To)\s+/i, "").replace(/\s*[\u25be\u25bc▲▸].*$/, "").trim() ||
+      network.replace(/^(From|To)\s+/i, "").replace(/\s*[\u25be\u25bc\u25b2\u25b8].*$/, "").trim() ||
       "Arbitrum";
     const symbol =
       view.querySelector(".symbol")?.textContent?.trim() || fallbackSymbol;
@@ -212,10 +218,14 @@ export async function loadTokenIntel(ref: SwapTokenRef): Promise<SwapTokenIntel>
   let pairs: DexPair[] = [];
 
   if (known?.address) {
-    const data = await fetchJson(
-      `https://api.dexscreener.com/tokens/v1/${ref.chain}/${known.address}`,
-    );
-    pairs = Array.isArray(data) ? (data as DexPair[]) : [];
+    try {
+      const data = await fetchJson(
+        `https://api.dexscreener.com/tokens/v1/${ref.chain}/${known.address}`,
+      );
+      pairs = Array.isArray(data) ? (data as DexPair[]) : [];
+    } catch {
+      pairs = [];
+    }
   }
 
   if (!pairs.length) {
@@ -273,5 +283,5 @@ export function formatPct(value: number | null): string {
 
 export function shortAddress(address: string): string {
   if (!address) return "Native";
-  return `${address.slice(0, 6)}\u2026${address.slice(-4)}`;
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
 }
