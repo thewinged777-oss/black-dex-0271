@@ -9,7 +9,7 @@
 html,
 body,
 #root {
-  background: #07090f;
+  background: #0b0e11;
   color: #eaecef;
   font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif;
 }
@@ -21,23 +21,23 @@ body,
 .oui-card,
 .oui-dialog-content,
 .oui-sheet-content {
-  border-color: #2a3344;
+  border-color: #2b3139;
 }
 
 .bd-navbar {
-  background: rgba(7, 9, 15, 0.92);
-  border-bottom: 1px solid #2a3344;
+  background: rgba(11, 14, 17, 0.92);
+  border-bottom: 1px solid #2b3139;
   backdrop-filter: blur(16px);
   min-height: 56px;
 }
 
 .bd-footer {
-  background: #07090f;
-  border-top: 1px solid #2a3344;
+  background: #0b0e11;
+  border-top: 1px solid #2b3139;
 }
 
 .bd-root {
-  background: #07090f;
+  background: #0b0e11;
   min-height: 100dvh;
 }
 
@@ -46,7 +46,7 @@ body,
 header img[alt="logo"],
 img[alt="logo"] {
   object-fit: contain;
-  background: #0c1018 !important;
+  background: #12151c !important;
 }
 
 .oui-empty {
@@ -61,8 +61,8 @@ img[alt="logo"] {
 .oui-bottom-nav,
 [class*="oui-bottomNav"],
 [class*="oui-bottom-nav"] {
-  background: rgba(7, 9, 15, 0.96) !important;
-  border-top: 1px solid #2a3344 !important;
+  background: rgba(11, 14, 17, 0.96) !important;
+  border-top: 1px solid #2b3139 !important;
   backdrop-filter: blur(18px);
 }
 
