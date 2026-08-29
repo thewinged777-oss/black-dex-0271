@@ -37,7 +37,7 @@ export default function PerpSymbol() {
   const pageTitle = generatePageTitle(formatSymbol(params.symbol!));
 
   return (
-    <div className="h-full">
+    <div className="h-full bd-perp-page">
       {renderSEOTags(pageMeta, pageTitle)}
       <TradeDeskLayout />
       <TradingPage
