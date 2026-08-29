@@ -9,10 +9,6 @@ import {
 } from "@orderly.network/ui";
 import { LeftNavProps, LeftNavItem } from "@orderly.network/ui-scaffold";
 import { ExternalLink } from "lucide-react";
-import {
-  getRuntimeConfig,
-  getRuntimeConfigBoolean,
-} from "@/utils/runtime-config";
 import { ThemeLogo } from "@/components/ThemeLogo";
 
 type LeftNavUIProps = LeftNavProps & {
@@ -63,17 +59,7 @@ const LeftNavSheet = modal.create<LeftNavUIProps>((props) => {
       >
         <div className="oui-relative oui-flex oui-h-full oui-flex-col oui-gap-3">
           <div className="oui-mt-[6px] oui-flex oui-h-[44px] oui-items-center">
-            {getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO") ? (
-              <ThemeLogo
-                variant="primary"
-                className="oui-h-[32px] bd-theme-logo"
-                height={32}
-              />
-            ) : (
-              <h1 className="oui-text-base-contrast-80 oui-font-bold">
-                {getRuntimeConfig("VITE_ORDERLY_BROKER_NAME")}
-              </h1>
-            )}
+            <ThemeLogo className="bd-brand-title" />
           </div>
 
           <div className="oui-flex oui-h-[calc(100vh-120px)] oui-flex-col oui-items-start oui-overflow-y-auto">

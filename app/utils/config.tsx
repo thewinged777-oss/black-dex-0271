@@ -268,17 +268,11 @@ export const useOrderlyConfig = () => {
 
   const appIcons = useMemo<AppLogos>(
     () => ({
-      main: getRuntimeConfigBoolean("VITE_HAS_PRIMARY_LOGO")
-        ? {
-            component: (
-              <ThemeLogo variant="primary" height={36} className="bd-theme-logo" />
-            ),
-          }
-        : { img: withBasePath("/orderly-logo.svg") },
+      main: {
+        component: <ThemeLogo className="bd-brand-title" />,
+      },
       secondary: {
-        img: getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO")
-          ? withBasePath("/logo-secondary.webp")
-          : withBasePath("/orderly-logo-secondary.svg"),
+        img: withBasePath("/logo-secondary.webp"),
       },
     }),
     [],
@@ -445,16 +439,7 @@ export const useOrderlyConfig = () => {
               />
             )}
             <Link to="/">
-              {isMobile &&
-              getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO") ? (
-                <ThemeLogo
-                  variant="secondary"
-                  height={32}
-                  className="bd-theme-logo"
-                />
-              ) : (
-                components.title
-              )}
+              <ThemeLogo className="bd-brand-title" />
             </Link>
             {components.mainNav}
           </Flex>
