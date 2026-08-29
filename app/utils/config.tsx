@@ -75,8 +75,6 @@ const getCustomMenuItems = (): MainNavItem[] => {
   }
 
   try {
-    // Parse delimiter-separated menu items
-    // Expected format: "Documentation,https://docs.example.com;Blog,https://blog.example.com;Support,https://support.example.com"
     const menuPairs = customMenusEnv
       .split(";")
       .map((pair) => pair.trim())
@@ -213,7 +211,7 @@ export const useOrderlyConfig = () => {
       twitterUrl: getRuntimeConfig("VITE_TWITTER_URL") || undefined,
       trailing: (
         <span className="oui-text-2xs oui-text-base-contrast-54">
-          Charts powered by{" "}
+          Black DEX · non-custodial · Orderly matching ·{" "}
           <a
             href="https://tradingview.com"
             target="_blank"
@@ -400,8 +398,6 @@ export const useOrderlyConfig = () => {
 
           <Flex itemAlign={"center"} className="oui-gap-2">
             {components.accountSummary}
-            {components.linkDevice}
-            {components.scanQRCode}
             {components.languageSwitcher}
             {components.subAccount}
             {components.chainMenu}
