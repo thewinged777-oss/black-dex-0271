@@ -1,8 +1,13 @@
 .bd-home {
-  width: min(920px, calc(100% - 24px));
+  width: min(920px, 100%);
+  max-width: 100%;
+  min-width: 0;
   margin: 12px auto 96px;
+  padding: 0 12px;
+  box-sizing: border-box;
   display: grid;
   gap: 18px;
+  overflow-x: hidden;
 }
 
 .bd-home-hero {
@@ -11,11 +16,13 @@
   justify-content: space-between;
   gap: 12px;
   padding: 4px 2px 0;
+  min-width: 0;
 }
 
 .bd-home-balance {
   display: grid;
   gap: 2px;
+  min-width: 0;
 }
 
 .bd-home-balance span,
@@ -46,6 +53,7 @@
   line-height: 1.05;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 
 .bd-home-balance small {
@@ -71,6 +79,7 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  flex: none;
 }
 
 .bd-home-shortcuts {
@@ -86,6 +95,7 @@
   gap: 8px;
   text-decoration: none;
   color: inherit;
+  min-width: 0;
 }
 
 .bd-home-chip i {
@@ -117,6 +127,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+  min-width: 0;
 }
 
 .bd-home-tabs {
@@ -150,6 +161,7 @@
   border-radius: 14px;
   text-decoration: none;
   color: inherit;
+  min-width: 0;
 }
 
 .bd-home-promo {
@@ -164,6 +176,9 @@
   font-style: normal;
   font-size: 11px;
   color: rgb(var(--oui-color-base-foreground) / 0.48);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .bd-home-promo b {
@@ -183,18 +198,20 @@
 .bd-home-posts {
   display: grid;
   gap: 0;
+  min-width: 0;
 }
 
 .bd-home-pass-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
+  min-width: 0;
 }
 
 .bd-home-mrow {
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr) auto 76px;
-  gap: 10px;
+  grid-template-columns: 28px minmax(0, 1fr) minmax(0, auto) 64px;
+  gap: 8px;
   align-items: center;
   padding: 10px 0;
   background: transparent;
@@ -202,6 +219,8 @@
   border-radius: 0;
   text-decoration: none;
   color: inherit;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .bd-home-mrow-name,
@@ -213,6 +232,15 @@
 
 .bd-home-mrow-px {
   text-align: right;
+}
+
+.bd-home-mrow-name strong,
+.bd-home-mrow-name small,
+.bd-home-mrow-px b,
+.bd-home-mrow-px small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bd-home-mrow-name strong {
@@ -233,12 +261,13 @@
 
 .bd-home-chg {
   height: 28px;
-  min-width: 76px;
+  min-width: 0;
+  width: 100%;
   border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -259,6 +288,10 @@
   padding: 12px;
 }
 
+.bd-home-post p {
+  overflow-wrap: anywhere;
+}
+
 .bd-home-pass {
   display: flex;
   flex-direction: column;
@@ -277,6 +310,7 @@
   align-items: center;
   gap: 4px;
   min-width: 0;
+  max-width: 100%;
 }
 
 .bd-home-pass .bd-grade {
@@ -293,6 +327,8 @@
   font-size: 10px;
   font-variant-numeric: tabular-nums;
   color: rgb(var(--oui-color-base-foreground) / 0.62);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .bd-token-mark {

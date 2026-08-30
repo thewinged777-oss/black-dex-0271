@@ -14,10 +14,13 @@
 
 html,
 body,
-#root {
+#root,
+.bd-root {
   background: rgb(var(--oui-color-base-9));
   color: rgb(var(--oui-color-base-foreground));
   font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .oui-portfolio-page .oui-box.oui-flex.oui-flex-nowrap > div:nth-child(2).oui-box.oui-flex.oui-justify-start.oui-flex-nowrap.oui-relative {
@@ -125,6 +128,8 @@ img[alt="logo"] {
 
 .bd-root > div {
   min-height: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (min-width: 1024px) {
