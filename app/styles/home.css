@@ -119,10 +119,27 @@
   gap: 8px;
 }
 
-.bd-home-movers {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+.bd-home-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.bd-home-tabs button {
+  border: 0;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgb(var(--oui-color-base-7));
+  color: rgb(var(--oui-color-base-foreground) / 0.62);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bd-home-tabs button.is-on {
+  background: rgb(var(--oui-color-primary) / 0.18);
+  color: rgb(var(--oui-color-primary));
 }
 
 .bd-home-promo,
@@ -326,10 +343,4 @@
   color: rgb(var(--oui-color-base-foreground) / 0.7);
   font-size: 11px;
   font-weight: 700;
-}
-
-@media (min-width: 720px) {
-  .bd-home-movers {
-    grid-template-columns: 1fr 1fr;
-  }
 }

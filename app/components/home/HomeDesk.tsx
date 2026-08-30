@@ -57,6 +57,8 @@ const SHORTCUTS = [
   { href: "/desk", label: "Desk", icon: <DeskIcon size={18} /> },
 ];
 
+type MoverTab = "gainers" | "losers" | "listings";
+
 function MarketRow({ row }: { row: HomeMarket }) {
   const up = row.change24h >= 0;
   return (
@@ -103,6 +105,7 @@ export default function HomeDesk() {
   const [markets, setMarkets] = useState<HomeMarket[]>([]);
   const [posts, setPosts] = useState<HomePost[]>([]);
   const [passing, setPassing] = useState<CarryIdea[]>([]);
+  const [tab, setTab] = useState<MoverTab>("gainers");
 
   useEffect(() => {
     loadHomeMarkets().then(setMarkets).catch(() => setMarkets([]));
@@ -122,11 +125,15 @@ export default function HomeDesk() {
     const live = markets.filter((row) => Number.isFinite(row.change24h) && row.price > 0);
     const sorted = [...live].sort((a, b) => b.change24h - a.change24h);
     return {
-      gainers: sorted.filter((row) => row.change24h > 0).slice(0, 5),
-      losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 5),
-      listings: [...live].sort((a, b) => b.created - a.created).slice(0, 5),
+      gainers: sorted.filter((row) => row.change24h > 0).slice(0, 8),
+      losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 8),
+      listings: [...live].sort((a, b) => b.created - a.created).slice(0, 8),
     };
   }, [markets]);
+
+  const rows = tab === "losers" ? losers : tab === "listings" ? listings : gainers;
+  const empty =
+    tab === "losers" ? "No red books." : tab === "listings" ? "No new books." : "No green books.";
 
   return (
     <div className="bd-home">
@@ -163,25 +170,20 @@ export default function HomeDesk() {
         </Link>
       </section>
 
-      <section className="bd-home-movers">
-        <div>
-          <h2>Top gainers</h2>
-          <div className="bd-home-list">
-            {gainers.length ? gainers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No green books.</p>}
-          </div>
+      <section className="bd-home-board">
+        <div className="bd-home-tabs">
+          <button type="button" className={tab === "gainers" ? "is-on" : ""} onClick={() => setTab("gainers")}>
+            Top gainers
+          </button>
+          <button type="button" className={tab === "losers" ? "is-on" : ""} onClick={() => setTab("losers")}>
+            Top losers
+          </button>
+          <button type="button" className={tab === "listings" ? "is-on" : ""} onClick={() => setTab("listings")}>
+            New listings
+          </button>
         </div>
-        <div>
-          <h2>Top losers</h2>
-          <div className="bd-home-list">
-            {losers.length ? losers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No red books.</p>}
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h2>New listings</h2>
         <div className="bd-home-list">
-          {listings.length ? listings.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No new books.</p>}
+          {rows.length ? rows.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>{empty}</p>}
         </div>
       </section>
 
