@@ -34,6 +34,13 @@
   text-transform: uppercase;
 }
 
+.bd-home-lead {
+  margin: -4px 0 10px;
+  color: rgb(var(--oui-color-base-foreground) / 0.52);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .bd-home-balance strong {
   font-size: 32px;
   line-height: 1.05;
@@ -88,8 +95,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgb(var(--oui-color-base-8));
-  border: 1px solid rgb(var(--oui-color-line));
+  background: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-primary-contrast));
+  border: 0;
+}
+
+.bd-home-chip i svg path,
+.bd-home-chip i svg rect,
+.bd-home-chip i svg circle {
+  stroke: rgb(var(--oui-color-primary-contrast));
 }
 
 .bd-home-chip span {
@@ -141,7 +155,7 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-base-foreground) / 0.7);
 }
 
 .bd-home-grid,
@@ -245,7 +259,7 @@
 }
 
 .bd-home-post header {
-  color: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-base-foreground) / 0.7);
   font-size: 11px;
   font-weight: 700;
 }

@@ -205,7 +205,10 @@ export default function HomeDesk() {
       </section>
 
       <section>
-        <h2>Passing screen</h2>
+        <h2>Funding Desk</h2>
+        <p className="bd-home-lead">
+          Live carry screen on Orderly perps. A name passes when funding is crowded enough to harvest — grade, score, side, estimated vs last rate, annualized carry, basis, 24h volume and open interest. This list is the same filter as /desk. Rates are a crowding tax, not free yield. Open a card to trade the pair.
+        </p>
         <div className="bd-home-pass-grid">
           {passing.length ? passing.map((idea) => <PassCard key={idea.symbol} idea={idea} />) : <p>No pair currently clears the screen.</p>}
         </div>

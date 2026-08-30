@@ -74,8 +74,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgb(var(--oui-color-base-7));
-  border: 1px solid rgb(var(--oui-color-line));
+  background: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-primary-contrast));
+  border: 0;
+}
+
+.bd-launcher-tile i svg path,
+.bd-launcher-tile i svg rect,
+.bd-launcher-tile i svg circle {
+  stroke: rgb(var(--oui-color-primary-contrast));
 }
 
 .bd-launcher-tile span {
@@ -91,18 +98,18 @@
 .bd-launcher-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px 16px;
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-launcher-links a {
-  color: rgb(var(--oui-color-primary-contrast));
-  background: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-base-foreground) / 0.62);
+  background: transparent;
   font-size: 12px;
-  font-weight: 650;
+  font-weight: 500;
   text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 0;
 }
