@@ -159,14 +159,14 @@ export default function HomeDesk() {
 
       <section className="bd-home-promos">
         <Link to="/" className="bd-home-promo">
-          <em>Perps</em>
+          <em>Perps <TradeIcon size={14} /></em>
           <b>Trade the book</b>
-          <span><TradeIcon size={14} /> Open desk</span>
+          <span>Open desk</span>
         </Link>
         <Link to="/swap" className="bd-home-promo">
-          <em>Swap</em>
+          <em>Swap <SwapIcon size={14} /></em>
           <b>Move spot size</b>
-          <span><SwapIcon size={14} /> Swap now</span>
+          <span>Swap now</span>
         </Link>
       </section>
 

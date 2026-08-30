@@ -1,4 +1,4 @@
-import { MarketsProvider, MarketsDataListWidget } from "@orderly.network/markets";
+import { MarketsHomePage } from "@orderly.network/markets";
 import { generatePageTitle } from "@/utils/utils";
 import { getPageMeta } from "@/utils/seo";
 import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-config";
@@ -14,7 +14,7 @@ export default function MarketsIndex() {
     <>
       {renderSEOTags(pageMeta, pageTitle)}
       <div className="bd-markets-list">
-        <MarketsProvider
+        <MarketsHomePage
           comparisonProps={{
             exchangesIconSrc:
               getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO")
@@ -26,9 +26,7 @@ export default function MarketsIndex() {
           onSymbolChange={(symbol) => {
             navigate(`/perp/${symbol.symbol}`);
           }}
-        >
-          <MarketsDataListWidget />
-        </MarketsProvider>
+        />
       </div>
     </>
   );
