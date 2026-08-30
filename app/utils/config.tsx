@@ -28,8 +28,6 @@ import {
   MarketsInactiveIcon,
   PortfolioActiveIcon,
   PortfolioInactiveIcon,
-  LeaderboardActiveIcon,
-  LeaderboardInactiveIcon,
   HomeIcon,
   TradeIcon,
   MarketsIcon,
@@ -239,15 +237,15 @@ const getBottomNavIcon = (menuId: string) => {
         activeIcon: <PortfolioActiveIcon />,
         inactiveIcon: <PortfolioInactiveIcon />,
       };
-    case "Leaderboard":
-      return {
-        activeIcon: <LeaderboardActiveIcon />,
-        inactiveIcon: <LeaderboardInactiveIcon />,
-      };
     case "Markets":
       return {
         activeIcon: <MarketsActiveIcon />,
         inactiveIcon: <MarketsInactiveIcon />,
+      };
+    case "Desk":
+      return {
+        activeIcon: <DeskIcon active />,
+        inactiveIcon: <DeskIcon />,
       };
     default:
       throw new Error(`Unsupported menu id: ${menuId}`);
@@ -436,25 +434,19 @@ export const useOrderlyConfig = () => {
       ...customMenus,
     ];
 
-    const supportedBottomNavMenus = [
-      "Home",
-      "Trading",
-      "Markets",
-      "Portfolio",
-      "Leaderboard",
-    ];
-    const bottomNavMenus = enabledMenus
-      .filter((menu) => supportedBottomNavMenus.includes(menu.id))
-      .map((menu) => {
-        const icons = getBottomNavIcon(menu.id);
-        return {
+    const bottomNavOrder = ["Home", "Markets", "Trading", "Desk", "Portfolio"];
+    const bottomNavMenus = bottomNavOrder.flatMap((id) => {
+      const menu = allMenuItems.find((item) => item.id === id);
+      if (!menu) return [];
+      return [
+        {
           name: menu.name,
           href: menu.href,
           target: menu.target,
-          ...icons,
-        };
-      })
-      .filter((menu) => menu.activeIcon && menu.inactiveIcon);
+          ...getBottomNavIcon(menu.id),
+        },
+      ];
+    });
 
     const mainNavProps: MainNavWidgetProps = {
       initialMenu: "/",
