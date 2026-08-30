@@ -12,16 +12,20 @@
   color: rgb(var(--oui-color-base-foreground)) !important;
 }
 
-.bd-markets-list [role="tab"] {
+.bd-markets-list [role="tab"],
+.bd-markets-list [role="tablist"] button {
   border-radius: 999px !important;
   color: rgb(var(--oui-color-base-foreground) / 0.55) !important;
   background: transparent !important;
+  box-shadow: none !important;
 }
 
 .bd-markets-list [role="tab"][data-state="active"],
-.bd-markets-list [role="tab"][aria-selected="true"] {
-  background: rgb(var(--oui-color-base-7)) !important;
-  color: rgb(var(--oui-color-base-foreground)) !important;
+.bd-markets-list [role="tab"][aria-selected="true"],
+.bd-markets-list [role="tablist"] button[data-state="active"],
+.bd-markets-list [role="tablist"] button[aria-selected="true"] {
+  background: rgb(var(--oui-color-primary) / 0.18) !important;
+  color: rgb(var(--oui-color-primary)) !important;
 }
 
 .bd-markets-list table {
@@ -40,12 +44,10 @@
   padding-bottom: 12px !important;
 }
 
-.bd-markets-list .oui-text-success,
-.bd-markets-list [class*="success"] {
+.bd-markets-list .oui-text-success {
   color: rgb(var(--oui-color-success)) !important;
 }
 
-.bd-markets-list .oui-text-danger,
-.bd-markets-list [class*="danger"] {
+.bd-markets-list .oui-text-danger {
   color: rgb(var(--oui-color-danger)) !important;
 }
