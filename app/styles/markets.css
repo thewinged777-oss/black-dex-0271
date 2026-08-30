@@ -1,0 +1,53 @@
+.bd-markets-list {
+  width: min(920px, calc(100% - 16px));
+  margin: 8px auto 96px;
+}
+
+.bd-markets-list input,
+.bd-markets-list [role="searchbox"] {
+  border-radius: 999px !important;
+  background: rgb(var(--oui-color-base-8)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+}
+
+.bd-markets-list [role="tablist"],
+.bd-markets-list [class*="tabs"] {
+  gap: 8px;
+}
+
+.bd-markets-list [role="tab"] {
+  border-radius: 999px !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.55) !important;
+}
+
+.bd-markets-list [role="tab"][data-state="active"],
+.bd-markets-list [role="tab"][aria-selected="true"] {
+  background: rgb(var(--oui-color-base-7)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.bd-markets-list table {
+  border-collapse: separate;
+  border-spacing: 0 2px;
+}
+
+.bd-markets-list tbody tr {
+  background: transparent !important;
+}
+
+.bd-markets-list tbody td {
+  border: 0 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.bd-markets-list [class*="change"],
+.bd-markets-list [class*="Change"] {
+  border-radius: 8px;
+  min-width: 72px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
