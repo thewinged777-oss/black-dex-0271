@@ -178,9 +178,9 @@ export default function HomeDesk() {
       </section>
 
       <section>
-        <h2>Funding Desk</h2>
+        <h2>Funding Score</h2>
         <p className="bd-home-lead">
-          Live carry screen on Orderly perps. A name passes when funding is crowded enough to harvest. Same filter as /desk. Rates are a crowding tax, not free yield.
+          How crowded a perp's funding is. Grade and score rank books that already pass the Desk filter. Higher means one side is paying more to stay in the trade — not free yield.
         </p>
         <div className="bd-home-pass-grid">
           {passing.length ? passing.map((idea) => <PassCard key={idea.symbol} idea={idea} />) : <p>No pair currently clears the screen.</p>}
