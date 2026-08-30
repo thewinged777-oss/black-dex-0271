@@ -1,6 +1,6 @@
 import { FC, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { modal, useModal, VectorIcon } from "@orderly.network/ui";
+import { modal, useModal } from "@orderly.network/ui";
 import { LeftNavProps, LeftNavItem } from "@orderly.network/ui-scaffold";
 import {
   HomeIcon,
@@ -13,6 +13,7 @@ import {
   VaultsIcon,
   PointsIcon,
   DeskIcon,
+  MenuIcon,
 } from "@/components/icons/desk";
 
 type LeftNavUIProps = LeftNavProps & {
@@ -47,9 +48,9 @@ const LeftNavUI: FC<LeftNavUIProps> = (props) => {
       onClick={showModal}
       className={props?.className}
       aria-label="Open navigation menu"
-      style={{ zoom: "1.2" }}
+      style={{ zoom: "1.15", color: "currentColor" }}
     >
-      <VectorIcon />
+      <MenuIcon size={22} />
     </button>
   );
 };

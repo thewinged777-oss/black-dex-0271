@@ -139,17 +139,30 @@ export function PointsIcon({ active, size, ...rest }: IconProps) {
   );
 }
 
+export function MenuIcon({ active, size, ...rest }: IconProps) {
+  const c = paint(active);
+  return (
+    <Base size={size} {...rest}>
+      <path d="M5 7.2h14" stroke={c} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M5 12h10" stroke={c} strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M5 16.8h12" stroke={c} strokeWidth="1.8" strokeLinecap="round" />
+    </Base>
+  );
+}
+
 export function SettingsIcon({ active, size, ...rest }: IconProps) {
   const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <circle cx="12" cy="12" r="2.5" stroke={c} strokeWidth="1.7" />
-      <path
-        d="M10.6 3.8h2.8l.3 2 1.8.8 1.7-1.1 2 2-1.1 1.7.8 1.8 2 .3v2.8l-2 .3-.8 1.8 1.1 1.7-2 2-1.7-1.1-1.8.8-.3 2h-2.8l-.3-2-1.8-.8-1.7 1.1-2-2 1.1-1.7-.8-1.8-2-.3v-2.8l2-.3.8-1.8-1.1-1.7 2-2 1.7 1.1 1.8-.8.3-2Z"
-        stroke={c}
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
+      <circle cx="12" cy="12" r="3.1" stroke={c} strokeWidth="1.7" />
+      <path d="M12 4.2v2.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M12 17.6v2.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M4.2 12h2.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M17.6 12h2.2" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M6.5 6.5l1.55 1.55" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M15.95 15.95l1.55 1.55" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M17.5 6.5l-1.55 1.55" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M8.05 15.95l-1.55 1.55" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
     </Base>
   );
 }
