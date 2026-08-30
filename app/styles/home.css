@@ -163,10 +163,15 @@
 }
 
 .bd-home-list,
-.bd-home-pass-grid,
 .bd-home-posts {
   display: grid;
   gap: 0;
+}
+
+.bd-home-pass-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .bd-home-mrow {
@@ -239,35 +244,38 @@
 
 .bd-home-pass {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 5px 8px;
-  border-radius: 8px;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 12px 6px 10px;
+  min-height: 148px;
+  border-radius: 12px;
+  text-align: center;
 }
 
 .bd-home-pass header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
-  flex: 1;
 }
 
 .bd-home-pass .bd-grade {
-  font-size: 9px;
+  font-size: 11px;
   line-height: 1;
-  padding: 2px 5px;
-  border-radius: 4px;
-  flex: none;
+  padding: 5px 6px;
+  border-radius: 6px;
 }
 
 .bd-home-pass-meta {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  gap: 2px;
   font-size: 10px;
   font-variant-numeric: tabular-nums;
   color: rgb(var(--oui-color-base-foreground) / 0.62);
-  white-space: nowrap;
 }
 
 .bd-token-mark {
@@ -279,8 +287,8 @@
 }
 
 .bd-home-pass .bd-token-mark {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
 }
 
 .bd-token-mark.is-fallback {
@@ -294,12 +302,15 @@
 }
 
 .bd-home-pass header strong {
-  font-size: 12px;
+  font-size: 11px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bd-home-pass header em {
   font-style: normal;
-  font-size: 10px;
+  font-size: 9px;
   color: rgb(var(--oui-color-base-foreground) / 0.5);
 }
 
@@ -318,8 +329,7 @@
 }
 
 @media (min-width: 720px) {
-  .bd-home-movers,
-  .bd-home-pass-grid {
+  .bd-home-movers {
     grid-template-columns: 1fr 1fr;
   }
 }
