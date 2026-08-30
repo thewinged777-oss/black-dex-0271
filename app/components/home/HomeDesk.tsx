@@ -32,10 +32,10 @@ function money(value: number | null | undefined) {
 
 function volume(value: number) {
   if (!value) return "\u2014";
-  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
-  return `$${value.toFixed(0)}`;
+  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
+  return `${value.toFixed(0)}`;
 }
 
 function funding(value: number) {
@@ -57,26 +57,20 @@ const SHORTCUTS = [
   { href: "/desk", label: "Desk", icon: <DeskIcon size={18} /> },
 ];
 
-function MarketCard({ row }: { row: HomeMarket }) {
+function MarketRow({ row }: { row: HomeMarket }) {
   const up = row.change24h >= 0;
   return (
-    <Link to={`/perp/${row.symbol}`} className="bd-home-card">
-      <header>
-        <TokenMark symbol={row.symbol} label={row.base} size={20} />
-        <strong>{row.base}</strong>
-        <small className={up ? "is-up" : "is-dn"}>{pct(row.change24h)}</small>
-      </header>
-      <b>{money(row.price)}</b>
-      <dl>
-        <div>
-          <dt>Funding</dt>
-          <dd className={row.funding >= 0 ? "is-up" : "is-dn"}>{funding(row.funding)}</dd>
-        </div>
-        <div>
-          <dt>Volume</dt>
-          <dd>{volume(row.volume)}</dd>
-        </div>
-      </dl>
+    <Link to={`/perp/${row.symbol}`} className="bd-home-mrow">
+      <TokenMark symbol={row.symbol} label={row.base} size={28} />
+      <div className="bd-home-mrow-name">
+        <strong>{row.base}USDC</strong>
+        <small>{volume(row.volume)}</small>
+      </div>
+      <div className="bd-home-mrow-px">
+        <b>{money(row.price)}</b>
+        <small>{funding(row.funding)}</small>
+      </div>
+      <span className={`bd-home-chg ${up ? "is-up" : "is-dn"}`}>{pct(row.change24h)}</span>
     </Link>
   );
 }
@@ -128,8 +122,8 @@ export default function HomeDesk() {
     const live = markets.filter((row) => Number.isFinite(row.change24h) && row.price > 0);
     const sorted = [...live].sort((a, b) => b.change24h - a.change24h);
     return {
-      gainers: sorted.filter((row) => row.change24h > 0).slice(0, 4),
-      losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 4),
+      gainers: sorted.filter((row) => row.change24h > 0).slice(0, 5),
+      losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 5),
     };
   }, [markets]);
 
@@ -171,14 +165,14 @@ export default function HomeDesk() {
       <section className="bd-home-movers">
         <div>
           <h2>Top gainers</h2>
-          <div className="bd-home-grid">
-            {gainers.length ? gainers.map((row) => <MarketCard key={row.symbol} row={row} />) : <p>No green books.</p>}
+          <div className="bd-home-list">
+            {gainers.length ? gainers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No green books.</p>}
           </div>
         </div>
         <div>
           <h2>Top losers</h2>
-          <div className="bd-home-grid">
-            {losers.length ? losers.map((row) => <MarketCard key={row.symbol} row={row} />) : <p>No red books.</p>}
+          <div className="bd-home-list">
+            {losers.length ? losers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No red books.</p>}
           </div>
         </div>
       </section>
