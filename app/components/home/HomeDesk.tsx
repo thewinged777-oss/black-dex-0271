@@ -118,12 +118,13 @@ export default function HomeDesk() {
       .catch(() => setPassing([]));
   }, []);
 
-  const { gainers, losers } = useMemo(() => {
+  const { gainers, losers, listings } = useMemo(() => {
     const live = markets.filter((row) => Number.isFinite(row.change24h) && row.price > 0);
     const sorted = [...live].sort((a, b) => b.change24h - a.change24h);
     return {
       gainers: sorted.filter((row) => row.change24h > 0).slice(0, 5),
       losers: [...sorted].reverse().filter((row) => row.change24h < 0).slice(0, 5),
+      listings: [...live].sort((a, b) => b.created - a.created).slice(0, 5),
     };
   }, [markets]);
 
@@ -174,6 +175,13 @@ export default function HomeDesk() {
           <div className="bd-home-list">
             {losers.length ? losers.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No red books.</p>}
           </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>New listings</h2>
+        <div className="bd-home-list">
+          {listings.length ? listings.map((row) => <MarketRow key={row.symbol} row={row} />) : <p>No new books.</p>}
         </div>
       </section>
 
