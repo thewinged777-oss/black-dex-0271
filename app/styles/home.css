@@ -173,14 +173,40 @@
 }
 
 .bd-home-pass {
-  display: grid;
-  gap: 6px;
-  padding: 8px 10px;
-  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  min-height: 0;
 }
 
-.bd-home-card header,
 .bd-home-pass header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.bd-home-pass .bd-grade {
+  font-size: 9px;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 4px;
+  flex: none;
+}
+
+.bd-home-pass-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--oui-color-base-foreground) / 0.62);
+  white-space: nowrap;
+}
+
+.bd-home-card header {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -192,6 +218,11 @@
   border-radius: 999px;
   object-fit: cover;
   flex: none;
+}
+
+.bd-home-pass .bd-token-mark {
+  width: 16px;
+  height: 16px;
 }
 
 .bd-token-mark.is-fallback {
@@ -214,6 +245,11 @@
   white-space: nowrap;
 }
 
+.bd-home-pass header strong {
+  font-size: 12px;
+  flex: none;
+}
+
 .bd-home-pass header em {
   font-style: normal;
   font-size: 10px;
@@ -226,26 +262,19 @@
   font-variant-numeric: tabular-nums;
 }
 
-.bd-home-card dl,
-.bd-home-pass dl {
+.bd-home-card dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px 8px;
   margin: 0;
 }
 
-.bd-home-pass dl {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.bd-home-card dt,
-.bd-home-pass dt {
+.bd-home-card dt {
   font-size: 9px;
   color: rgb(var(--oui-color-base-foreground) / 0.4);
 }
 
-.bd-home-card dd,
-.bd-home-pass dd {
+.bd-home-card dd {
   margin: 0;
   font-size: 11px;
 }
