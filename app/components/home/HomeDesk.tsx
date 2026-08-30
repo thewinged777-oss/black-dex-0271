@@ -85,37 +85,16 @@ function PassCard({ idea }: { idea: CarryIdea }) {
   return (
     <Link to={`/perp/${idea.symbol}`} className="bd-home-pass">
       <header>
-        <TokenMark symbol={idea.symbol} label={idea.ticker} size={20} />
+        <TokenMark symbol={idea.symbol} label={idea.ticker} size={16} />
         <strong>{idea.ticker}</strong>
         <em>{sideLabel(idea.side)}</em>
-        <span className={`bd-grade g-${idea.grade}`}>{idea.grade} {idea.score}</span>
       </header>
-      <dl>
-        <div>
-          <dt>Est</dt>
-          <dd className={idea.est >= 0 ? "is-up" : "is-dn"}>{formatRate(idea.est)}</dd>
-        </div>
-        <div>
-          <dt>Ann.</dt>
-          <dd className={idea.annualized >= 0 ? "is-up" : "is-dn"}>{formatPct(idea.annualized)}</dd>
-        </div>
-        <div>
-          <dt>Basis</dt>
-          <dd>{idea.basisBps.toFixed(1)} bp</dd>
-        </div>
-        <div>
-          <dt>24h</dt>
-          <dd>{formatUsd(idea.volumeUsd)}</dd>
-        </div>
-        <div>
-          <dt>OI</dt>
-          <dd>{formatUsd(idea.oiUsd)}</dd>
-        </div>
-        <div>
-          <dt>Int</dt>
-          <dd>{idea.intervalHours}h · {idea.persist ? "Y" : "N"}</dd>
-        </div>
-      </dl>
+      <span className="bd-home-pass-meta">
+        <span className={idea.est >= 0 ? "is-up" : "is-dn"}>{formatRate(idea.est)}</span>
+        <span>{formatPct(idea.annualized)}</span>
+        <span>{formatUsd(idea.volumeUsd)}</span>
+      </span>
+      <span className={`bd-grade g-${idea.grade}`}>{idea.grade}{idea.score}</span>
     </Link>
   );
 }
@@ -207,7 +186,7 @@ export default function HomeDesk() {
       <section>
         <h2>Funding Desk</h2>
         <p className="bd-home-lead">
-          Live carry screen on Orderly perps. A name passes when funding is crowded enough to harvest — grade, score, side, estimated vs last rate, annualized carry, basis, 24h volume and open interest. This list is the same filter as /desk. Rates are a crowding tax, not free yield. Open a card to trade the pair.
+          Live carry screen on Orderly perps. A name passes when funding is crowded enough to harvest. Same filter as /desk. Rates are a crowding tax, not free yield.
         </p>
         <div className="bd-home-pass-grid">
           {passing.length ? passing.map((idea) => <PassCard key={idea.symbol} idea={idea} />) : <p>No pair currently clears the screen.</p>}
