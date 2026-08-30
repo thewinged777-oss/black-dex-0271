@@ -5,27 +5,42 @@
 }
 
 .bd-markets-list input,
-.bd-markets-list [role="searchbox"] {
-  border-radius: 999px !important;
+.bd-markets-list [role="searchbox"],
+.bd-markets-list [class*="search"] input {
+  height: 40px !important;
+  border-radius: 8px !important;
   background: rgb(var(--oui-color-base-8)) !important;
   border: 1px solid rgb(var(--oui-color-line)) !important;
+  box-shadow: none !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
+  font-size: 14px !important;
+}
+
+.bd-markets-list [class*="search"] {
+  border-radius: 8px !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .bd-markets-list [role="tab"],
 .bd-markets-list [role="tablist"] button {
-  border-radius: 999px !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.55) !important;
-  background: transparent !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  padding: 0 12px !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.62) !important;
+  background: rgb(var(--oui-color-base-8)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
   box-shadow: none !important;
+  font-weight: 600 !important;
 }
 
 .bd-markets-list [role="tab"][data-state="active"],
 .bd-markets-list [role="tab"][aria-selected="true"],
 .bd-markets-list [role="tablist"] button[data-state="active"],
 .bd-markets-list [role="tablist"] button[aria-selected="true"] {
-  background: rgb(var(--oui-color-primary) / 0.18) !important;
-  color: rgb(var(--oui-color-primary)) !important;
+  background: rgb(var(--oui-color-primary)) !important;
+  border-color: rgb(var(--oui-color-primary)) !important;
+  color: rgb(var(--oui-color-primary-contrast)) !important;
 }
 
 .bd-markets-list table {
