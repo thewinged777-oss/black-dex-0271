@@ -1,65 +1,16 @@
-.oui-portfolio-page,
-.bd-portfolio {
+.oui-portfolio-page {
   width: min(920px, calc(100% - 24px));
   margin: 12px auto 96px;
-  color: rgb(var(--oui-color-base-foreground));
 }
 
-.oui-portfolio-page .oui-card,
-.bd-portfolio .oui-card {
-  background: rgb(var(--oui-color-base-8));
-  border: 1px solid rgb(var(--oui-color-line));
-  border-radius: 14px;
-}
-
-.bd-pf-gold,
-.bd-pf-gold.oui-button,
-button.bd-pf-gold,
-a.bd-pf-gold {
+.bd-pf-gold {
   background: rgb(var(--oui-color-primary)) !important;
-  background-image: none !important;
   background-color: rgb(var(--oui-color-primary)) !important;
-  color: rgb(var(--oui-color-primary-contrast)) !important;
-  border: 0 !important;
-  border-radius: 10px !important;
-  font-weight: 700 !important;
-  box-shadow: none !important;
-}
-
-.bd-pf-gold *,
-.bd-pf-gold span,
-.bd-pf-gold div {
-  background: transparent !important;
-  color: rgb(var(--oui-color-primary-contrast)) !important;
+  background-image: none !important;
+  border-radius: 12px !important;
 }
 
 .bd-pf-gold svg {
-  stroke: rgb(var(--oui-color-primary-contrast)) !important;
   color: rgb(var(--oui-color-primary-contrast)) !important;
-}
-
-.bd-pf-gear {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  padding: 0 !important;
-  border-radius: 10px !important;
-  background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgb(var(--oui-color-line)) !important;
-  color: rgb(var(--oui-color-base-foreground)) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.bd-pf-aff {
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 0 10px !important;
-  border-radius: 8px !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  background: rgb(var(--oui-color-base-7)) !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.78) !important;
-  border: 1px solid rgb(var(--oui-color-line)) !important;
+  stroke: rgb(var(--oui-color-primary-contrast)) !important;
 }
