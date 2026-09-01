@@ -6,43 +6,11 @@ import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-confi
 import { renderSEOTags } from "@/utils/seo-tags";
 import { useNavigate } from "react-router-dom";
 import MarketsChrome from "@/components/markets/MarketsChrome";
-
-function liftSearch(root: HTMLElement) {
-  const input = root.querySelector(
-    "input[type='search'], input[type='text'], [role='searchbox']",
-  ) as HTMLInputElement | null;
-  if (!input) return;
-  input.placeholder = "Search market";
-  input.setAttribute("aria-label", "Search market");
-
-  let wrap = input.closest("div") as HTMLElement | null;
-  let steps = 0;
-  while (wrap && wrap.parentElement && wrap.parentElement !== root && steps < 6) {
-    const box = wrap.getBoundingClientRect();
-    if (box.width > 220 && box.height < 72) break;
-    wrap = wrap.parentElement;
-    steps += 1;
-  }
-  if (!wrap) return;
-  wrap.classList.add("bd-markets-search");
-  wrap.querySelectorAll("svg, img, i").forEach((node) => {
-    (node as HTMLElement).style.display = "none";
-  });
-  if (!wrap.querySelector(".bd-markets-search-icon")) {
-    const icon = document.createElement("span");
-    icon.className = "bd-markets-search-icon";
-    icon.setAttribute("aria-hidden", "true");
-    wrap.insertBefore(icon, wrap.firstChild);
-  }
-  if (root.firstElementChild !== wrap) {
-    root.insertBefore(wrap, root.firstElementChild);
-  }
-}
+import MarketsSearch from "@/components/markets/MarketsSearch";
 
 function hideMarketsChrome() {
   const root = document.querySelector(".bd-markets-list") as HTMLElement | null;
   if (!root) return;
-  liftSearch(root);
 
   const tabLike = Array.from(root.querySelectorAll("button, a, [role='tab']")) as HTMLElement[];
   const pageTabs = tabLike.filter((node) => {
@@ -98,6 +66,7 @@ export default function MarketsIndex() {
     <>
       {renderSEOTags(pageMeta, pageTitle)}
       <div className="bd-markets-list">
+        <MarketsSearch />
         <MarketsHomePage
           comparisonProps={{
             exchangesIconSrc:
