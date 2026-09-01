@@ -5,21 +5,30 @@ import { getPageMeta } from "@/utils/seo";
 import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-config";
 import { renderSEOTags } from "@/utils/seo-tags";
 import { useNavigate } from "react-router-dom";
-import MarketsChrome from "@/components/markets/MarketsChrome";
-import MarketsSearch from "@/components/markets/MarketsSearch";
 
 function hideMarketsChrome() {
   const root = document.querySelector(".bd-markets-list") as HTMLElement | null;
   if (!root) return;
 
   const tabLike = Array.from(root.querySelectorAll("button, a, [role='tab']")) as HTMLElement[];
-  const pageTabs = tabLike.filter((node) => {
+  tabLike.forEach((node) => {
     const text = (node.textContent || "").replace(/\s+/g, " ").trim();
-    return text === "Markets" || text === "Funding";
+    if (text === "Markets" || text === "Funding") node.style.display = "none";
   });
-  pageTabs.forEach((node) => {
-    node.style.display = "none";
+
+  const nodes = Array.from(root.querySelectorAll("div")) as HTMLElement[];
+  const matches = nodes.filter((el) => {
+    const text = (el.innerText || "").replace(/\s+/g, " ");
+    return (
+      text.includes("24h volume") &&
+      text.includes("Open interest") &&
+      (text.includes("New listings") || text.includes("Top gainers"))
+    );
   });
+  if (matches.length) {
+    const header = matches.sort((a, b) => a.innerText.length - b.innerText.length)[0];
+    if (header && header.innerText.length < 5000) header.style.display = "none";
+  }
 }
 
 export default function MarketsIndex() {
@@ -29,8 +38,8 @@ export default function MarketsIndex() {
 
   useEffect(() => {
     hideMarketsChrome();
-    const id = window.setInterval(hideMarketsChrome, 800);
-    const stop = window.setTimeout(() => window.clearInterval(id), 6000);
+    const id = window.setInterval(hideMarketsChrome, 700);
+    const stop = window.setTimeout(() => window.clearInterval(id), 8000);
     return () => {
       window.clearInterval(id);
       window.clearTimeout(stop);
@@ -41,8 +50,6 @@ export default function MarketsIndex() {
     <>
       {renderSEOTags(pageMeta, pageTitle)}
       <div className="bd-markets-list">
-        <MarketsSearch />
-        <MarketsChrome />
         <MarketsHomePage
           comparisonProps={{
             exchangesIconSrc:
