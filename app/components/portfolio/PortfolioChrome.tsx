@@ -6,6 +6,8 @@ const MUTED = "rgb(var(--oui-color-base-7))";
 const INK = "rgb(var(--oui-color-primary-contrast))";
 const FG = "rgb(var(--oui-color-base-foreground))";
 
+let selected: "deposit" | "withdraw" = "deposit";
+
 const ICONS: Record<string, string> = {
   deposit:
     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 4.2v10.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M8.2 11.2 12 15l3.8-3.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.2 19.2h13.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
@@ -19,56 +21,66 @@ function labelOf(el: Element) {
   return (el.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
 }
 
+function kindOf(el: Element): "deposit" | "withdraw" | null {
+  const text = labelOf(el);
+  if (text.includes("withdraw")) return "withdraw";
+  if (text.includes("deposit")) return "deposit";
+  return null;
+}
+
 function paintTab(button: HTMLElement, on: boolean) {
   button.classList.remove("bd-pf-gold");
   button.classList.add("bd-pf-tab");
   button.classList.toggle("is-on", on);
   button.style.setProperty("width", "auto", "important");
-  button.style.setProperty("height", "36px", "important");
   button.style.setProperty("min-width", "108px", "important");
+  button.style.setProperty("height", "36px", "important");
   button.style.setProperty("background", on ? GOLD : MUTED, "important");
   button.style.setProperty("background-image", "none", "important");
   button.style.setProperty("color", on ? INK : FG, "important");
 }
 
-function bindTabs(tabs: HTMLElement[]) {
-  tabs.forEach((button) => {
-    if (button.dataset.bdBound === "1") return;
-    button.dataset.bdBound = "1";
-    button.addEventListener("click", () => {
-      tabs.forEach((item) => paintTab(item, item === button));
-      window.setTimeout(() => tabs.forEach((item) => paintTab(item, item === button)), 80);
-    });
+function sheetTabs() {
+  return Array.from(document.querySelectorAll(".bd-pf-sheet button, [role='dialog'] button")) as HTMLElement[];
+}
+
+function applySelected() {
+  const tabs = sheetTabs().filter((button) => {
+    const kind = kindOf(button);
+    return kind === "deposit" || kind === "withdraw";
   });
+  const pair = tabs.filter((button) => {
+    const parent = button.parentElement;
+    if (!parent) return false;
+    const kinds = Array.from(parent.querySelectorAll("button")).map(kindOf);
+    return kinds.includes("deposit") && kinds.includes("withdraw");
+  });
+  pair.forEach((button) => paintTab(button, kindOf(button) === selected));
+}
+
+function onPointer(event: Event) {
+  const target = event.target as HTMLElement | null;
+  if (!target) return;
+  const button = target.closest("button") as HTMLElement | null;
+  if (!button) return;
+  const kind = kindOf(button);
+  if (!kind) return;
+  const parent = button.parentElement;
+  if (!parent) return;
+  const kinds = Array.from(parent.querySelectorAll("button")).map(kindOf);
+  if (!(kinds.includes("deposit") && kinds.includes("withdraw"))) return;
+  selected = kind;
+  applySelected();
 }
 
 function paintSheet() {
   const sheet = Array.from(document.querySelectorAll("div")).find((node) => {
     const text = (node.textContent || "").replace(/\s+/g, " ");
-    return text.includes("Quantity") && (text.includes("Deposit") || text.includes("Withdraw")) && (node as HTMLElement).offsetHeight > 160;
+    return text.includes("Quantity") && text.includes("Deposit") && text.includes("Withdraw") && (node as HTMLElement).offsetHeight > 160;
   }) as HTMLElement | undefined;
   if (!sheet) return;
   sheet.classList.add("bd-pf-sheet");
-
-  const buttons = Array.from(sheet.querySelectorAll("button")) as HTMLElement[];
-  const tabs = buttons.filter((button) => {
-    const text = labelOf(button);
-    return text === "deposit" || text === "withdraw" || text.endsWith("deposit") || text.endsWith("withdraw");
-  });
-  const pair = tabs.filter((button) => {
-    const parent = button.parentElement;
-    if (!parent) return false;
-    const labels = Array.from(parent.querySelectorAll("button")).map(labelOf);
-    return labels.some((item) => item.includes("deposit")) && labels.some((item) => item.includes("withdraw"));
-  });
-  if (pair.length >= 2) {
-    const active =
-      pair.find((item) => item.classList.contains("is-on")) ||
-      pair.find((item) => /contained|primary|active/.test(item.className)) ||
-      pair[0];
-    pair.forEach((item) => paintTab(item, item === active));
-    bindTabs(pair);
-  }
+  applySelected();
 
   sheet.querySelectorAll("input").forEach((input) => {
     let wrap = input.parentElement as HTMLElement | null;
@@ -83,14 +95,8 @@ function paintSheet() {
     if (!field) return;
     field.classList.add("bd-pf-field");
     field.style.setProperty("background", PLATE, "important");
-    field.style.setProperty("background-image", "none", "important");
     Array.from(field.querySelectorAll("div,span,button")).forEach((child) => {
-      const el = child as HTMLElement;
-      if (el === field) return;
-      if (el.offsetWidth < field.offsetWidth - 24) {
-        el.style.setProperty("background", "transparent", "important");
-        el.style.setProperty("box-shadow", "none", "important");
-      }
+      (child as HTMLElement).style.setProperty("background", "transparent", "important");
     });
     input.style.setProperty("background", "transparent", "important");
   });
@@ -132,12 +138,13 @@ function tagPortfolio() {
 export default function PortfolioChrome() {
   useEffect(() => {
     tagPortfolio();
-    const id = window.setInterval(tagPortfolio, 500);
-    const observer = new MutationObserver(tagPortfolio);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const id = window.setInterval(tagPortfolio, 700);
+    document.addEventListener("pointerdown", onPointer, true);
+    document.addEventListener("click", onPointer, true);
     return () => {
       window.clearInterval(id);
-      observer.disconnect();
+      document.removeEventListener("pointerdown", onPointer, true);
+      document.removeEventListener("click", onPointer, true);
     };
   }, []);
   return null;
