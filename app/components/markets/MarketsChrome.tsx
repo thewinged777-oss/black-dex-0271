@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { profileFor } from "@/utils/funding-desk";
 
 const TAGS = ["ALL", "L1", "MEME", "DEX"] as const;
@@ -33,9 +34,22 @@ function isCryptoTab() {
 export default function MarketsChrome() {
   const [tag, setTag] = useState<Tag>("ALL");
   const [crypto, setCrypto] = useState(false);
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     const sync = () => {
+      const root = document.querySelector(".bd-markets-list");
+      const lists = root ? Array.from(root.querySelectorAll("[role='tablist']")) : [];
+      const tablist = lists[lists.length - 1] as HTMLElement | undefined;
+      if (root && tablist) {
+        let host = root.querySelector(".bd-markets-filters-slot") as HTMLElement | null;
+        if (!host) {
+          host = document.createElement("div");
+          host.className = "bd-markets-filters-slot";
+          tablist.parentElement?.insertBefore(host, tablist.nextSibling);
+        }
+        setSlot(host);
+      }
       const onCrypto = isCryptoTab();
       setCrypto(onCrypto);
       if (!onCrypto && tag !== "ALL") setTag("ALL");
@@ -68,9 +82,9 @@ export default function MarketsChrome() {
     return () => observer?.disconnect();
   }, [tag, crypto]);
 
-  if (!crypto) return null;
+  if (!crypto || !slot) return null;
 
-  return (
+  return createPortal(
     <div className="bd-markets-filters">
       {TAGS.map((item) => (
         <button
@@ -82,6 +96,7 @@ export default function MarketsChrome() {
           {item === "ALL" ? "All" : item}
         </button>
       ))}
-    </div>
+    </div>,
+    slot,
   );
 }
