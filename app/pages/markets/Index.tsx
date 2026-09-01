@@ -11,18 +11,54 @@ function textOf(el: Element) {
 }
 
 function clickIf(root: Element, label: string) {
-  const nodes = Array.from(root.querySelectorAll("button, a, [role='tab'], [role='button']"));
-  const match = nodes.find((node) => textOf(node) === label) as HTMLElement | undefined;
+  const match = Array.from(
+    root.querySelectorAll("button, a, [role='tab'], [role='button']"),
+  ).find((node) => textOf(node) === label) as HTMLElement | undefined;
   match?.click();
+}
+
+function hideLabeled(root: Element, labels: string[]) {
+  const set = new Set(labels.map((item) => item.toLowerCase()));
+  root.querySelectorAll("button, a, [role='tab'], [role='button']").forEach((node) => {
+    if (set.has(textOf(node).toLowerCase())) {
+      (node as HTMLElement).style.display = "none";
+    }
+  });
+}
+
+function hideCategoryCard(root: Element) {
+  const nodes = Array.from(root.querySelectorAll("div"));
+  const card = nodes.find((el) => {
+    const text = textOf(el);
+    return (
+      text.includes("All markets") &&
+      text.includes("TradFi") &&
+      text.includes("New listings") &&
+      text.length < 400
+    );
+  });
+  if (card) (card as HTMLElement).style.display = "none";
 }
 
 function tidyMarkets() {
   const root = document.querySelector(".bd-markets-list");
   if (!root) return;
-
   clickIf(root, "All markets");
   clickIf(root, "Crypto");
-  clickIf(root, "All");
+  hideCategoryCard(root);
+  hideLabeled(root, [
+    "L1",
+    "MEME",
+    "DEX",
+    "TradFi",
+    "Community",
+    "New listings",
+    "Pre-launch",
+    "FX",
+    "HK",
+    "Markets",
+    "Funding",
+  ]);
 }
 
 export default function MarketsIndex() {
