@@ -7,7 +7,7 @@ body,
 .chart-container-border,
 #tv_chart_container,
 iframe {
-    background: #0b0e11 !important;
+    background: transparent !important;
 }
 
 html,

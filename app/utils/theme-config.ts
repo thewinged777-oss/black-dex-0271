@@ -101,9 +101,10 @@ export const DexThemeConfigSchema = z
     if (defaultCount !== 1) {
       ctx.addIssue({
         code: "custom",
-        message: "Exactly one theme must be the default",
-        path: ["isDefault"],
-      });
+          message: "Exactly one theme must be the default",
+          path: ["isDefault"],
+        });
+      }
     }
   });
 
@@ -126,6 +127,8 @@ export type DexThemeConfigResolution = {
   themes: DexThemeConfig;
   source: "theme-config" | "legacy";
 };
+
+export type BdThemeSlug = "original" | "classic" | "navy";
 
 const LegacyTradingViewColorConfigSchema = z
   .object({
@@ -262,3 +265,19 @@ export const resolveDexThemeConfig = (): DexThemeConfigResolution => {
 
 export const getDexThemeConfig = (): DexThemeConfig =>
   resolveDexThemeConfig().themes;
+
+export const slugFromThemeName = (name: string): BdThemeSlug => {
+  const normalized = name.toLowerCase();
+  if (normalized.includes("navy")) return "navy";
+  if (normalized.includes("classic")) return "classic";
+  return "original";
+};
+
+export const getTradingViewColorConfigForSlug = (
+  slug: BdThemeSlug,
+): TradingViewColorConfig | undefined => {
+  const match = getDexThemeConfig().find(
+    (theme) => slugFromThemeName(theme.displayName) === slug,
+  );
+  return match?.tradingViewColorConfig;
+};
