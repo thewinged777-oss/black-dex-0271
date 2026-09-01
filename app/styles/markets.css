@@ -78,20 +78,27 @@
   box-shadow: inset 0 -2px 0 rgb(var(--oui-color-primary)) !important;
 }
 
+.bd-markets-filters-slot {
+  margin: 0 0 10px;
+}
+
 .bd-markets-filters {
   display: flex;
   flex-wrap: nowrap;
-  gap: 8px;
-  margin: 0 0 10px;
+  gap: 0;
   overflow-x: auto;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgb(var(--oui-color-base-8));
+  border: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-markets-filters button {
   border: 0;
   height: 28px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgb(var(--oui-color-base-7));
+  padding: 0 14px;
+  border-radius: 9px;
+  background: transparent;
   color: rgb(var(--oui-color-base-foreground) / 0.62);
   font-size: 12px;
   font-weight: 600;
