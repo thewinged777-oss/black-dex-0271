@@ -43,39 +43,44 @@ function findBook() {
   return pane(leaf(/est\.?\s*funding rate/i) || leaf(/^mid$/i) || leaf(/^bbo$/i), 10);
 }
 
-function stackSubviews() {
+function stackSubviews(mode: "ticket" | "chart") {
   const root = document.querySelector(".bd-perp-page") as HTMLElement | null;
   if (!root) return;
 
   const tabs = Array.from(root.querySelectorAll("button, [role='tab']")).filter((node) =>
     /^(chart|charts|trades|data)$/i.test(text(node)),
   ) as HTMLElement[];
-  if (tabs.length >= 2) {
-    const list = (tabs[0].closest("[role='tablist']") || tabs[0].parentElement) as HTMLElement | null;
-    list?.classList.add("bd-trade-subtabs");
+  const list = tabs[0]
+    ? ((tabs[0].closest("[role='tablist']") || tabs[0].parentElement) as HTMLElement | null)
+    : null;
+  if (list) {
+    list.classList.add("bd-trade-subtabs");
+    list.style.display = mode === "chart" ? "none" : "";
   }
 
   const panels = Array.from(root.querySelectorAll("[role='tabpanel']")) as HTMLElement[];
   if (panels.length >= 2) {
-    panels.forEach((panel) => {
-      panel.classList.add("bd-trade-panel");
-      panel.style.display = "block";
-      panel.hidden = false;
-      panel.setAttribute("data-state", "active");
-    });
     const parent = panels[0].parentElement;
     parent?.classList.add("bd-trade-stack");
+    panels.forEach((panel) => {
+      panel.classList.add("bd-trade-panel");
+      if (mode === "chart") {
+        panel.style.display = "block";
+        panel.hidden = false;
+        panel.setAttribute("data-state", "active");
+      }
+    });
   }
 }
 
-function layoutTradeDesk() {
+function layoutTradeDesk(mode: "ticket" | "chart") {
   const chart = findChart();
   const ticket = findTicket();
   const book = findBook();
   chart?.classList.add("bd-trade-chart");
   ticket?.classList.add("bd-trade-ticket");
   book?.classList.add("bd-trade-book");
-  stackSubviews();
+  stackSubviews(mode);
 
   if (window.innerWidth < 720) return;
   if (!chart || !ticket || !book) return;
@@ -102,9 +107,9 @@ export default function TradeDeskLayout({
   onMode: (mode: Mode) => void;
 }) {
   useEffect(() => {
-    layoutTradeDesk();
-    const id = window.setInterval(layoutTradeDesk, 600);
-    const observer = new MutationObserver(layoutTradeDesk);
+    layoutTradeDesk(mode);
+    const id = window.setInterval(() => layoutTradeDesk(mode), 600);
+    const observer = new MutationObserver(() => layoutTradeDesk(mode));
     observer.observe(document.body, { childList: true, subtree: true });
     return () => {
       window.clearInterval(id);
