@@ -36,6 +36,10 @@ export default function PerpSymbol() {
 
   const pageMeta = getPageMeta();
   const pageTitle = generatePageTitle(formatSymbol(params.symbol!));
+  const disableFeatures =
+    mode === "ticket"
+      ? (["kline", "asset_margin_info"] as never[])
+      : (["asset_margin_info"] as never[]);
 
   return (
     <div className="h-full bd-perp-page" data-mode={mode}>
@@ -46,7 +50,7 @@ export default function PerpSymbol() {
         onSymbolChange={onSymbolChange}
         tradingViewConfig={config.tradingPage.tradingViewConfig}
         sharePnLConfig={config.tradingPage.sharePnLConfig}
-        disableFeatures={["asset_margin_info"] as never[]}
+        disableFeatures={disableFeatures}
       />
       <div className="md:hidden pb-2 pt-8 text-center">
         <span className="oui-text-2xs oui-text-base-contrast-54">
