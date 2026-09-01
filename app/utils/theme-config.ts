@@ -101,10 +101,9 @@ export const DexThemeConfigSchema = z
     if (defaultCount !== 1) {
       ctx.addIssue({
         code: "custom",
-          message: "Exactly one theme must be the default",
-          path: ["isDefault"],
-        });
-      }
+        message: "Exactly one theme must be the default",
+        path: ["isDefault"],
+      });
     }
   });
 
