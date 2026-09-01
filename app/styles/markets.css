@@ -9,7 +9,7 @@
 .bd-markets-list input[type="search"],
 .bd-markets-list [role="searchbox"] {
   height: 40px !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   background: rgb(var(--oui-color-base-8)) !important;
   border: 1px solid rgb(var(--oui-color-line)) !important;
   box-shadow: none !important;
@@ -17,14 +17,25 @@
   font-size: 14px !important;
 }
 
+.bd-markets-list [role="tablist"] {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0 !important;
+  padding: 3px !important;
+  border-radius: 12px !important;
+  background: rgb(var(--oui-color-base-8)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+}
+
 .bd-markets-list [role="tab"],
 .bd-markets-list [role="tablist"] button {
   height: 32px !important;
-  border-radius: 8px !important;
+  border-radius: 9px !important;
   padding: 0 12px !important;
+  margin: 0 !important;
   color: rgb(var(--oui-color-base-foreground) / 0.62) !important;
-  background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgb(var(--oui-color-line)) !important;
+  background: transparent !important;
+  border: 0 !important;
   box-shadow: none !important;
   font-weight: 600 !important;
 }
@@ -34,8 +45,30 @@
 .bd-markets-list [role="tablist"] button[data-state="active"],
 .bd-markets-list [role="tablist"] button[aria-selected="true"] {
   background: rgb(var(--oui-color-primary) / 0.18) !important;
-  border-color: rgb(var(--oui-color-primary)) !important;
   color: rgb(var(--oui-color-primary)) !important;
+}
+
+.bd-markets-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 6px;
+}
+
+.bd-markets-filters button {
+  border: 0;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgb(var(--oui-color-base-7));
+  color: rgb(var(--oui-color-base-foreground) / 0.62);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bd-markets-filters button.is-on {
+  background: rgb(var(--oui-color-primary) / 0.18);
+  color: rgb(var(--oui-color-primary));
 }
 
 .bd-markets-list tbody td {

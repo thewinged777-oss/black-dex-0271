@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCollateral } from "@orderly.network/hooks";
 import { loadHomeMarkets, type HomeMarket } from "@/utils/home-markets";
 import { loadBlackDexPosts, type HomePost } from "@/utils/home-posts";
@@ -96,6 +96,7 @@ function PassCard({ idea }: { idea: CarryIdea }) {
 }
 
 export default function HomeDesk() {
+  const navigate = useNavigate();
   const collateral = useCollateral();
   const total =
     Number((collateral as { totalValue?: number; totalCollateral?: number })?.totalValue ??
@@ -106,6 +107,7 @@ export default function HomeDesk() {
   const [posts, setPosts] = useState<HomePost[]>([]);
   const [passing, setPassing] = useState<CarryIdea[]>([]);
   const [tab, setTab] = useState<MoverTab>("gainers");
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     loadHomeMarkets().then(setMarkets).catch(() => setMarkets([]));
@@ -131,12 +133,46 @@ export default function HomeDesk() {
     };
   }, [markets]);
 
+  const hits = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return markets
+      .filter((row) => row.base.toLowerCase().includes(q) || row.symbol.toLowerCase().includes(q))
+      .slice(0, 8);
+  }, [markets, query]);
+
   const rows = tab === "losers" ? losers : tab === "listings" ? listings : gainers;
   const empty =
     tab === "losers" ? "No red books." : tab === "listings" ? "No new books." : "No green books.";
 
   return (
     <div className="bd-home">
+      <form
+        className="bd-home-search"
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (hits[0]) navigate(`/perp/${hits[0].symbol}`);
+        }}
+      >
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search a token"
+          aria-label="Search a token"
+        />
+        {hits.length ? (
+          <div className="bd-home-search-hits">
+            {hits.map((row) => (
+              <Link key={row.symbol} to={`/perp/${row.symbol}`}>
+                <TokenMark symbol={row.symbol} label={row.base} size={20} />
+                <span>{row.base}USDC</span>
+                <b>{money(row.price)}</b>
+              </Link>
+            ))}
+          </div>
+        ) : null}
+      </form>
+
       <section className="bd-home-hero">
         <div className="bd-home-balance">
           <span>Total assets</span>

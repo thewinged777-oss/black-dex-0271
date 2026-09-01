@@ -12,6 +12,7 @@ import TradeDeskLayout from "@/components/trade/TradeDeskLayout";
 export default function PerpSymbol() {
   const params = useParams();
   const [symbol, setSymbol] = useState(params.symbol!);
+  const [mode, setMode] = useState<"ticket" | "chart">("ticket");
   const config = useOrderlyConfig();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -35,16 +36,21 @@ export default function PerpSymbol() {
 
   const pageMeta = getPageMeta();
   const pageTitle = generatePageTitle(formatSymbol(params.symbol!));
+  const disableFeatures =
+    mode === "ticket"
+      ? (["kline", "asset_margin_info"] as never[])
+      : (["asset_margin_info"] as never[]);
 
   return (
-    <div className="h-full bd-perp-page">
+    <div className="h-full bd-perp-page" data-mode={mode}>
       {renderSEOTags(pageMeta, pageTitle)}
-      <TradeDeskLayout />
+      <TradeDeskLayout mode={mode} onMode={setMode} />
       <TradingPage
         symbol={symbol}
         onSymbolChange={onSymbolChange}
         tradingViewConfig={config.tradingPage.tradingViewConfig}
         sharePnLConfig={config.tradingPage.sharePnLConfig}
+        disableFeatures={disableFeatures}
       />
       <div className="md:hidden pb-2 pt-8 text-center">
         <span className="oui-text-2xs oui-text-base-contrast-54">
