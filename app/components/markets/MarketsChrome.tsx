@@ -19,16 +19,26 @@ function matches(text: string, tag: Tag) {
   return /defi|dex|venue/.test(sleeve) || ["UNI", "CAKE", "RAY", "JUP", "CRV", "PENDLE", "JOE"].includes(ticker);
 }
 
-function isCryptoTab() {
-  const root = document.querySelector(".bd-markets-list");
-  if (!root) return false;
+function lists(root: Element) {
+  return Array.from(root.querySelectorAll("[role='tablist']")) as HTMLElement[];
+}
+
+function isCryptoTab(root: Element) {
   const active = Array.from(
     root.querySelectorAll("[role='tab'][aria-selected='true'], [role='tab'][data-state='active'], [role='tablist'] button[aria-selected='true']"),
   ) as HTMLElement[];
   return active.some((node) => {
     const label = (node.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
-    return label === "crypto" || label.includes("crypto");
+    return label === "crypto";
   });
+}
+
+function categoryList(root: Element) {
+  return lists(root).find((list) => /all markets|crypto|tradfi/i.test(list.textContent || ""));
+}
+
+function tradfiList(root: Element) {
+  return lists(root).find((list) => /\bFX\b|\bHK\b/.test(list.textContent || ""));
 }
 
 export default function MarketsChrome() {
@@ -39,20 +49,33 @@ export default function MarketsChrome() {
   useEffect(() => {
     const sync = () => {
       const root = document.querySelector(".bd-markets-list");
-      const lists = root ? Array.from(root.querySelectorAll("[role='tablist']")) : [];
-      const tablist = lists[lists.length - 1] as HTMLElement | undefined;
-      if (root && tablist) {
-        let host = root.querySelector(".bd-markets-filters-slot") as HTMLElement | null;
-        if (!host) {
-          host = document.createElement("div");
-          host.className = "bd-markets-filters-slot";
-          tablist.parentElement?.insertBefore(host, tablist.nextSibling);
-        }
-        setSlot(host);
-      }
-      const onCrypto = isCryptoTab();
+      if (!root) return;
+      const onCrypto = isCryptoTab(root);
       setCrypto(onCrypto);
       if (!onCrypto && tag !== "ALL") setTag("ALL");
+
+      const sub = tradfiList(root);
+      const cat = categoryList(root);
+      let host = root.querySelector(".bd-markets-filters-slot") as HTMLElement | null;
+      if (!host) {
+        host = document.createElement("div");
+        host.className = "bd-markets-filters-slot";
+      }
+      if (onCrypto) {
+        if (sub) {
+          sub.style.display = "none";
+          sub.parentElement?.insertBefore(host, sub);
+        } else if (cat) {
+          cat.parentElement?.insertBefore(host, cat.nextSibling);
+        } else {
+          root.appendChild(host);
+        }
+        setSlot(host);
+      } else {
+        if (sub) sub.style.display = "";
+        host.remove();
+        setSlot(null);
+      }
     };
     sync();
     const root = document.querySelector(".bd-markets-list");
