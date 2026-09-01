@@ -1,12 +1,34 @@
 import { useEffect } from "react";
 
 const GOLD = "rgb(var(--oui-color-primary))";
+const PLATE = "rgb(var(--oui-color-base-8))";
 
 function paintWell(el: HTMLElement) {
   el.classList.add("bd-pf-gold");
   el.style.setProperty("background", GOLD, "important");
   el.style.setProperty("background-color", GOLD, "important");
   el.style.setProperty("background-image", "none", "important");
+}
+
+function paintAffiliates() {
+  const nodes = Array.from(document.querySelectorAll("a,button,div"));
+  const title = nodes.find((node) => {
+    const text = (node.textContent || "").replace(/\s+/g, " ").trim();
+    return /^affiliates\b/i.test(text) && text.length < 90;
+  }) as HTMLElement | undefined;
+  if (!title) return;
+
+  let card = title;
+  for (let i = 0; i < 7 && card.parentElement; i += 1) {
+    if (card.offsetWidth >= 220 && card.offsetHeight >= 48) break;
+    card = card.parentElement;
+  }
+  if (card.offsetHeight > 220) return;
+  card.classList.add("bd-pf-aff");
+  card.style.setProperty("background", PLATE, "important");
+  card.style.setProperty("background-color", PLATE, "important");
+  card.style.setProperty("background-image", "none", "important");
+  card.style.setProperty("border-color", "rgb(var(--oui-color-line))", "important");
 }
 
 function tagPortfolio() {
@@ -29,12 +51,14 @@ function tagPortfolio() {
     }
     if (well) paintWell(well);
   });
+
+  paintAffiliates();
 }
 
 export default function PortfolioChrome() {
   useEffect(() => {
     tagPortfolio();
-    const id = window.setInterval(tagPortfolio, 400);
+    const id = window.setInterval(tagPortfolio, 500);
     const observer = new MutationObserver(tagPortfolio);
     observer.observe(document.body, { childList: true, subtree: true });
     return () => {
