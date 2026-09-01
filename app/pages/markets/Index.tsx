@@ -12,8 +12,8 @@ function liftSearch(root: HTMLElement) {
     "input[type='search'], input[type='text'], [role='searchbox']",
   ) as HTMLInputElement | null;
   if (!input) return;
-  input.placeholder = "Search the market";
-  input.setAttribute("aria-label", "Search the market");
+  input.placeholder = "Search market";
+  input.setAttribute("aria-label", "Search market");
 
   let wrap = input.closest("div") as HTMLElement | null;
   let steps = 0;
