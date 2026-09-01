@@ -17,6 +17,7 @@ import {
 import { createSymbolDataAdapter } from "@/utils/symbol-filter";
 import { resolveDexThemeConfig } from "@/utils/theme-config";
 import ServiceDisclaimerDialog from "./ServiceDisclaimerDialog";
+import ThemeSync from "./ThemeSync";
 import { OrderlyLocaleProvider } from "./orderlyLocaleProvider";
 
 const getNetworkId = (): NetworkId => {
@@ -108,8 +109,6 @@ const OrderlyProvider = (props: { children: ReactNode }) => {
       };
     }
 
-    // No filter match (or filters unset): only set the current networkId key
-    // to avoid applying a mainnet chainId on testnet (and vice versa).
     return options?.networkId === "testnet"
       ? { testnet: { id: chainId } }
       : { mainnet: { id: chainId } };
@@ -178,6 +177,7 @@ const OrderlyProvider = (props: { children: ReactNode }) => {
         ),
       }}
     >
+      <ThemeSync />
       <DemoGraduationChecker />
       <ServiceDisclaimerDialog />
       {props.children}

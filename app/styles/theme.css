@@ -70,4 +70,71 @@
   --oui-spacing-md: 26.25rem;
   --oui-spacing-lg: 30rem;
   --oui-spacing-xl: 33.75rem;
+  --bd-chart-bg: #000000;
+}
+
+html[data-bd-theme="original"] {
+  --oui-color-primary-contrast: 0 0 0 !important;
+  --oui-color-success-contrast: 0 0 0 !important;
+  --oui-color-warning-contrast: 0 0 0 !important;
+  --oui-color-fill: 0 0 0 !important;
+  --oui-color-fill-active: 26 26 26 !important;
+  --oui-color-base-5: 48 42 28 !important;
+  --oui-color-base-6: 26 26 26 !important;
+  --oui-color-base-7: 18 18 18 !important;
+  --oui-color-base-8: 10 10 10 !important;
+  --oui-color-base-9: 0 0 0 !important;
+  --oui-color-base-10: 0 0 0 !important;
+  --oui-color-line: 48 42 28 !important;
+  --oui-color-base-static-contrast: 0 0 0 !important;
+  --oui-color-trading-profit-contrast: 0 0 0 !important;
+  --oui-gradient-secondary-start: 48 42 28 !important;
+  --oui-gradient-secondary-end: 94 102 115 !important;
+  --oui-gradient-neutral-start: 18 18 18 !important;
+  --oui-gradient-neutral-end: 0 0 0 !important;
+  --bd-chart-bg: #000000;
+}
+
+html[data-bd-theme="classic"] {
+  --oui-color-primary-contrast: 11 14 17 !important;
+  --oui-color-success-contrast: 11 14 17 !important;
+  --oui-color-warning-contrast: 11 14 17 !important;
+  --oui-color-fill: 11 14 17 !important;
+  --oui-color-fill-active: 28 33 42 !important;
+  --oui-color-base-5: 42 48 52 !important;
+  --oui-color-base-6: 28 33 42 !important;
+  --oui-color-base-7: 22 26 34 !important;
+  --oui-color-base-8: 18 21 28 !important;
+  --oui-color-base-9: 11 14 17 !important;
+  --oui-color-base-10: 8 10 12 !important;
+  --oui-color-line: 42 48 52 !important;
+  --oui-color-base-static-contrast: 11 14 17 !important;
+  --oui-color-trading-profit-contrast: 11 14 17 !important;
+  --oui-gradient-secondary-start: 42 48 52 !important;
+  --oui-gradient-secondary-end: 94 102 115 !important;
+  --oui-gradient-neutral-start: 22 26 34 !important;
+  --oui-gradient-neutral-end: 11 14 17 !important;
+  --bd-chart-bg: #0B0E11;
+}
+
+html[data-bd-theme="navy"] {
+  --oui-color-primary-contrast: 7 9 15 !important;
+  --oui-color-success-contrast: 7 9 15 !important;
+  --oui-color-warning-contrast: 7 9 15 !important;
+  --oui-color-fill: 7 9 15 !important;
+  --oui-color-fill-active: 24 32 48 !important;
+  --oui-color-base-5: 42 51 68 !important;
+  --oui-color-base-6: 24 32 48 !important;
+  --oui-color-base-7: 18 24 38 !important;
+  --oui-color-base-8: 12 16 24 !important;
+  --oui-color-base-9: 7 9 15 !important;
+  --oui-color-base-10: 5 7 12 !important;
+  --oui-color-line: 42 51 68 !important;
+  --oui-color-base-static-contrast: 7 9 15 !important;
+  --oui-color-trading-profit-contrast: 7 9 15 !important;
+  --oui-gradient-secondary-start: 42 51 68 !important;
+  --oui-gradient-secondary-end: 94 102 115 !important;
+  --oui-gradient-neutral-start: 18 24 38 !important;
+  --oui-gradient-neutral-end: 7 9 15 !important;
+  --bd-chart-bg: #07090F;
 }

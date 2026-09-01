@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { API } from "@orderly.network/types";
 import { TradingPage } from "@orderly.network/trading";
@@ -7,6 +7,12 @@ import { formatSymbol, generatePageTitle } from "@/utils/utils";
 import { useOrderlyConfig } from "@/utils/config";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
+import {
+  BD_THEME_EVENT,
+  getBdThemeSlug,
+  type BdThemeSlug,
+} from "@/components/orderlyProvider/ThemeSync";
+import { createTradingViewConfigForSlug } from "@/utils/trading-view-config";
 
 function paintTradeGold() {
   const root = document.querySelector(".bd-perp-page");
@@ -30,6 +36,17 @@ export default function PerpSymbol() {
   const config = useOrderlyConfig();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [themeSlug, setThemeSlug] = useState<BdThemeSlug>("original");
+
+  useEffect(() => {
+    setThemeSlug(getBdThemeSlug());
+    const onTheme = (event: Event) => {
+      const next = (event as CustomEvent<BdThemeSlug>).detail;
+      setThemeSlug(next || getBdThemeSlug());
+    };
+    window.addEventListener(BD_THEME_EVENT, onTheme);
+    return () => window.removeEventListener(BD_THEME_EVENT, onTheme);
+  }, []);
 
   useEffect(() => {
     updateSymbol(symbol);
@@ -47,7 +64,7 @@ export default function PerpSymbol() {
       window.clearTimeout(second);
       observer.disconnect();
     };
-  }, [symbol]);
+  }, [symbol, themeSlug]);
 
   const onSymbolChange = useCallback(
     (data: API.Symbol) => {
@@ -60,16 +77,25 @@ export default function PerpSymbol() {
     [navigate, searchParams],
   );
 
+  const tradingViewConfig = useMemo(
+    () => ({
+      ...config.tradingPage.tradingViewConfig,
+      ...createTradingViewConfigForSlug(themeSlug),
+    }),
+    [config.tradingPage.tradingViewConfig, themeSlug],
+  );
+
   const pageMeta = getPageMeta();
   const pageTitle = generatePageTitle(formatSymbol(params.symbol!));
 
   return (
-    <div className="h-full bd-perp-page">
+    <div className="h-full bd-perp-page" data-bd-theme={themeSlug}>
       {renderSEOTags(pageMeta, pageTitle)}
       <TradingPage
+        key={`${symbol}-${themeSlug}`}
         symbol={symbol}
         onSymbolChange={onSymbolChange}
-        tradingViewConfig={config.tradingPage.tradingViewConfig}
+        tradingViewConfig={tradingViewConfig}
         sharePnLConfig={config.tradingPage.sharePnLConfig}
       />
       <div className="md:hidden pb-2 pt-8 text-center">
