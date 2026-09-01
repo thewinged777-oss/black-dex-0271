@@ -13,8 +13,6 @@
   align-items: center !important;
   justify-content: center !important;
   background: rgb(var(--oui-color-primary)) !important;
-  background-color: rgb(var(--oui-color-primary)) !important;
-  background-image: none !important;
   border-radius: 8px !important;
   color: rgb(var(--oui-color-primary-contrast)) !important;
 }
@@ -23,7 +21,6 @@
   width: 14px !important;
   height: 14px !important;
   color: rgb(var(--oui-color-primary-contrast)) !important;
-  stroke: rgb(var(--oui-color-primary-contrast)) !important;
 }
 
 .bd-pf-aff {
@@ -32,17 +29,7 @@
   padding: 10px 12px !important;
   border-radius: 12px !important;
   background: rgb(var(--oui-color-base-8)) !important;
-  background-image: none !important;
   border: 1px solid rgb(var(--oui-color-line)) !important;
-  color: rgb(var(--oui-color-base-foreground)) !important;
-  box-shadow: none !important;
-  overflow: hidden !important;
-}
-
-.bd-pf-aff img {
-  width: 28px !important;
-  height: 28px !important;
-  object-fit: contain !important;
 }
 
 .bd-pf-notice,
@@ -51,4 +38,29 @@
   background-image: none !important;
   box-shadow: none !important;
   border: 0 !important;
+}
+
+.bd-pf-tab {
+  background: rgb(var(--oui-color-base-7)) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.7) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.bd-pf-tab.is-on {
+  background: rgb(var(--oui-color-primary)) !important;
+  color: rgb(var(--oui-color-primary-contrast)) !important;
+}
+
+.bd-pf-field,
+.bd-pf-sheet input,
+.bd-pf-sheet textarea {
+  background: rgb(var(--oui-color-base-8)) !important;
+  background-image: none !important;
+  border-color: rgb(var(--oui-color-line)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.bd-pf-sheet input {
+  background: transparent !important;
 }
