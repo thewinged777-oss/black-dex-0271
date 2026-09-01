@@ -1,18 +1,45 @@
 .bd-markets-list {
   width: min(920px, calc(100% - 16px));
-  margin: 8px auto 96px;
+  margin: 0 auto 96px;
+  padding-top: 18px;
   min-height: 60vh;
   color: rgb(var(--oui-color-base-foreground));
 }
 
 .bd-markets-search,
 .bd-markets-list .bd-markets-search {
+  position: relative !important;
   width: 100% !important;
-  margin: 0 0 12px !important;
+  margin: 10px 0 18px !important;
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+}
+
+.bd-markets-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  border: 2px solid rgb(var(--oui-color-primary));
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.bd-markets-search-icon::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+  width: 7px;
+  height: 2px;
+  background: rgb(var(--oui-color-primary));
+  transform: rotate(45deg);
+  border-radius: 1px;
 }
 
 .bd-markets-list input[type="text"],
@@ -22,11 +49,11 @@
   height: 42px !important;
   border-radius: 8px !important;
   background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border: 1px solid rgb(var(--oui-color-primary)) !important;
   box-shadow: none !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
   font-size: 14px !important;
-  padding: 0 12px !important;
+  padding: 0 12px 0 36px !important;
 }
 
 .bd-markets-list input::placeholder,
@@ -43,10 +70,10 @@
 
 .bd-markets-list [role="tablist"] {
   display: flex !important;
-  flex-wrap: nowrap !important;
-  gap: 16px !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
   padding: 0 !important;
-  margin: 4px 0 10px !important;
+  margin: 0 0 12px !important;
   overflow-x: auto !important;
   background: transparent !important;
   border: 0 !important;
@@ -56,15 +83,15 @@
 
 .bd-markets-list [role="tab"],
 .bd-markets-list [role="tablist"] button {
-  height: auto !important;
-  border-radius: 0 !important;
-  padding: 6px 0 !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  padding: 0 14px !important;
   margin: 0 !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.48) !important;
-  background: transparent !important;
-  border: 0 !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.62) !important;
+  background: rgb(var(--oui-color-base-8)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
   box-shadow: none !important;
-  font-size: 15px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
 }
@@ -73,9 +100,10 @@
 .bd-markets-list [role="tab"][aria-selected="true"],
 .bd-markets-list [role="tablist"] button[data-state="active"],
 .bd-markets-list [role="tablist"] button[aria-selected="true"] {
-  background: transparent !important;
-  color: rgb(var(--oui-color-base-foreground)) !important;
-  box-shadow: inset 0 -2px 0 rgb(var(--oui-color-primary)) !important;
+  background: rgb(var(--oui-color-primary) / 0.18) !important;
+  color: rgb(var(--oui-color-primary)) !important;
+  border-color: rgb(var(--oui-color-primary) / 0.4) !important;
+  box-shadow: none !important;
 }
 
 .bd-markets-filters-slot {

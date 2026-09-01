@@ -28,6 +28,12 @@ function liftSearch(root: HTMLElement) {
   wrap.querySelectorAll("svg, img, i").forEach((node) => {
     (node as HTMLElement).style.display = "none";
   });
+  if (!wrap.querySelector(".bd-markets-search-icon")) {
+    const icon = document.createElement("span");
+    icon.className = "bd-markets-search-icon";
+    icon.setAttribute("aria-hidden", "true");
+    wrap.insertBefore(icon, wrap.firstChild);
+  }
   if (root.firstElementChild !== wrap) {
     root.insertBefore(wrap, root.firstElementChild);
   }
