@@ -53,25 +53,41 @@
   line-height: 16px !important;
 }
 
-.bd-perp-page[data-mode="ticket"] .bd-trade-chart,
-.bd-perp-page[data-mode="ticket"] iframe[src*="tradingview"],
-.bd-perp-page[data-mode="ticket"] iframe[id*="tradingview"] {
-  display: none !important;
-  height: 0 !important;
-  min-height: 0 !important;
+.bd-trade-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px;
+  min-height: calc(100dvh - 220px);
+}
+
+.bd-trade-stack > .bd-trade-panel {
+  display: block !important;
+  flex: 1 1 0;
+  min-height: 22vh;
+  overflow: auto;
 }
 
 .bd-perp-page[data-mode="chart"] .bd-trade-ticket {
   display: none !important;
 }
 
-.bd-perp-page[data-mode="chart"] .bd-trade-book {
-  min-height: 420px;
+.bd-perp-page[data-mode="chart"] .bd-trade-stack {
+  min-height: calc(100dvh - 160px);
+}
+
+.bd-perp-page[data-mode="chart"] .bd-trade-chart,
+.bd-perp-page[data-mode="chart"] .bd-trade-book,
+.bd-perp-page[data-mode="ticket"] .bd-trade-chart,
+.bd-perp-page[data-mode="ticket"] .bd-trade-book {
+  min-height: 24vh;
 }
 
 @media (min-width: 720px) {
   .bd-trade-chart {
-    min-height: 380px;
+    min-height: 280px;
     margin-top: 8px;
+  }
+  .bd-perp-page[data-mode="chart"] .bd-trade-book {
+    min-height: 320px;
   }
 }
