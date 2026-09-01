@@ -2,7 +2,10 @@ import { useEffect } from "react";
 
 const GOLD = "rgb(var(--oui-color-primary))";
 const PLATE = "rgb(var(--oui-color-base-8))";
+const MUTED = "rgb(var(--oui-color-base-7))";
+const LINE = "rgb(var(--oui-color-line))";
 const INK = "rgb(var(--oui-color-primary-contrast))";
+const FG = "rgb(var(--oui-color-base-foreground))";
 
 const ICONS: Record<string, string> = {
   deposit:
@@ -15,15 +18,73 @@ const ICONS: Record<string, string> = {
 
 function paintWell(el: HTMLElement, kind: "deposit" | "withdraw" | "history") {
   el.classList.add("bd-pf-gold");
-  el.setAttribute("data-bd-action", kind);
   el.style.setProperty("background", GOLD, "important");
-  el.style.setProperty("background-color", GOLD, "important");
-  el.style.setProperty("background-image", "none", "important");
   el.style.setProperty("color", INK, "important");
   if (el.dataset.bdIcon === "1") return;
   el.querySelectorAll("svg").forEach((svg) => svg.remove());
   el.insertAdjacentHTML("afterbegin", ICONS[kind]);
   el.dataset.bdIcon = "1";
+}
+
+function isOn(el: HTMLElement) {
+  return (
+    el.getAttribute("aria-selected") === "true" ||
+    el.getAttribute("aria-pressed") === "true" ||
+    el.getAttribute("data-state") === "active" ||
+    el.getAttribute("data-state") === "on" ||
+    el.dataset.variant === "contained" ||
+    /contained|primary/.test(el.className)
+  );
+}
+
+function paintSheet() {
+  const sheet = Array.from(document.querySelectorAll("div")).find((node) => {
+    const text = (node.textContent || "").replace(/\s+/g, " ");
+    return (
+      text.includes("Your Web3 Wallet") &&
+      text.includes("Quantity") &&
+      node.childElementCount > 2 &&
+      (node as HTMLElement).offsetHeight > 180
+    );
+  }) as HTMLElement | undefined;
+  if (!sheet) return;
+  sheet.classList.add("bd-pf-sheet");
+
+  const buttons = Array.from(sheet.querySelectorAll("button")) as HTMLElement[];
+  const tabs = buttons.filter((button) => {
+    const text = (button.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
+    return text === "deposit" || text === "withdraw";
+  });
+  const grouped = tabs.filter((button) => {
+    const parent = button.parentElement;
+    if (!parent) return false;
+    const labels = Array.from(parent.querySelectorAll("button")).map((item) =>
+      (item.textContent || "").replace(/\s+/g, " ").trim().toLowerCase(),
+    );
+    return labels.includes("deposit") && labels.includes("withdraw");
+  });
+
+  grouped.forEach((button) => {
+    button.classList.add("bd-pf-tab");
+    const on = isOn(button);
+    button.classList.toggle("is-on", on);
+    button.style.setProperty("background", on ? GOLD : MUTED, "important");
+    button.style.setProperty("background-image", "none", "important");
+    button.style.setProperty("color", on ? INK : FG, "important");
+  });
+
+  sheet.querySelectorAll("input, textarea").forEach((input) => {
+    const field =
+      (input.closest("[class*='field'], [class*='input'], label, div") as HTMLElement) ||
+      (input.parentElement as HTMLElement);
+    if (!field) return;
+    field.classList.add("bd-pf-field");
+    field.style.setProperty("background", PLATE, "important");
+    field.style.setProperty("background-image", "none", "important");
+    field.style.setProperty("border-color", LINE, "important");
+    (input as HTMLElement).style.setProperty("background", "transparent", "important");
+    (input as HTMLElement).style.setProperty("color", FG, "important");
+  });
 }
 
 function paintAffiliates() {
@@ -33,7 +94,6 @@ function paintAffiliates() {
     return /^affiliates\b/i.test(text) && text.length < 90;
   }) as HTMLElement | undefined;
   if (!title) return;
-
   let card = title;
   for (let i = 0; i < 7 && card.parentElement; i += 1) {
     if (card.offsetWidth >= 220 && card.offsetHeight >= 48) break;
@@ -42,17 +102,14 @@ function paintAffiliates() {
   if (card.offsetHeight > 220) return;
   card.classList.add("bd-pf-aff");
   card.style.setProperty("background", PLATE, "important");
-  card.style.setProperty("background-color", PLATE, "important");
   card.style.setProperty("background-image", "none", "important");
-  card.style.setProperty("border-color", "rgb(var(--oui-color-line))", "important");
 }
 
 function stripNotice() {
   const nodes = Array.from(document.querySelectorAll("div,span,p,section"));
   nodes.forEach((node) => {
     const text = (node.textContent || "").replace(/\s+/g, " ").trim();
-    if (!/please connect wallet before starting to trade/i.test(text)) return;
-    if (text.length > 80) return;
+    if (!/please connect wallet before starting to trade/i.test(text) || text.length > 80) return;
     let bar = node as HTMLElement;
     for (let i = 0; i < 5 && bar.parentElement; i += 1) {
       if (bar.offsetWidth >= 200) break;
@@ -60,9 +117,6 @@ function stripNotice() {
     }
     bar.classList.add("bd-pf-notice");
     bar.style.setProperty("background", "transparent", "important");
-    bar.style.setProperty("background-image", "none", "important");
-    bar.style.setProperty("box-shadow", "none", "important");
-    bar.style.setProperty("border", "0", "important");
   });
 }
 
@@ -73,8 +127,8 @@ function tagPortfolio() {
   leaves.forEach((node) => {
     const text = (node.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
     if (text !== "deposit" && text !== "withdraw" && text !== "history") return;
+    if ((node as HTMLElement).closest(".bd-pf-sheet")) return;
     const kind = text as "deposit" | "withdraw" | "history";
-
     let current = node as HTMLElement | null;
     let well: HTMLElement | null = null;
     for (let i = 0; i < 8 && current; i += 1) {
@@ -85,17 +139,18 @@ function tagPortfolio() {
       }
       current = current.parentElement;
     }
-    if (well) paintWell(well, kind);
+    if (well && !well.classList.contains("bd-pf-tab")) paintWell(well, kind);
   });
 
   paintAffiliates();
   stripNotice();
+  paintSheet();
 }
 
 export default function PortfolioChrome() {
   useEffect(() => {
     tagPortfolio();
-    const id = window.setInterval(tagPortfolio, 500);
+    const id = window.setInterval(tagPortfolio, 400);
     const observer = new MutationObserver(tagPortfolio);
     observer.observe(document.body, { childList: true, subtree: true });
     return () => {
