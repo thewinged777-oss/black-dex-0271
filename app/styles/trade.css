@@ -4,31 +4,32 @@
 
 .bd-trade-modes {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 8px;
+  right: 10px;
   z-index: 30;
   display: flex;
   gap: 0;
   padding: 3px;
-  border-radius: 12px;
-  background: rgb(var(--oui-color-base-8));
+  border-radius: 999px;
+  background: rgb(var(--oui-color-base-7));
   border: 1px solid rgb(var(--oui-color-line));
 }
 
 .bd-trade-modes button {
+  width: 36px;
   height: 28px;
-  padding: 0 12px;
+  padding: 0;
   border: 0;
-  border-radius: 9px;
+  border-radius: 999px;
   background: transparent;
-  color: rgb(var(--oui-color-base-foreground) / 0.62);
-  font-size: 12px;
-  font-weight: 700;
+  color: rgb(var(--oui-color-base-foreground) / 0.45);
+  display: grid;
+  place-items: center;
 }
 
 .bd-trade-modes button.is-on {
-  background: rgb(var(--oui-color-primary) / 0.18);
-  color: rgb(var(--oui-color-primary));
+  background: rgb(var(--oui-color-base-5, var(--oui-color-base-8)));
+  color: rgb(var(--oui-color-base-foreground));
 }
 
 .bd-perp-page input,
@@ -53,8 +54,25 @@
   line-height: 16px !important;
 }
 
+.bd-trade-top {
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 8px;
+}
+
+.bd-perp-page[data-mode="ticket"] .bd-trade-ticket {
+  flex: 1.15;
+  min-width: 0;
+}
+
+.bd-perp-page[data-mode="ticket"] .bd-trade-book {
+  display: block !important;
+  flex: 0.85;
+  min-width: 118px;
+  max-width: 46%;
+}
+
 .bd-perp-page[data-mode="ticket"] .bd-trade-chart,
-.bd-perp-page[data-mode="ticket"] .bd-trade-book,
 .bd-perp-page[data-mode="ticket"] .bd-trade-stack,
 .bd-perp-page[data-mode="ticket"] .bd-trade-panel,
 .bd-perp-page[data-mode="ticket"] .bd-trade-subtabs,
@@ -73,31 +91,7 @@
   display: none !important;
 }
 
-.bd-perp-page[data-mode="chart"] .bd-trade-stack {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 8px;
-  min-height: calc(100dvh - 280px);
-}
-
-.bd-perp-page[data-mode="chart"] .bd-trade-panel {
-  display: block !important;
-  flex: 1 1 0;
-  min-height: 22vh;
-  overflow: auto;
-}
-
 .bd-perp-page[data-mode="chart"] .bd-trade-chart,
 .bd-perp-page[data-mode="chart"] .bd-trade-book {
-  min-height: 24vh;
-}
-
-@media (min-width: 720px) {
-  .bd-perp-page[data-mode="chart"] .bd-trade-chart {
-    min-height: 280px;
-    margin-top: 8px;
-  }
-  .bd-perp-page[data-mode="chart"] .bd-trade-book {
-    min-height: 280px;
-  }
+  min-height: 28vh;
 }
