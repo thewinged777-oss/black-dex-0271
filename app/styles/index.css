@@ -40,7 +40,7 @@ body,
 }
 
 .bd-brand-title {
-  color: #d4af37;
+  color: rgb(var(--oui-color-primary));
   font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -130,6 +130,12 @@ img[alt="logo"] {
   min-height: 100%;
   min-width: 0;
   max-width: 100%;
+}
+
+.oui-button[data-variant="contained"],
+.oui-button-primary {
+  background: rgb(var(--oui-color-primary));
+  color: rgb(var(--oui-color-primary-contrast));
 }
 
 @media (min-width: 1024px) {
