@@ -14,3 +14,22 @@
   color: rgb(var(--oui-color-primary-contrast)) !important;
   stroke: rgb(var(--oui-color-primary-contrast)) !important;
 }
+
+.bd-pf-aff {
+  min-height: 56px !important;
+  max-height: 72px !important;
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  background: rgb(var(--oui-color-base-8)) !important;
+  background-image: none !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+.bd-pf-aff img {
+  width: 28px !important;
+  height: 28px !important;
+  object-fit: contain !important;
+}
