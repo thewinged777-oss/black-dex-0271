@@ -10,55 +10,37 @@ function textOf(el: Element) {
   return (el.textContent || "").replace(/\s+/g, " ").trim();
 }
 
-function clickIf(root: Element, label: string) {
-  const match = Array.from(
-    root.querySelectorAll("button, a, [role='tab'], [role='button']"),
-  ).find((node) => textOf(node) === label) as HTMLElement | undefined;
-  match?.click();
-}
+function lineUpTabs() {
+  const root = document.querySelector(".bd-markets-list");
+  if (!root) return;
 
-function hideLabeled(root: Element, labels: string[]) {
-  const set = new Set(labels.map((item) => item.toLowerCase()));
-  root.querySelectorAll("button, a, [role='tab'], [role='button']").forEach((node) => {
-    if (set.has(textOf(node).toLowerCase())) {
+  root.querySelectorAll("button, a, [role='tab']").forEach((node) => {
+    const label = textOf(node);
+    if (label === "L1" || label === "MEME" || label === "DEX" || label === "Markets" || label === "Funding") {
       (node as HTMLElement).style.display = "none";
     }
   });
-}
 
-function hideCategoryCard(root: Element) {
-  const nodes = Array.from(root.querySelectorAll("div"));
-  const card = nodes.find((el) => {
-    const text = textOf(el);
-    return (
-      text.includes("All markets") &&
-      text.includes("TradFi") &&
-      text.includes("New listings") &&
-      text.length < 400
-    );
-  });
-  if (card) (card as HTMLElement).style.display = "none";
-}
+  const buttons = Array.from(root.querySelectorAll("button, [role='tab'], [role='button']")) as HTMLElement[];
+  const allMarkets = buttons.find((node) => textOf(node) === "All markets");
+  const prelaunch = buttons.find((node) => textOf(node) === "Pre-launch");
+  if (!allMarkets || !prelaunch) return;
 
-function tidyMarkets() {
-  const root = document.querySelector(".bd-markets-list");
-  if (!root) return;
-  clickIf(root, "All markets");
-  clickIf(root, "Crypto");
-  hideCategoryCard(root);
-  hideLabeled(root, [
-    "L1",
-    "MEME",
-    "DEX",
-    "TradFi",
-    "Community",
-    "New listings",
-    "Pre-launch",
-    "FX",
-    "HK",
-    "Markets",
-    "Funding",
-  ]);
+  let row: HTMLElement | null = allMarkets.parentElement;
+  while (row && row !== root) {
+    if (row.contains(prelaunch) && row.contains(allMarkets)) break;
+    row = row.parentElement;
+  }
+  if (!row) return;
+
+  row.classList.add("bd-markets-tabrow");
+  row.style.display = "flex";
+  row.style.flexWrap = "nowrap";
+  row.style.overflowX = "auto";
+  row.style.overflowY = "hidden";
+  row.style.gap = "8px";
+  row.style.whiteSpace = "nowrap";
+  row.style.webkitOverflowScrolling = "touch";
 }
 
 export default function MarketsIndex() {
@@ -67,11 +49,12 @@ export default function MarketsIndex() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const start = window.setTimeout(tidyMarkets, 250);
-    const again = window.setTimeout(tidyMarkets, 1200);
+    lineUpTabs();
+    const first = window.setTimeout(lineUpTabs, 200);
+    const second = window.setTimeout(lineUpTabs, 900);
     return () => {
-      window.clearTimeout(start);
-      window.clearTimeout(again);
+      window.clearTimeout(first);
+      window.clearTimeout(second);
     };
   }, []);
 

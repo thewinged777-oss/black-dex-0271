@@ -19,38 +19,54 @@
   height: 44px !important;
   border-radius: 12px !important;
   background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border: 1px solid rgb(var(--oui-color-primary) / 0.55) !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
   box-shadow: none !important;
-  padding-left: 40px !important;
 }
 
-.bd-markets-list [role="tablist"] {
+.bd-markets-list [role="tablist"],
+.bd-markets-list .bd-markets-tabrow {
   display: flex !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
   gap: 8px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  white-space: nowrap !important;
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
+  scrollbar-width: none;
+}
+
+.bd-markets-list [role="tablist"]::-webkit-scrollbar,
+.bd-markets-list .bd-markets-tabrow::-webkit-scrollbar {
+  display: none;
 }
 
 .bd-markets-list [role="tab"],
-.bd-markets-list [role="tablist"] button {
-  height: 34px !important;
-  border-radius: 999px !important;
+.bd-markets-list [role="tablist"] button,
+.bd-markets-list .bd-markets-tabrow button,
+.bd-markets-list .bd-markets-tabrow [role="button"] {
+  flex: 0 0 auto !important;
+  height: 36px !important;
+  border-radius: 12px !important;
   padding: 0 14px !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.62) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.72) !important;
   background: rgb(var(--oui-color-base-7)) !important;
   border: 0 !important;
   box-shadow: none !important;
   font-size: 13px !important;
   font-weight: 600 !important;
+  white-space: nowrap !important;
 }
 
 .bd-markets-list [role="tab"][data-state="active"],
 .bd-markets-list [role="tab"][aria-selected="true"],
 .bd-markets-list [role="tablist"] button[data-state="active"],
-.bd-markets-list [role="tablist"] button[aria-selected="true"] {
+.bd-markets-list [role="tablist"] button[aria-selected="true"],
+.bd-markets-list .bd-markets-tabrow button[data-state="active"],
+.bd-markets-list .bd-markets-tabrow button[aria-pressed="true"] {
   background: rgb(var(--oui-color-primary) / 0.18) !important;
   color: rgb(var(--oui-color-primary)) !important;
 }
