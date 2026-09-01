@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
 
 function nativeInput() {
-  return document.querySelector(
-    ".bd-markets-list input[type='search'], .bd-markets-list input[type='text'], .bd-markets-list [role='searchbox']",
-  ) as HTMLInputElement | null;
-}
-
-function hideNative() {
-  const input = nativeInput();
-  if (!input) return;
-  const wrap = input.closest("div");
-  wrap?.classList.add("bd-markets-native-search");
-  input.classList.add("bd-markets-native-input");
+  const root = document.querySelector(".bd-markets-list");
+  if (!root) return null;
+  return Array.from(root.querySelectorAll("input[type='search'], input[type='text'], [role='searchbox']")).find(
+    (node) => !node.closest(".bd-markets-search"),
+  ) as HTMLInputElement | undefined;
 }
 
 export default function MarketsSearch() {
   const [value, setValue] = useState("");
 
   useEffect(() => {
-    hideNative();
-    const id = window.setInterval(hideNative, 500);
+    const hide = () => {
+      const input = nativeInput();
+      if (input) input.classList.add("bd-markets-native-input");
+    };
+    hide();
+    const id = window.setInterval(hide, 800);
     return () => window.clearInterval(id);
   }, []);
 
