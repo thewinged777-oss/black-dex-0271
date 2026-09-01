@@ -6,29 +6,23 @@ import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-confi
 import { renderSEOTags } from "@/utils/seo-tags";
 import { useNavigate } from "react-router-dom";
 
-function hideMarketsChrome() {
-  const root = document.querySelector(".bd-markets-list") as HTMLElement | null;
+function textOf(el: Element) {
+  return (el.textContent || "").replace(/\s+/g, " ").trim();
+}
+
+function clickIf(root: Element, label: string) {
+  const nodes = Array.from(root.querySelectorAll("button, a, [role='tab'], [role='button']"));
+  const match = nodes.find((node) => textOf(node) === label) as HTMLElement | undefined;
+  match?.click();
+}
+
+function tidyMarkets() {
+  const root = document.querySelector(".bd-markets-list");
   if (!root) return;
 
-  const tabLike = Array.from(root.querySelectorAll("button, a, [role='tab']")) as HTMLElement[];
-  tabLike.forEach((node) => {
-    const text = (node.textContent || "").replace(/\s+/g, " ").trim();
-    if (text === "Markets" || text === "Funding") node.style.display = "none";
-  });
-
-  const nodes = Array.from(root.querySelectorAll("div")) as HTMLElement[];
-  const matches = nodes.filter((el) => {
-    const text = (el.innerText || "").replace(/\s+/g, " ");
-    return (
-      text.includes("24h volume") &&
-      text.includes("Open interest") &&
-      (text.includes("New listings") || text.includes("Top gainers"))
-    );
-  });
-  if (matches.length) {
-    const header = matches.sort((a, b) => a.innerText.length - b.innerText.length)[0];
-    if (header && header.innerText.length < 5000) header.style.display = "none";
-  }
+  clickIf(root, "All markets");
+  clickIf(root, "Crypto");
+  clickIf(root, "All");
 }
 
 export default function MarketsIndex() {
@@ -37,12 +31,11 @@ export default function MarketsIndex() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    hideMarketsChrome();
-    const id = window.setInterval(hideMarketsChrome, 700);
-    const stop = window.setTimeout(() => window.clearInterval(id), 8000);
+    const start = window.setTimeout(tidyMarkets, 250);
+    const again = window.setTimeout(tidyMarkets, 1200);
     return () => {
-      window.clearInterval(id);
-      window.clearTimeout(stop);
+      window.clearTimeout(start);
+      window.clearTimeout(again);
     };
   }, []);
 
@@ -52,12 +45,10 @@ export default function MarketsIndex() {
       <div className="bd-markets-list">
         <MarketsHomePage
           comparisonProps={{
-            exchangesIconSrc:
-              getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO")
-                ? "/logo-secondary.webp"
-                : undefined,
-            exchangesName:
-              getRuntimeConfig("VITE_ORDERLY_BROKER_NAME"),
+            exchangesIconSrc: getRuntimeConfigBoolean("VITE_HAS_SECONDARY_LOGO")
+              ? "/logo-secondary.webp"
+              : undefined,
+            exchangesName: getRuntimeConfig("VITE_ORDERLY_BROKER_NAME"),
           }}
           onSymbolChange={(symbol) => {
             navigate(`/perp/${symbol.symbol}`);
