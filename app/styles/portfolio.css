@@ -33,3 +33,11 @@
   height: 28px !important;
   object-fit: contain !important;
 }
+
+.bd-pf-notice,
+.bd-pf-notice * {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
