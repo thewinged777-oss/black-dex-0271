@@ -31,6 +31,25 @@ function paintAffiliates() {
   card.style.setProperty("border-color", "rgb(var(--oui-color-line))", "important");
 }
 
+function stripNotice() {
+  const nodes = Array.from(document.querySelectorAll("div,span,p,section"));
+  nodes.forEach((node) => {
+    const text = (node.textContent || "").replace(/\s+/g, " ").trim();
+    if (!/please connect wallet before starting to trade/i.test(text)) return;
+    if (text.length > 80) return;
+    let bar = node as HTMLElement;
+    for (let i = 0; i < 5 && bar.parentElement; i += 1) {
+      if (bar.offsetWidth >= 200) break;
+      bar = bar.parentElement;
+    }
+    bar.classList.add("bd-pf-notice");
+    bar.style.setProperty("background", "transparent", "important");
+    bar.style.setProperty("background-image", "none", "important");
+    bar.style.setProperty("box-shadow", "none", "important");
+    bar.style.setProperty("border", "0", "important");
+  });
+}
+
 function tagPortfolio() {
   if (!window.location.pathname.includes("/portfolio")) return;
 
@@ -53,6 +72,7 @@ function tagPortfolio() {
   });
 
   paintAffiliates();
+  stripNotice();
 }
 
 export default function PortfolioChrome() {
