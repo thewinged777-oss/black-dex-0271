@@ -1,7 +1,6 @@
 .bd-markets-list {
   width: min(920px, calc(100% - 16px));
-  margin: 0 auto 96px;
-  padding-top: 18px;
+  margin: 8px auto 96px;
   min-height: 60vh;
   color: rgb(var(--oui-color-base-foreground));
 }
@@ -10,7 +9,7 @@
 .bd-markets-list .bd-markets-search {
   position: relative !important;
   width: 100% !important;
-  margin: 10px 0 18px !important;
+  margin: 4px 0 10px !important;
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -19,12 +18,12 @@
 
 .bd-markets-search-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   top: 50%;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   transform: translateY(-50%);
-  border: 2px solid rgb(var(--oui-color-primary));
+  border: 1.6px solid rgb(var(--oui-color-base-foreground) / 0.45);
   border-radius: 50%;
   pointer-events: none;
   z-index: 2;
@@ -35,9 +34,9 @@
   position: absolute;
   right: -5px;
   bottom: -3px;
-  width: 7px;
-  height: 2px;
-  background: rgb(var(--oui-color-primary));
+  width: 6px;
+  height: 1.6px;
+  background: rgb(var(--oui-color-base-foreground) / 0.45);
   transform: rotate(45deg);
   border-radius: 1px;
 }
@@ -46,19 +45,19 @@
 .bd-markets-list input[type="search"],
 .bd-markets-list [role="searchbox"] {
   width: 100% !important;
-  height: 42px !important;
-  border-radius: 8px !important;
+  height: 40px !important;
+  border-radius: 10px !important;
   background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgb(var(--oui-color-primary)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
   box-shadow: none !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   padding: 0 12px 0 36px !important;
 }
 
 .bd-markets-list input::placeholder,
 .bd-markets-list [role="searchbox"]::placeholder {
-  color: rgb(var(--oui-color-primary)) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.42) !important;
   opacity: 1 !important;
 }
 
@@ -70,10 +69,10 @@
 
 .bd-markets-list [role="tablist"] {
   display: flex !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   gap: 8px !important;
-  padding: 0 !important;
-  margin: 0 0 12px !important;
+  padding: 0 2px !important;
+  margin: 0 0 8px !important;
   overflow-x: auto !important;
   background: transparent !important;
   border: 0 !important;
@@ -83,52 +82,51 @@
 
 .bd-markets-list [role="tab"],
 .bd-markets-list [role="tablist"] button {
-  height: 34px !important;
-  border-radius: 10px !important;
-  padding: 0 14px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  padding: 0 12px !important;
   margin: 0 !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.62) !important;
-  background: rgb(var(--oui-color-base-8)) !important;
-  border: 1px solid rgb(var(--oui-color-line)) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.7) !important;
+  background: rgb(var(--oui-color-base-7)) !important;
+  border: 0 !important;
   box-shadow: none !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
+  flex: none !important;
 }
 
 .bd-markets-list [role="tab"][data-state="active"],
 .bd-markets-list [role="tab"][aria-selected="true"],
 .bd-markets-list [role="tablist"] button[data-state="active"],
 .bd-markets-list [role="tablist"] button[aria-selected="true"] {
-  background: rgb(var(--oui-color-primary) / 0.18) !important;
-  color: rgb(var(--oui-color-primary)) !important;
-  border-color: rgb(var(--oui-color-primary) / 0.4) !important;
+  background: rgb(var(--oui-color-base-6, var(--oui-color-base-8))) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
   box-shadow: none !important;
 }
 
 .bd-markets-filters-slot {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
 .bd-markets-filters {
   display: flex;
   flex-wrap: nowrap;
-  gap: 0;
+  gap: 8px;
   overflow-x: auto;
-  padding: 3px;
-  border-radius: 12px;
-  background: rgb(var(--oui-color-base-8));
-  border: 1px solid rgb(var(--oui-color-line));
+  padding: 0;
+  background: transparent;
+  border: 0;
 }
 
 .bd-markets-filters button {
   border: 0;
-  height: 28px;
-  padding: 0 14px;
-  border-radius: 9px;
-  background: transparent;
-  color: rgb(var(--oui-color-base-foreground) / 0.62);
-  font-size: 12px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: rgb(var(--oui-color-base-7));
+  color: rgb(var(--oui-color-base-foreground) / 0.7);
+  font-size: 13px;
   font-weight: 600;
   flex: none;
 }
