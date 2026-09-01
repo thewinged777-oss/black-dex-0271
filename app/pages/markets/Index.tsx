@@ -5,6 +5,7 @@ import { getPageMeta } from "@/utils/seo";
 import { getRuntimeConfig, getRuntimeConfigBoolean } from "@/utils/runtime-config";
 import { renderSEOTags } from "@/utils/seo-tags";
 import { useNavigate } from "react-router-dom";
+import MarketsChrome from "@/components/markets/MarketsChrome";
 
 function hideMarketsChrome() {
   const root = document.querySelector(".bd-markets-list") as HTMLElement | null;
@@ -77,6 +78,7 @@ export default function MarketsIndex() {
             navigate(`/perp/${symbol.symbol}`);
           }}
         />
+        <MarketsChrome />
       </div>
     </>
   );
