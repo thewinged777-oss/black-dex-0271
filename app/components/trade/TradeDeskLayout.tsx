@@ -16,7 +16,7 @@ function pane(start: Element | null, max = 12) {
   let best = current;
   let steps = 0;
   while (current && steps < max) {
-    if (current.offsetHeight >= 160 && current.offsetWidth >= 200) best = current;
+    if (current.offsetHeight >= 120 && current.offsetWidth >= 160) best = current;
     current = current.parentElement;
     steps += 1;
   }
@@ -43,6 +43,31 @@ function findBook() {
   return pane(leaf(/est\.?\s*funding rate/i) || leaf(/^mid$/i) || leaf(/^bbo$/i), 10);
 }
 
+function stackSubviews() {
+  const root = document.querySelector(".bd-perp-page") as HTMLElement | null;
+  if (!root) return;
+
+  const tabs = Array.from(root.querySelectorAll("button, [role='tab']")).filter((node) =>
+    /^(chart|charts|trades|data)$/i.test(text(node)),
+  ) as HTMLElement[];
+  if (tabs.length >= 2) {
+    const list = (tabs[0].closest("[role='tablist']") || tabs[0].parentElement) as HTMLElement | null;
+    list?.classList.add("bd-trade-subtabs");
+  }
+
+  const panels = Array.from(root.querySelectorAll("[role='tabpanel']")) as HTMLElement[];
+  if (panels.length >= 2) {
+    panels.forEach((panel) => {
+      panel.classList.add("bd-trade-panel");
+      panel.style.display = "block";
+      panel.hidden = false;
+      panel.setAttribute("data-state", "active");
+    });
+    const parent = panels[0].parentElement;
+    parent?.classList.add("bd-trade-stack");
+  }
+}
+
 function layoutTradeDesk() {
   const chart = findChart();
   const ticket = findTicket();
@@ -50,6 +75,7 @@ function layoutTradeDesk() {
   chart?.classList.add("bd-trade-chart");
   ticket?.classList.add("bd-trade-ticket");
   book?.classList.add("bd-trade-book");
+  stackSubviews();
 
   if (window.innerWidth < 720) return;
   if (!chart || !ticket || !book) return;
