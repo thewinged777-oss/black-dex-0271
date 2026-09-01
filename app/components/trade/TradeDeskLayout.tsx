@@ -44,11 +44,14 @@ function findBook() {
 }
 
 function layoutTradeDesk() {
-  if (window.innerWidth < 720) return;
-
   const chart = findChart();
   const ticket = findTicket();
   const book = findBook();
+  chart?.classList.add("bd-trade-chart");
+  ticket?.classList.add("bd-trade-ticket");
+  book?.classList.add("bd-trade-book");
+
+  if (window.innerWidth < 720) return;
   if (!chart || !ticket || !book) return;
   if (chart.contains(ticket) || chart.contains(book)) return;
 
@@ -60,11 +63,18 @@ function layoutTradeDesk() {
   if (chartBox.top >= rowBox.top - 8) return;
 
   row.parentElement?.insertBefore(chart, row.nextSibling);
-  chart.classList.add("bd-trade-chart");
   row.classList.add("bd-trade-top");
 }
 
-export default function TradeDeskLayout() {
+type Mode = "ticket" | "chart";
+
+export default function TradeDeskLayout({
+  mode,
+  onMode,
+}: {
+  mode: Mode;
+  onMode: (mode: Mode) => void;
+}) {
   useEffect(() => {
     layoutTradeDesk();
     const id = window.setInterval(layoutTradeDesk, 600);
@@ -74,6 +84,16 @@ export default function TradeDeskLayout() {
       window.clearInterval(id);
       observer.disconnect();
     };
-  }, []);
-  return null;
+  }, [mode]);
+
+  return (
+    <div className="bd-trade-modes">
+      <button type="button" className={mode === "ticket" ? "is-on" : ""} onClick={() => onMode("ticket")}>
+        Trade
+      </button>
+      <button type="button" className={mode === "chart" ? "is-on" : ""} onClick={() => onMode("chart")}>
+        Chart
+      </button>
+    </div>
+  );
 }
