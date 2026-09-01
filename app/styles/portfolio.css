@@ -41,14 +41,11 @@
 
 .bd-pf-field {
   background: rgb(var(--oui-color-base-8)) !important;
-  background-image: none !important;
   border: 1px solid rgb(var(--oui-color-line)) !important;
-  box-shadow: none !important;
 }
 
 .bd-pf-field *,
 .bd-pf-sheet input {
   background: transparent !important;
-  background-image: none !important;
   box-shadow: none !important;
 }

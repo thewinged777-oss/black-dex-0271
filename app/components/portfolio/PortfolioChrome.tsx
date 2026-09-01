@@ -17,15 +17,29 @@ const ICONS: Record<string, string> = {
     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.2" stroke="currentColor" stroke-width="1.7"/><path d="M12 8.2V12l2.6 1.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 };
 
+function path() {
+  return window.location.pathname.toLowerCase();
+}
+
+function isHistoryPage() {
+  return /history/.test(path()) || document.body.innerText.includes("No results found");
+}
+
+function isOverview() {
+  return /\/portfolio\/?$/.test(path()) && !isHistoryPage();
+}
+
 function labelOf(el: Element) {
   return (el.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
 }
 
-function kindOf(el: Element): "deposit" | "withdraw" | null {
-  const text = labelOf(el);
-  if (text.includes("withdraw")) return "withdraw";
-  if (text.includes("deposit")) return "deposit";
-  return null;
+function clearGold(el: HTMLElement) {
+  el.classList.remove("bd-pf-gold");
+  el.style.removeProperty("background");
+  el.style.removeProperty("width");
+  el.style.removeProperty("height");
+  el.style.removeProperty("min-width");
+  el.style.removeProperty("min-height");
 }
 
 function paintTab(button: HTMLElement, on: boolean) {
@@ -36,39 +50,27 @@ function paintTab(button: HTMLElement, on: boolean) {
   button.style.setProperty("min-width", "108px", "important");
   button.style.setProperty("height", "36px", "important");
   button.style.setProperty("background", on ? GOLD : MUTED, "important");
-  button.style.setProperty("background-image", "none", "important");
   button.style.setProperty("color", on ? INK : FG, "important");
 }
 
-function sheetTabs() {
-  return Array.from(document.querySelectorAll(".bd-pf-sheet button, [role='dialog'] button")) as HTMLElement[];
+function kindOf(el: Element): "deposit" | "withdraw" | null {
+  const text = labelOf(el);
+  if (text.includes("withdraw")) return "withdraw";
+  if (text.includes("deposit") && !text.includes("deposits")) return "deposit";
+  return null;
 }
 
 function applySelected() {
-  const tabs = sheetTabs().filter((button) => {
-    const kind = kindOf(button);
-    return kind === "deposit" || kind === "withdraw";
-  });
-  const pair = tabs.filter((button) => {
-    const parent = button.parentElement;
-    if (!parent) return false;
-    const kinds = Array.from(parent.querySelectorAll("button")).map(kindOf);
-    return kinds.includes("deposit") && kinds.includes("withdraw");
-  });
+  const tabs = Array.from(document.querySelectorAll(".bd-pf-sheet button")) as HTMLElement[];
+  const pair = tabs.filter((button) => kindOf(button));
   pair.forEach((button) => paintTab(button, kindOf(button) === selected));
 }
 
 function onPointer(event: Event) {
-  const target = event.target as HTMLElement | null;
-  if (!target) return;
-  const button = target.closest("button") as HTMLElement | null;
-  if (!button) return;
+  const button = (event.target as HTMLElement | null)?.closest("button") as HTMLElement | null;
+  if (!button || !button.closest(".bd-pf-sheet")) return;
   const kind = kindOf(button);
   if (!kind) return;
-  const parent = button.parentElement;
-  if (!parent) return;
-  const kinds = Array.from(parent.querySelectorAll("button")).map(kindOf);
-  if (!(kinds.includes("deposit") && kinds.includes("withdraw"))) return;
   selected = kind;
   applySelected();
 }
@@ -81,29 +83,18 @@ function paintSheet() {
   if (!sheet) return;
   sheet.classList.add("bd-pf-sheet");
   applySelected();
-
   sheet.querySelectorAll("input").forEach((input) => {
-    let wrap = input.parentElement as HTMLElement | null;
-    let field = wrap;
-    for (let i = 0; i < 5 && wrap; i += 1) {
-      if (wrap.offsetWidth > 180 && wrap.offsetHeight > 40) {
-        field = wrap;
-        break;
-      }
-      wrap = wrap.parentElement;
-    }
+    const field = input.parentElement as HTMLElement | null;
     if (!field) return;
     field.classList.add("bd-pf-field");
     field.style.setProperty("background", PLATE, "important");
-    Array.from(field.querySelectorAll("div,span,button")).forEach((child) => {
-      (child as HTMLElement).style.setProperty("background", "transparent", "important");
-    });
-    input.style.setProperty("background", "transparent", "important");
   });
 }
 
 function paintWell(el: HTMLElement, kind: "deposit" | "withdraw" | "history") {
+  if (!isOverview()) return;
   if (el.closest(".bd-pf-sheet") || el.classList.contains("bd-pf-tab")) return;
+  if (el.offsetWidth > 72 || el.offsetHeight > 72) return;
   el.classList.add("bd-pf-gold");
   el.style.setProperty("background", GOLD, "important");
   if (el.dataset.bdIcon === "1") return;
@@ -112,9 +103,17 @@ function paintWell(el: HTMLElement, kind: "deposit" | "withdraw" | "history") {
   el.dataset.bdIcon = "1";
 }
 
+function unpaintHistory() {
+  if (!isHistoryPage()) return;
+  document.querySelectorAll(".bd-pf-gold").forEach((node) => clearGold(node as HTMLElement));
+}
+
 function tagPortfolio() {
-  if (!window.location.pathname.includes("/portfolio")) return;
+  if (!path().includes("/portfolio")) return;
+  unpaintHistory();
+  if (isHistoryPage()) return;
   paintSheet();
+  if (!isOverview()) return;
   Array.from(document.querySelectorAll("div,span,p,a,button")).forEach((node) => {
     const text = labelOf(node);
     if (text !== "deposit" && text !== "withdraw" && text !== "history") return;
@@ -140,11 +139,9 @@ export default function PortfolioChrome() {
     tagPortfolio();
     const id = window.setInterval(tagPortfolio, 700);
     document.addEventListener("pointerdown", onPointer, true);
-    document.addEventListener("click", onPointer, true);
     return () => {
       window.clearInterval(id);
       document.removeEventListener("pointerdown", onPointer, true);
-      document.removeEventListener("click", onPointer, true);
     };
   }, []);
   return null;
