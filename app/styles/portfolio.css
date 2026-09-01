@@ -12,12 +12,25 @@
   border-radius: 14px;
 }
 
-.bd-pf-gold {
+.bd-pf-gold,
+.bd-pf-gold.oui-button,
+button.bd-pf-gold,
+a.bd-pf-gold {
   background: rgb(var(--oui-color-primary)) !important;
+  background-image: none !important;
+  background-color: rgb(var(--oui-color-primary)) !important;
   color: rgb(var(--oui-color-primary-contrast)) !important;
   border: 0 !important;
   border-radius: 10px !important;
   font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+.bd-pf-gold *,
+.bd-pf-gold span,
+.bd-pf-gold div {
+  background: transparent !important;
+  color: rgb(var(--oui-color-primary-contrast)) !important;
 }
 
 .bd-pf-gold svg {
@@ -49,9 +62,4 @@
   background: rgb(var(--oui-color-base-7)) !important;
   color: rgb(var(--oui-color-base-foreground) / 0.78) !important;
   border: 1px solid rgb(var(--oui-color-line)) !important;
-}
-
-.bd-pf-aff svg {
-  width: 14px !important;
-  height: 14px !important;
 }
