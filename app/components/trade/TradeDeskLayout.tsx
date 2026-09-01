@@ -39,41 +39,22 @@ function findTicket() {
   );
 }
 
-function findBook() {
-  return pane(leaf(/est\.?\s*funding rate/i) || leaf(/^mid$/i) || leaf(/^bbo$/i), 10);
-}
-
-function stackSubviews(mode: "ticket" | "chart") {
+function markSubviews() {
   const root = document.querySelector(".bd-perp-page") as HTMLElement | null;
   if (!root) return;
-
   const tabs = Array.from(root.querySelectorAll("button, [role='tab']")).filter((node) =>
     /^(chart|charts|trades|data)$/i.test(text(node)),
   ) as HTMLElement[];
   const list = tabs[0]
     ? ((tabs[0].closest("[role='tablist']") || tabs[0].parentElement) as HTMLElement | null)
     : null;
-  if (list) {
-    list.classList.add("bd-trade-subtabs");
-    list.style.display = mode === "chart" ? "none" : list.style.display;
-  }
+  list?.classList.add("bd-trade-subtabs");
+  Array.from(root.querySelectorAll("[role='tabpanel']")).forEach((panel) => {
+    panel.classList.add("bd-trade-panel");
+  });
+  findChart()?.classList.add("bd-trade-chart");
+  findTicket()?.classList.add("bd-trade-ticket");
 }
-
-function layoutTradeDesk(mode: "ticket" | "chart") {
-  const chart = findChart();
-  const ticket = findTicket();
-  const book = findBook();
-  chart?.classList.add("bd-trade-chart");
-  ticket?.classList.add("bd-trade-ticket");
-  book?.classList.add("bd-trade-book");
-  stackSubviews(mode);
-
-  if (ticket && book && ticket.parentElement && ticket.parentElement === book.parentElement) {
-    ticket.parentElement.classList.add("bd-trade-top");
-  }
-}
-
-type Mode = "ticket" | "chart";
 
 function CandleIcon() {
   return (
@@ -99,36 +80,21 @@ export default function TradeDeskLayout({
   mode,
   onMode,
 }: {
-  mode: Mode;
-  onMode: (mode: Mode) => void;
+  mode: "ticket" | "chart";
+  onMode: (mode: "ticket" | "chart") => void;
 }) {
   useEffect(() => {
-    layoutTradeDesk(mode);
-    const id = window.setInterval(() => layoutTradeDesk(mode), 600);
-    const observer = new MutationObserver(() => layoutTradeDesk(mode));
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => {
-      window.clearInterval(id);
-      observer.disconnect();
-    };
+    markSubviews();
+    const id = window.setInterval(markSubviews, 700);
+    return () => window.clearInterval(id);
   }, [mode]);
 
   return (
     <div className="bd-trade-modes">
-      <button
-        type="button"
-        aria-label="Chart"
-        className={mode === "chart" ? "is-on" : ""}
-        onClick={() => onMode("chart")}
-      >
+      <button type="button" aria-label="Chart" className={mode === "chart" ? "is-on" : ""} onClick={() => onMode("chart")}>
         <CandleIcon />
       </button>
-      <button
-        type="button"
-        aria-label="Trade"
-        className={mode === "ticket" ? "is-on" : ""}
-        onClick={() => onMode("ticket")}
-      >
+      <button type="button" aria-label="Trade" className={mode === "ticket" ? "is-on" : ""} onClick={() => onMode("ticket")}>
         <BookIcon />
       </button>
     </div>

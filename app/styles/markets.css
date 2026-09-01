@@ -9,7 +9,7 @@
   position: relative;
   display: block;
   width: 100%;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
 }
 
 .bd-markets-search-icon {
@@ -55,30 +55,20 @@
   opacity: 1;
 }
 
-.bd-markets-native-search {
-  display: none !important;
-}
-
-.bd-markets-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.bd-markets-search {
-  order: 0;
-}
-
-.bd-markets-list > *:not(.bd-markets-search):not(.bd-markets-filters) {
-  order: 1;
+.bd-markets-native-input {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .bd-markets-filters {
-  order: 2;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   width: 100%;
-  margin: 8px 0 10px;
+  margin: 0 0 10px;
 }
 
 .bd-markets-filters button {
@@ -137,12 +127,6 @@
 .bd-markets-list tbody td {
   padding-top: 12px !important;
   padding-bottom: 12px !important;
-  background: transparent !important;
-  border: 0 !important;
-}
-
-.bd-markets-list tbody tr {
-  background: transparent !important;
 }
 
 .bd-markets-list .oui-text-success {

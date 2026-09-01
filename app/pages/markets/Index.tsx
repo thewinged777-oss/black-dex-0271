@@ -20,25 +20,6 @@ function hideMarketsChrome() {
   pageTabs.forEach((node) => {
     node.style.display = "none";
   });
-  const bar = pageTabs[0]?.parentElement as HTMLElement | undefined;
-  if (bar && bar.childElementCount <= 4) {
-    bar.style.display = "none";
-  }
-
-  const nodes = Array.from(root.querySelectorAll("div")) as HTMLElement[];
-  const matches = nodes.filter((el) => {
-    const text = (el.innerText || "").replace(/\s+/g, " ");
-    return (
-      text.includes("24h volume") &&
-      text.includes("Open interest") &&
-      text.includes("New listings") &&
-      text.includes("Top gainers")
-    );
-  });
-  if (matches.length) {
-    const header = matches.sort((a, b) => a.innerText.length - b.innerText.length)[0];
-    if (header && header.innerText.length < 5000) header.style.display = "none";
-  }
 }
 
 export default function MarketsIndex() {
@@ -48,15 +29,9 @@ export default function MarketsIndex() {
 
   useEffect(() => {
     hideMarketsChrome();
-    const root = document.querySelector(".bd-markets-list");
-    const observer = root
-      ? new MutationObserver(() => hideMarketsChrome())
-      : null;
-    if (root && observer) observer.observe(root, { childList: true, subtree: true });
-    const id = window.setInterval(hideMarketsChrome, 500);
-    const stop = window.setTimeout(() => window.clearInterval(id), 10000);
+    const id = window.setInterval(hideMarketsChrome, 800);
+    const stop = window.setTimeout(() => window.clearInterval(id), 6000);
     return () => {
-      observer?.disconnect();
       window.clearInterval(id);
       window.clearTimeout(stop);
     };
@@ -67,6 +42,7 @@ export default function MarketsIndex() {
       {renderSEOTags(pageMeta, pageTitle)}
       <div className="bd-markets-list">
         <MarketsSearch />
+        <MarketsChrome />
         <MarketsHomePage
           comparisonProps={{
             exchangesIconSrc:
@@ -80,7 +56,6 @@ export default function MarketsIndex() {
             navigate(`/perp/${symbol.symbol}`);
           }}
         />
-        <MarketsChrome />
       </div>
     </>
   );

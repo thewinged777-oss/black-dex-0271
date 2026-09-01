@@ -28,70 +28,18 @@
 }
 
 .bd-trade-modes button.is-on {
-  background: rgb(var(--oui-color-base-5, var(--oui-color-base-8)));
+  background: rgb(var(--oui-color-base-8));
   color: rgb(var(--oui-color-base-foreground));
 }
 
-.bd-perp-page input,
-.bd-perp-page textarea {
-  min-height: 28px !important;
-  font-size: 12px !important;
-}
-
-.bd-perp-page button {
-  font-size: 12px !important;
-}
-
-.bd-perp-page [class*="oui-input"],
-.bd-perp-page [class*="oui-field"] {
-  min-height: 28px !important;
-}
-
-.bd-perp-page [class*="orderbook"] td,
-.bd-perp-page [class*="OrderBook"] td,
-.bd-perp-page [class*="orderBook"] div {
-  font-size: 11px !important;
-  line-height: 16px !important;
-}
-
-.bd-trade-top {
-  display: flex !important;
-  align-items: stretch !important;
-  gap: 8px;
-}
-
-.bd-perp-page[data-mode="ticket"] .bd-trade-ticket {
-  flex: 1.15;
-  min-width: 0;
-}
-
-.bd-perp-page[data-mode="ticket"] .bd-trade-book {
-  display: block !important;
-  flex: 0.85;
-  min-width: 118px;
-  max-width: 46%;
-}
-
 .bd-perp-page[data-mode="ticket"] .bd-trade-chart,
-.bd-perp-page[data-mode="ticket"] .bd-trade-stack,
-.bd-perp-page[data-mode="ticket"] .bd-trade-panel,
 .bd-perp-page[data-mode="ticket"] .bd-trade-subtabs,
+.bd-perp-page[data-mode="ticket"] .bd-trade-panel,
 .bd-perp-page[data-mode="ticket"] iframe[src*="tradingview"],
 .bd-perp-page[data-mode="ticket"] iframe[id*="tradingview"] {
   display: none !important;
-  height: 0 !important;
-  min-height: 0 !important;
 }
 
 .bd-perp-page[data-mode="chart"] .bd-trade-ticket {
-  display: block !important;
-}
-
-.bd-perp-page[data-mode="chart"] .bd-trade-subtabs {
   display: none !important;
-}
-
-.bd-perp-page[data-mode="chart"] .bd-trade-chart,
-.bd-perp-page[data-mode="chart"] .bd-trade-book {
-  min-height: 28vh;
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { profileFor } from "@/utils/funding-desk";
 
 const TAGS = ["ALL", "L1", "MEME", "DEX"] as const;
@@ -21,34 +20,6 @@ function matches(text: string, tag: Tag) {
 
 export default function MarketsChrome() {
   const [tag, setTag] = useState<Tag>("ALL");
-  const [slot, setSlot] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const place = () => {
-      const root = document.querySelector(".bd-markets-list");
-      if (!root) return;
-      const existing = root.querySelector(".bd-markets-filters-slot") as HTMLElement | null;
-      if (existing) {
-        setSlot(existing);
-        return;
-      }
-      const tablist = Array.from(root.querySelectorAll("[role='tablist']")).find((list) =>
-        /all markets|crypto|tradfi/i.test(list.textContent || ""),
-      ) as HTMLElement | undefined;
-      const host = document.createElement("div");
-      host.className = "bd-markets-filters-slot";
-      if (tablist?.parentElement) tablist.parentElement.insertBefore(host, tablist.nextSibling);
-      else root.appendChild(host);
-      setSlot(host);
-    };
-    place();
-    const id = window.setInterval(place, 600);
-    const stop = window.setTimeout(() => window.clearInterval(id), 8000);
-    return () => {
-      window.clearInterval(id);
-      window.clearTimeout(stop);
-    };
-  }, []);
 
   useEffect(() => {
     const apply = () => {
@@ -66,7 +37,7 @@ export default function MarketsChrome() {
     return () => observer?.disconnect();
   }, [tag]);
 
-  const bar = (
+  return (
     <div className="bd-markets-filters">
       {TAGS.map((item) => (
         <button
@@ -80,6 +51,4 @@ export default function MarketsChrome() {
       ))}
     </div>
   );
-
-  return slot ? createPortal(bar, slot) : bar;
 }
