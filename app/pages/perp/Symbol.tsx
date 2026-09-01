@@ -8,6 +8,22 @@ import { useOrderlyConfig } from "@/utils/config";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
 
+function paintTradeGold() {
+  const root = document.querySelector(".bd-perp-page");
+  if (!root) return;
+  root.querySelectorAll("button").forEach((node) => {
+    const label = (node.textContent || "").replace(/\s+/g, " ").trim();
+    if (
+      /^Buy\s*\/?\s*Long$/i.test(label) ||
+      /^Sell\s*\/?\s*Short$/i.test(label) ||
+      label === "Buy / Long" ||
+      label === "Sell / Short"
+    ) {
+      node.classList.add("bd-gold-side");
+    }
+  });
+}
+
 export default function PerpSymbol() {
   const params = useParams();
   const [symbol, setSymbol] = useState(params.symbol!);
@@ -17,6 +33,20 @@ export default function PerpSymbol() {
 
   useEffect(() => {
     updateSymbol(symbol);
+  }, [symbol]);
+
+  useEffect(() => {
+    paintTradeGold();
+    const first = window.setTimeout(paintTradeGold, 200);
+    const second = window.setTimeout(paintTradeGold, 900);
+    const observer = new MutationObserver(paintTradeGold);
+    const root = document.querySelector(".bd-perp-page");
+    if (root) observer.observe(root, { childList: true, subtree: true });
+    return () => {
+      window.clearTimeout(first);
+      window.clearTimeout(second);
+      observer.disconnect();
+    };
   }, [symbol]);
 
   const onSymbolChange = useCallback(
