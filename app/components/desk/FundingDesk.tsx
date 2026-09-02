@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  briefIdea,
   CarryIdea,
   formatPct,
   formatRate,
@@ -22,12 +23,7 @@ function mmStrategy(idea: CarryIdea) {
       : idea.side === "SHORT_PERP"
         ? "Skew quotes short and collect positive funding. Hedge residual delta with spot or a correlated perp."
         : "Skew quotes long and collect negative funding. Hedge residual delta with spot or a correlated perp.";
-  return [
-    harvest,
-    "Cap inventory at a slice of 24h notional.",
-    idea.persist ? "Persist Yes." : "Persist No — flatten into the next print.",
-    idea.profile.mmNote,
-  ].join(" ");
+  return [harvest, idea.persist ? "Persist Yes." : "Persist No.", idea.profile.mmNote].join(" ");
 }
 
 export default function FundingDesk() {
@@ -46,10 +42,7 @@ export default function FundingDesk() {
       try {
         const rows = await loadOrderlyFutures();
         if (!live) return;
-        const next = rows
-          .map(scoreMarket)
-          .filter((row): row is CarryIdea => Boolean(row));
-        setIdeas(next);
+        setIdeas(rows.map(scoreMarket).filter((row): row is CarryIdea => Boolean(row)));
         setError(null);
       } catch (err) {
         if (!live) return;
@@ -75,10 +68,7 @@ export default function FundingDesk() {
     setSortDir(key === "name" ? 1 : -1);
   };
 
-  const sortMark = (key: SortKey) => {
-    if (sortKey !== key) return "";
-    return sortDir === 1 ? " \u2191" : " \u2193";
-  };
+  const sortMark = (key: SortKey) => (sortKey !== key ? "" : sortDir === 1 ? " \u2191" : " \u2193");
 
   const sorted = useMemo(() => {
     const copy = [...ideas];
@@ -89,9 +79,7 @@ export default function FundingDesk() {
       if (sortKey === "ann") cmp = a.annualized - b.annualized;
       if (sortKey === "basis") cmp = a.basisBps - b.basisBps;
       if (sortKey === "volume") cmp = a.volumeUsd - b.volumeUsd;
-      if (sortKey === "grade") {
-        cmp = (GRADE_RANK[a.grade] || 0) - (GRADE_RANK[b.grade] || 0) || a.score - b.score;
-      }
+      if (sortKey === "grade") cmp = (GRADE_RANK[a.grade] || 0) - (GRADE_RANK[b.grade] || 0) || a.score - b.score;
       return cmp * sortDir;
     });
     return copy;
@@ -101,8 +89,7 @@ export default function FundingDesk() {
   const harvestCount = ideas.filter((i) => i.side !== "PASS").length;
   const medianAnn = useMemo(() => {
     const vals = ideas.map((i) => Math.abs(i.annualized)).sort((a, b) => a - b);
-    if (!vals.length) return 0;
-    return vals[Math.floor(vals.length / 2)] || 0;
+    return vals.length ? vals[Math.floor(vals.length / 2)] || 0 : 0;
   }, [ideas]);
 
   return (
@@ -112,7 +99,7 @@ export default function FundingDesk() {
           <p className="bd-desk-kicker">Orderly · live public book</p>
           <h1>Funding Desk</h1>
           <p className="bd-desk-lead">
-            Carry screen for Black DEX perps. Tap a row for the note. Trade opens the ticket.
+            Carry screen for Black DEX perps. Rates are a crowding tax, not free yield. Trade opens the ticket.
           </p>
           <div className="bd-desk-page-tabs">
             <button type="button" className={tab === "overview" ? "is-on" : ""} onClick={() => setTab("overview")}>
@@ -141,6 +128,14 @@ export default function FundingDesk() {
 
       {error ? <div className="bd-desk-error">{error}</div> : null}
 
+      {tab === "overview" && active ? (
+        <section className="bd-desk-essay">
+          <strong>{active.ticker}</strong>
+          <span className={`bd-grade g-${active.grade}`}>{active.grade}{active.score}</span>
+          <p>{briefIdea(active)}</p>
+        </section>
+      ) : null}
+
       {tab === "help" ? (
         <section className="bd-desk-help">
           <article>
@@ -154,84 +149,36 @@ export default function FundingDesk() {
       ) : (
         <div className="bd-desk-grid">
           <section className="bd-desk-panel">
-            <div className="bd-desk-toolbar">
-              <p className="bd-desk-hint">Every active Orderly perp. Refresh 45s.</p>
-            </div>
             <div className="bd-desk-table-wrap">
               <table className="bd-desk-table">
                 <thead>
                   <tr>
-                    <th>
-                      <button type="button" onClick={() => toggleSort("name")}>
-                        Name{sortMark("name")}
-                      </button>
-                    </th>
-                    <th>
-                      <button type="button" onClick={() => toggleSort("est")}>
-                        Est / last{sortMark("est")}
-                      </button>
-                    </th>
-                    <th>
-                      <button type="button" onClick={() => toggleSort("ann")}>
-                        Ann.{sortMark("ann")}
-                      </button>
-                    </th>
-                    <th>
-                      <button type="button" onClick={() => toggleSort("basis")}>
-                        Basis{sortMark("basis")}
-                      </button>
-                    </th>
-                    <th>
-                      <button type="button" onClick={() => toggleSort("volume")}>
-                        24h / OI{sortMark("volume")}
-                      </button>
-                    </th>
-                    <th>
-                      <button type="button" onClick={() => toggleSort("grade")}>
-                        Grade{sortMark("grade")}
-                      </button>
-                    </th>
+                    <th><button type="button" onClick={() => toggleSort("name")}>Name{sortMark("name")}</button></th>
+                    <th><button type="button" onClick={() => toggleSort("est")}>Est / last{sortMark("est")}</button></th>
+                    <th><button type="button" onClick={() => toggleSort("ann")}>Ann.{sortMark("ann")}</button></th>
+                    <th><button type="button" onClick={() => toggleSort("basis")}>Basis{sortMark("basis")}</button></th>
+                    <th><button type="button" onClick={() => toggleSort("volume")}>24h / OI{sortMark("volume")}</button></th>
+                    <th><button type="button" onClick={() => toggleSort("grade")}>Grade{sortMark("grade")}</button></th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading && !ideas.length ? (
-                    <tr>
-                      <td colSpan={6}>Loading Orderly futures…</td>
-                    </tr>
+                    <tr><td colSpan={6}>Loading Orderly futures…</td></tr>
                   ) : null}
                   {sorted.map((idea) => (
-                    <tr
-                      key={idea.symbol}
-                      className={active?.symbol === idea.symbol ? "is-on" : ""}
-                      onClick={() => setSelected(idea.symbol)}
-                    >
-                      <td>
-                        <strong>{idea.ticker}</strong>
-                        <em>{idea.profile.sleeve}</em>
-                      </td>
-                      <td className={idea.est >= 0 ? "up" : "dn"}>
-                        {formatRate(idea.est)}
-                        <em>{formatRate(idea.last)}</em>
-                      </td>
-                      <td className={idea.annualized >= 0 ? "up" : "dn"}>
-                        {formatPct(idea.annualized)}
-                      </td>
+                    <tr key={idea.symbol} className={active?.symbol === idea.symbol ? "is-on" : ""} onClick={() => setSelected(idea.symbol)}>
+                      <td><strong>{idea.ticker}</strong><em>{idea.profile.sleeve}</em></td>
+                      <td className={idea.est >= 0 ? "up" : "dn"}>{formatRate(idea.est)}<em>{formatRate(idea.last)}</em></td>
+                      <td className={idea.annualized >= 0 ? "up" : "dn"}>{formatPct(idea.annualized)}</td>
                       <td>{idea.basisBps.toFixed(1)} bp</td>
-                      <td>
-                        {formatUsd(idea.volumeUsd)}
-                        <em>{formatUsd(idea.oiUsd)}</em>
-                      </td>
-                      <td>
-                        <span className={`bd-grade g-${idea.grade}`}>{idea.grade}</span>
-                        <em>{sideLabel(idea.side)}</em>
-                      </td>
+                      <td>{formatUsd(idea.volumeUsd)}<em>{formatUsd(idea.oiUsd)}</em></td>
+                      <td><span className={`bd-grade g-${idea.grade}`}>{idea.grade}</span><em>{sideLabel(idea.side)}</em></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </section>
-
           <aside className="bd-desk-side">
             {active ? (
               <article className="bd-desk-card">
@@ -240,28 +187,8 @@ export default function FundingDesk() {
                     <h2>{active.ticker}</h2>
                     <p>{active.symbol}</p>
                   </div>
-                  <button type="button" className="bd-desk-trade" onClick={() => navigate(`/perp/${active.symbol}`)}>
-                    Trade
-                  </button>
+                  <button type="button" className="bd-desk-trade" onClick={() => navigate(`/perp/${active.symbol}`)}>Trade</button>
                 </div>
-                <dl>
-                  <div>
-                    <dt>Receive</dt>
-                    <dd>{sideLabel(active.side)}</dd>
-                  </div>
-                  <div>
-                    <dt>Annualized</dt>
-                    <dd className={active.annualized >= 0 ? "up" : "dn"}>{formatPct(active.annualized)}</dd>
-                  </div>
-                  <div>
-                    <dt>Interval</dt>
-                    <dd>{active.intervalHours}h</dd>
-                  </div>
-                  <div>
-                    <dt>Persist</dt>
-                    <dd>{active.persist ? "Yes" : "No"}</dd>
-                  </div>
-                </dl>
                 <p className="bd-desk-strategy">{mmStrategy(active)}</p>
               </article>
             ) : null}
