@@ -14,39 +14,14 @@ import {
 } from "@/components/orderlyProvider/ThemeSync";
 import { createTradingViewConfigForSlug } from "@/utils/trading-view-config";
 
-function isChipOn(node: HTMLElement) {
-  return (
-    node.getAttribute("aria-selected") === "true" ||
-    node.getAttribute("data-state") === "active" ||
-    node.getAttribute("data-state") === "on"
-  );
-}
-
 function paintTradeGold() {
   const root = document.querySelector(".bd-perp-page");
   if (!root) return;
-  const chips: HTMLElement[] = [];
   root.querySelectorAll("button").forEach((node) => {
     const label = (node.textContent || "").replace(/\s+/g, " ").trim();
     if (/^Buy(\s*\/?\s*Long)?$/i.test(label) || /^Sell(\s*\/?\s*Short)?$/i.test(label)) {
       node.classList.add("bd-gold-side");
     }
-    if (/^(chart|trades|data)$/i.test(label)) {
-      node.classList.add("bd-trade-chip");
-      chips.push(node as HTMLElement);
-    }
-  });
-  const selected = chips.find(isChipOn);
-  chips.forEach((chip) => {
-    chip.classList.toggle("is-on", selected ? chip === selected : false);
-  });
-}
-
-function onChipClick(event: Event) {
-  const button = (event.target as HTMLElement | null)?.closest("button") as HTMLElement | null;
-  if (!button || !/^(chart|trades|data)$/i.test((button.textContent || "").trim())) return;
-  document.querySelectorAll(".bd-perp-page .bd-trade-chip").forEach((node) => {
-    node.classList.toggle("is-on", node === button);
   });
 }
 
@@ -79,12 +54,10 @@ export default function PerpSymbol() {
     const observer = new MutationObserver(paintTradeGold);
     const root = document.querySelector(".bd-perp-page");
     if (root) observer.observe(root, { childList: true, subtree: true });
-    document.addEventListener("click", onChipClick, true);
     return () => {
       window.clearTimeout(first);
       window.clearTimeout(second);
       observer.disconnect();
-      document.removeEventListener("click", onChipClick, true);
     };
   }, [symbol, themeSlug]);
 

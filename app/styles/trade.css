@@ -25,18 +25,6 @@
   box-shadow: none !important;
 }
 
-.bd-perp-page .bd-trade-chip {
-  background: rgb(var(--oui-color-base-7)) !important;
-  color: rgb(var(--oui-color-base-foreground) / 0.7) !important;
-  border-radius: 10px !important;
-  border: 0 !important;
-}
-
-.bd-perp-page .bd-trade-chip.is-on {
-  background: rgb(var(--oui-color-primary)) !important;
-  color: rgb(var(--oui-color-primary-contrast)) !important;
-}
-
 .bd-perp-page input[type="range"] {
   accent-color: rgb(var(--oui-color-primary));
 }
