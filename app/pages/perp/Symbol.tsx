@@ -20,12 +20,20 @@ function paintTradeGold() {
   root.querySelectorAll("button").forEach((node) => {
     const label = (node.textContent || "").replace(/\s+/g, " ").trim();
     if (
+      /^Buy(\s*\/?\s*Long)?$/i.test(label) ||
+      /^Sell(\s*\/?\s*Short)?$/i.test(label) ||
       /^Buy\s*\/?\s*Long$/i.test(label) ||
-      /^Sell\s*\/?\s*Short$/i.test(label) ||
-      label === "Buy / Long" ||
-      label === "Sell / Short"
+      /^Sell\s*\/?\s*Short$/i.test(label)
     ) {
       node.classList.add("bd-gold-side");
+    }
+    if (/^(chart|trades|data)$/i.test(label)) {
+      const on =
+        node.getAttribute("aria-selected") === "true" ||
+        node.getAttribute("data-state") === "active" ||
+        /active|selected/.test(node.className);
+      node.classList.toggle("bd-trade-chip", true);
+      node.classList.toggle("is-on", on);
     }
   });
 }
@@ -98,18 +106,6 @@ export default function PerpSymbol() {
         tradingViewConfig={tradingViewConfig}
         sharePnLConfig={config.tradingPage.sharePnLConfig}
       />
-      <div className="md:hidden pb-2 pt-8 text-center">
-        <span className="oui-text-2xs oui-text-base-contrast-54">
-          Charts powered by{" "}
-          <a
-            href="https://tradingview.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            TradingView
-          </a>
-        </span>
-      </div>
     </div>
   );
 }
