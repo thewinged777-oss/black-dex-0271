@@ -13,16 +13,32 @@
   background-color: rgb(var(--oui-color-base-8));
 }
 
-.bd-perp-page .bd-gold-side,
-.bd-perp-page .bd-gold-side[data-color="success"],
-.bd-perp-page .bd-gold-side[data-color="danger"],
-.bd-perp-page .bd-gold-side[data-variant="contained"],
-.bd-perp-page .bd-gold-side[data-variant="outline"] {
+.bd-perp-page .bd-trade-chip {
+  background: rgb(var(--oui-color-base-7)) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.72) !important;
+  border-color: transparent !important;
+}
+
+.bd-perp-page .bd-trade-chip.is-on {
   background: rgb(var(--oui-color-primary)) !important;
-  background-image: none !important;
   color: rgb(var(--oui-color-primary-contrast)) !important;
-  border-color: rgb(var(--oui-color-primary)) !important;
+}
+
+.bd-perp-page .bd-trade-side {
+  background: rgb(var(--oui-color-base-7)) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.72) !important;
+  border-color: transparent !important;
   box-shadow: none !important;
+}
+
+.bd-perp-page .bd-trade-side.is-buy.is-on {
+  background: rgb(var(--oui-color-success)) !important;
+  color: #06140d !important;
+}
+
+.bd-perp-page .bd-trade-side.is-sell.is-on {
+  background: rgb(var(--oui-color-danger)) !important;
+  color: #fff !important;
 }
 
 .bd-perp-page input[type="range"] {
