@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  briefIdea,
   CarryIdea,
   formatPct,
   formatRate,
@@ -25,12 +24,9 @@ function mmStrategy(idea: CarryIdea) {
         : "Skew quotes long and collect negative funding. Hedge residual delta with spot or a correlated perp.";
   return [
     harvest,
-    "Cap inventory at a slice of 24h notional — never more than the tape can absorb in about ten minutes.",
-    idea.persist
-      ? "Persist is Yes: estimated and last print share a sign, so the crowding has lasted at least one interval."
-      : "Persist is No: the last print flipped. Flatten into the next funding rather than adding.",
+    "Cap inventory at a slice of 24h notional.",
+    idea.persist ? "Persist Yes." : "Persist No — flatten into the next print.",
     idea.profile.mmNote,
-    `Risk: ${idea.profile.risk}`,
   ].join(" ");
 }
 
@@ -40,8 +36,8 @@ export default function FundingDesk() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<SortKey>("name");
-  const [sortDir, setSortDir] = useState<1 | -1>(1);
+  const [sortKey, setSortKey] = useState<SortKey>("grade");
+  const [sortDir, setSortDir] = useState<1 | -1>(-1);
   const [tab, setTab] = useState<DeskTab>("overview");
 
   useEffect(() => {
@@ -94,9 +90,7 @@ export default function FundingDesk() {
       if (sortKey === "basis") cmp = a.basisBps - b.basisBps;
       if (sortKey === "volume") cmp = a.volumeUsd - b.volumeUsd;
       if (sortKey === "grade") {
-        cmp =
-          (GRADE_RANK[a.grade] || 0) - (GRADE_RANK[b.grade] || 0) ||
-          a.score - b.score;
+        cmp = (GRADE_RANK[a.grade] || 0) - (GRADE_RANK[b.grade] || 0) || a.score - b.score;
       }
       return cmp * sortDir;
     });
@@ -118,8 +112,7 @@ export default function FundingDesk() {
           <p className="bd-desk-kicker">Orderly · live public book</p>
           <h1>Funding Desk</h1>
           <p className="bd-desk-lead">
-            Professional carry screen for Black DEX perps. Rates are a crowding tax,
-            not a free yield. No execution from this page — Trade opens the existing ticket.
+            Carry screen for Black DEX perps. Tap a row for the note. Trade opens the ticket.
           </p>
           <div className="bd-desk-page-tabs">
             <button type="button" className={tab === "overview" ? "is-on" : ""} onClick={() => setTab("overview")}>
@@ -154,73 +147,15 @@ export default function FundingDesk() {
             <h2>How the screen works</h2>
             <p>
               Funding is the periodic transfer between longs and shorts so mark stays near index.
-              Positive estimated rate: longs pay shorts. Negative: shorts pay longs. The desk only
-              flags a side when liquidity, persistence, and basis all clear — fat APR on an empty book is not carry.
-            </p>
-          </article>
-          <dl>
-            <div>
-              <dt>Est / last</dt>
-              <dd>Estimated next funding print versus the last settled print, in percent per interval.</dd>
-            </div>
-            <div>
-              <dt>Ann.</dt>
-              <dd>Annualized as rate × (24 / interval hours) × 365. Subtract fees and basis slip before treating it as edge.</dd>
-            </div>
-            <div>
-              <dt>Basis</dt>
-              <dd>Mark versus index in basis points (bps). 1 bp = 0.01%. Wide basis means squeeze or dislocation risk.</dd>
-            </div>
-            <div>
-              <dt>24h / OI</dt>
-              <dd>24h traded notional versus open interest in USDC. High OI with thin 24h tape is a crowded, illiquid book.</dd>
-            </div>
-            <div>
-              <dt>Persist</dt>
-              <dd>Yes when estimated and last funding share a sign. The crowded side has lasted at least one interval. No means the book just flipped — mean-reversion risk.</dd>
-            </div>
-            <div>
-              <dt>Score / grade</dt>
-              <dd>
-                0–100 blend of |annualized|, persist, 24h notional, open interest, basis width, pre-TGE / isolated flags, and sleeve.
-                A ≥ 78, B ≥ 62, C ≥ 45, else D. PASS if score &lt; 45 or |ann.| &lt; 8%.
-              </dd>
-            </div>
-            <div>
-              <dt>Receive as long / short</dt>
-              <dd>The side that collects the print if you are delta-neutral. Short-perp receive when funding is positive.</dd>
-            </div>
-            <div>
-              <dt>Sleeve</dt>
-              <dd>Desk tag for the name: L1, meme, venue token, RWA, emissions, and so on. It changes how hard we fade a fat rate.</dd>
-            </div>
-          </dl>
-          <article>
-            <h2>Market-making rule</h2>
-            <p>
-              Earn spread. Funding is a residual. Skew inventory to the side that collects the print, cap size to tape,
-              and flatten into the next interval if persist is No or the name is a meme. This desk does not execute and is not advice.
+              The desk only flags a side when liquidity, persistence, and basis all clear.
             </p>
           </article>
         </section>
       ) : (
         <div className="bd-desk-grid">
           <section className="bd-desk-panel">
-            {active ? (
-              <div className="bd-desk-brief">
-                <header>
-                  <strong>{active.ticker}</strong>
-                  <span className={`bd-grade g-${active.grade}`}>{active.grade}{active.score}</span>
-                </header>
-                <p>{briefIdea(active)}</p>
-                <p className="bd-desk-strategy">{mmStrategy(active)}</p>
-              </div>
-            ) : null}
             <div className="bd-desk-toolbar">
-              <p className="bd-desk-hint">
-                Overview — every active Orderly perp on the live book ({loading ? "\u2026" : ideas.length}).
-              </p>
-              <span className="bd-desk-hint">Refreshes from api.orderly.org every 45s</span>
+              <p className="bd-desk-hint">Every active Orderly perp. Refresh 45s.</p>
             </div>
             <div className="bd-desk-table-wrap">
               <table className="bd-desk-table">
@@ -305,11 +240,7 @@ export default function FundingDesk() {
                     <h2>{active.ticker}</h2>
                     <p>{active.symbol}</p>
                   </div>
-                  <button
-                    type="button"
-                    className="bd-desk-trade"
-                    onClick={() => navigate(`/perp/${active.symbol}`)}
-                  >
+                  <button type="button" className="bd-desk-trade" onClick={() => navigate(`/perp/${active.symbol}`)}>
                     Trade
                   </button>
                 </div>
@@ -320,9 +251,7 @@ export default function FundingDesk() {
                   </div>
                   <div>
                     <dt>Annualized</dt>
-                    <dd className={active.annualized >= 0 ? "up" : "dn"}>
-                      {formatPct(active.annualized)}
-                    </dd>
+                    <dd className={active.annualized >= 0 ? "up" : "dn"}>{formatPct(active.annualized)}</dd>
                   </div>
                   <div>
                     <dt>Interval</dt>
@@ -333,11 +262,7 @@ export default function FundingDesk() {
                     <dd>{active.persist ? "Yes" : "No"}</dd>
                   </div>
                 </dl>
-                <ul>
-                  {active.reasons.map((reason) => (
-                    <li key={reason}>{reason}</li>
-                  ))}
-                </ul>
+                <p className="bd-desk-strategy">{mmStrategy(active)}</p>
               </article>
             ) : null}
           </aside>
