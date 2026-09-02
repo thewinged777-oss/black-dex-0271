@@ -44,8 +44,19 @@
   border: 1px solid rgb(var(--oui-color-line)) !important;
 }
 
-.bd-pf-field *,
-.bd-pf-sheet input {
-  background: transparent !important;
+.bd-pf-aff,
+.oui-portfolio-page [class*="affiliate"],
+.oui-portfolio-page [class*="Affiliate"] {
+  background: rgb(var(--oui-color-base-8)) !important;
+  background-image: none !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
   box-shadow: none !important;
+}
+
+.bd-pf-notice,
+.bd-pf-notice * {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
 }

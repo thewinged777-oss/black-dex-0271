@@ -4,7 +4,6 @@
   color: rgb(var(--oui-color-base-foreground));
 }
 
-.bd-perp-page,
 .bd-perp-page [class*="oui-bg-base-9"],
 .bd-perp-page [class*="oui-bg-base-10"] {
   background-color: rgb(var(--oui-color-base-9));
@@ -14,60 +13,30 @@
   background-color: rgb(var(--oui-color-base-8));
 }
 
-.bd-perp-page [class*="oui-bg-base-7"] {
-  background-color: rgb(var(--oui-color-base-7));
-}
-
-.bd-perp-page [class*="oui-border"],
-.bd-perp-page [class*="oui-divider"] {
-  border-color: rgb(var(--oui-color-line));
-}
-
 .bd-perp-page .bd-gold-side,
 .bd-perp-page .bd-gold-side[data-color="success"],
 .bd-perp-page .bd-gold-side[data-color="danger"],
 .bd-perp-page .bd-gold-side[data-variant="contained"],
 .bd-perp-page .bd-gold-side[data-variant="outline"] {
-  background: rgb(212 175 55) !important;
+  background: rgb(var(--oui-color-primary)) !important;
   background-image: none !important;
-  color: #000 !important;
-  border-color: rgb(212 175 55) !important;
+  color: rgb(var(--oui-color-primary-contrast)) !important;
+  border-color: rgb(var(--oui-color-primary)) !important;
   box-shadow: none !important;
 }
 
-.bd-perp-page .bd-gold-side svg,
-.bd-perp-page .bd-gold-side svg path {
-  stroke: #000 !important;
-  fill: #000 !important;
+.bd-perp-page .bd-trade-chip {
+  background: rgb(var(--oui-color-base-7)) !important;
+  color: rgb(var(--oui-color-base-foreground) / 0.7) !important;
+  border-radius: 10px !important;
+  border: 0 !important;
+}
+
+.bd-perp-page .bd-trade-chip.is-on {
+  background: rgb(var(--oui-color-primary)) !important;
+  color: rgb(var(--oui-color-primary-contrast)) !important;
 }
 
 .bd-perp-page input[type="range"] {
-  accent-color: rgb(212 175 55);
-}
-
-.bd-perp-page input[type="range"]::-webkit-slider-thumb {
-  background: rgb(212 175 55) !important;
-}
-
-.bd-perp-page input[type="range"]::-moz-range-thumb {
-  background: rgb(212 175 55) !important;
-}
-
-.bd-perp-page input[type="range"]::-webkit-slider-runnable-track {
-  background: rgb(212 175 55 / 0.35) !important;
-}
-
-.bd-perp-page [class*="slider"] [class*="thumb"],
-.bd-perp-page [class*="Slider"] [class*="thumb"],
-.bd-perp-page [class*="slider"] [class*="Thumb"],
-.bd-perp-page [class*="Slider"] [class*="Thumb"] {
-  background: rgb(212 175 55) !important;
-  border-color: rgb(212 175 55) !important;
-}
-
-.bd-perp-page [class*="slider"] [class*="range"],
-.bd-perp-page [class*="Slider"] [class*="range"],
-.bd-perp-page [class*="slider"] [class*="Range"],
-.bd-perp-page [class*="Slider"] [class*="Range"] {
-  background: rgb(212 175 55) !important;
+  accent-color: rgb(var(--oui-color-primary));
 }
