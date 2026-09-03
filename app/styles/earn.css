@@ -163,6 +163,81 @@
   background: #d4af37;
   color: #0b0e11;
   border: 1px solid #d4af37;
+  cursor: pointer;
+  width: 100%;
+}
+
+.bd-earn-cta:disabled {
+  opacity: 0.6;
+}
+
+.bd-earn-form {
+  display: grid;
+  gap: 10px;
+}
+
+.bd-earn-mode {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.bd-earn-mode button {
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--oui-color-line));
+  background: rgb(var(--oui-color-base-9));
+  color: rgb(var(--oui-color-base-foreground) / 0.7);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bd-earn-mode button.is-on {
+  background: #d4af37;
+  color: #0b0e11;
+  border-color: #d4af37;
+}
+
+.bd-earn-field {
+  position: relative;
+  display: grid;
+  gap: 4px;
+}
+
+.bd-earn-field span {
+  font-size: 11px;
+  color: rgb(var(--oui-color-base-foreground) / 0.5);
+}
+
+.bd-earn-field input {
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgb(var(--oui-color-line));
+  background: rgb(var(--oui-color-base-9));
+  color: rgb(var(--oui-color-base-foreground));
+  padding: 0 64px 0 12px;
+  font-size: 16px;
+}
+
+.bd-earn-max {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(var(--oui-color-primary) / 0.16);
+  color: rgb(var(--oui-color-primary));
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bd-earn-hint,
+.bd-earn-status {
+  margin: 0;
+  font-size: 12px;
+  color: rgb(var(--oui-color-base-foreground) / 0.55);
 }
 
 .bd-earn-powered {

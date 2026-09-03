@@ -7,9 +7,9 @@ import {
   formatApy,
   formatUsdCompact,
   loadMorphoVaults,
-  morphoVaultUrl,
   type MorphoVaultLive,
 } from "@/utils/morpho-earn";
+import { useMorphoVault } from "@/hooks/useMorphoVault";
 
 const ALLOWED_VAULTS = ["orderly omnivault", "smaug"];
 
@@ -33,13 +33,6 @@ function hideVaultsMarketing(root: Element) {
       text.includes("available on")
     ) {
       (el as HTMLElement).style.display = "none";
-      const parent = el.parentElement;
-      if (parent && parent.children.length <= 4) {
-        const siblingText = (parent.textContent || "").toLowerCase();
-        if (siblingText.includes("earn passive")) {
-          parent.style.display = "none";
-        }
-      }
     }
   });
 }
@@ -66,8 +59,20 @@ function FilterOrderlyVaults() {
 }
 
 function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
-  const href = morphoVaultUrl(vault);
   const chainLabel = vault.chain === "base" ? "Base" : "Ethereum";
+  const [amount, setAmount] = useState("");
+  const [mode, setMode] = useState<"deposit" | "withdraw">("deposit");
+  const morpho = useMorphoVault(vault);
+
+  const onSubmit = async () => {
+    try {
+      if (mode === "deposit") await morpho.deposit(amount);
+      else await morpho.withdraw(amount);
+    } catch {
+      // status already set
+    }
+  };
+
   return (
     <article className="bd-earn-card">
       <header className="bd-earn-card-head">
@@ -88,20 +93,79 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
           <b>{formatUsdCompact(vault.totalAssetsUsd)}</b>
         </div>
         <div>
-          <span>Curator</span>
-          <b>{vault.curator}</b>
+          <span>Wallet USDC</span>
+          <b>
+            {morpho.isConnected
+              ? Number(morpho.formattedBalance).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })
+              : "—"}
+          </b>
         </div>
         <div>
-          <span>Network</span>
-          <b>{chainLabel}</b>
+          <span>In vault</span>
+          <b>
+            {morpho.isConnected
+              ? Number(morpho.formattedPosition).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })
+              : "—"}
+          </b>
         </div>
       </div>
-      <a className="bd-earn-cta" href={href} target="_blank" rel="noopener noreferrer">
-        Deposit on Morpho
-      </a>
-      <p className="bd-earn-powered">
-        Powered by Morpho · curated by {vault.curator}
-      </p>
+
+      {!morpho.isConnected ? (
+        <button type="button" className="bd-earn-cta" onClick={() => void morpho.connect()}>
+          Connect wallet
+        </button>
+      ) : (
+        <div className="bd-earn-form">
+          <div className="bd-earn-mode">
+            <button type="button" className={mode === "deposit" ? "is-on" : ""} onClick={() => setMode("deposit")}>
+              Deposit
+            </button>
+            <button type="button" className={mode === "withdraw" ? "is-on" : ""} onClick={() => setMode("withdraw")}>
+              Withdraw
+            </button>
+          </div>
+          <label className="bd-earn-field">
+            <span>Amount ({vault.asset})</span>
+            <input
+              inputMode="decimal"
+              value={amount}
+              onChange={(event) => setAmount(event.target.value)}
+              placeholder="0.00"
+            />
+            <button
+              type="button"
+              className="bd-earn-max"
+              onClick={() =>
+                setAmount(mode === "deposit" ? morpho.formattedBalance : morpho.formattedPosition)
+              }
+            >
+              Max
+            </button>
+          </label>
+          {!morpho.onVault && (
+            <p className="bd-earn-hint">Switch to {chainLabel} when you confirm the transaction.</p>
+          )}
+          <button
+            type="button"
+            className="bd-earn-cta"
+            disabled={Boolean(morpho.busy)}
+            onClick={() => void onSubmit()}
+          >
+            {morpho.busy
+              ? morpho.status || "Working…"
+              : mode === "deposit"
+                ? "Deposit from wallet"
+                : "Withdraw to wallet"}
+          </button>
+        </div>
+      )}
+
+      {morpho.status && !morpho.busy && <p className="bd-earn-status">{morpho.status}</p>}
+      <p className="bd-earn-powered">Powered by Morpho · curated by {vault.curator}</p>
     </article>
   );
 }
@@ -147,7 +211,7 @@ export default function EarnIndex() {
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Morpho Earn</h2>
-            <p>Curated USDC vaults on Base and Ethereum. Powered by Morpho.</p>
+            <p>Connect the Black DEX wallet and deposit USDC on-chain from this page.</p>
           </header>
           {loading && vaults.length === 0 ? (
             <div className="bd-earn-loading">Loading Morpho APY…</div>
