@@ -17,7 +17,7 @@ export default function EarnLayout() {
       }}
       mainNavProps={{
         ...config.scaffold.mainNavProps,
-        initialMenu: "/earn",
+        initialMenu: "/home",
       }}
       footerProps={config.scaffold.footerProps}
       routerAdapter={{
