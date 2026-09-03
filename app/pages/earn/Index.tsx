@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useAccount, useWalletConnector } from "@orderly.network/hooks";
 import { generatePageTitle } from "@/utils/utils";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
@@ -62,12 +63,6 @@ function OrderlyDepositDesk({ open }: { open: boolean }) {
   );
 }
 
-function openHeaderConnect() {
-  const buttons = Array.from(document.querySelectorAll("button"));
-  const connect = buttons.find((btn) => /connect/i.test(btn.textContent || ""));
-  connect?.click();
-}
-
 function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
   const chainLabel = vault.chain === "base" ? "Base" : "Ethereum";
   const [amount, setAmount] = useState("");
@@ -124,8 +119,13 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
         </div>
       </div>
       {!morpho.isConnected ? (
-        <button type="button" className="bd-earn-cta" onClick={() => void morpho.connect()}>
-          Connect wallet
+        <button
+          type="button"
+          className="bd-earn-cta"
+          disabled={Boolean(morpho.connecting)}
+          onClick={() => void morpho.connect()}
+        >
+          {morpho.connecting ? "Connecting\u2026" : "Connect wallet"}
         </button>
       ) : (
         <div className="bd-earn-form">
@@ -182,6 +182,17 @@ function OrderlyCard({
   vault: OrderlyEarnVault;
   onDeposit: () => void;
 }) {
+  const { state } = useAccount();
+  const connector = useWalletConnector();
+  const connected = Boolean(state?.address || connector.wallet?.accounts?.[0]?.address);
+
+  const onClick = async () => {
+    if (!connected) {
+      await connector.connect();
+    }
+    onDeposit();
+  };
+
   return (
     <article className="bd-earn-card">
       <header className="bd-earn-card-head">
@@ -210,15 +221,8 @@ function OrderlyCard({
           <b>{vault.minDeposit != null ? `${vault.minDeposit} USDC` : "\u2014"}</b>
         </div>
       </div>
-      <button
-        type="button"
-        className="bd-earn-cta"
-        onClick={() => {
-          openHeaderConnect();
-          onDeposit();
-        }}
-      >
-        Connect wallet
+      <button type="button" className="bd-earn-cta" onClick={() => void onClick()}>
+        {connected ? "Open vault" : connector.connecting ? "Connecting\u2026" : "Connect wallet"}
       </button>
       <p className="bd-earn-powered">Powered by Orderly, no gas on deposit</p>
     </article>
