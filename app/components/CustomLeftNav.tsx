@@ -13,6 +13,7 @@ import {
   VaultsIcon,
   PointsIcon,
   DeskIcon,
+  EarnIcon,
   MenuIcon,
 } from "@/components/icons/desk";
 
@@ -35,6 +36,7 @@ const TILES: Array<{ href: string; label: string; icon: FC<{ size?: number }> }>
   { href: "/rewards", label: "Rewards", icon: RewardsIcon },
   { href: "/vaults", label: "Vaults", icon: VaultsIcon },
   { href: "/points", label: "Points", icon: PointsIcon },
+  { href: "/earn", label: "Earn", icon: EarnIcon },
   { href: "/desk", label: "Desk", icon: DeskIcon },
 ];
 
