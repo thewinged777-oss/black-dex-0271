@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAccount, useWalletConnector } from "@orderly.network/hooks";
+import { useAccount } from "@orderly.network/hooks";
 import {
   createPublicClient,
   createWalletClient,
@@ -32,25 +32,18 @@ function asAddress(value: unknown): Address | null {
   return value as Address;
 }
 
+function getInjected(): EthereumProvider | null {
+  if (typeof window === "undefined") return null;
+  return (window as Window & { ethereum?: EthereumProvider }).ethereum ?? null;
+}
+
 export function useMorphoVault(vault: MorphoVaultMeta) {
   const token = USDC_BY_CHAIN[vault.chain];
   const vaultAddress = vault.address as Address;
   const chain = chainFor(vault);
   const { state } = useAccount();
-  const connector = useWalletConnector();
-
-  const address = useMemo(() => {
-    const fromAccount = asAddress(state?.address);
-    if (fromAccount) return fromAccount;
-    const fromWallet = connector?.wallet?.accounts?.[0]?.address;
-    return asAddress(fromWallet);
-  }, [connector?.wallet, state?.address]);
-
-  const provider =
-    (connector?.wallet?.provider as EthereumProvider | undefined) ?? null;
-  const rawChain = connector?.connectedChain;
-  const chainId =
-    rawChain && rawChain.id != null ? Number(rawChain.id) || null : null;
+  const address = asAddress(state?.address);
+  const provider = getInjected();
 
   const [assetBalance, setAssetBalance] = useState<bigint>(0n);
   const [allowance, setAllowance] = useState<bigint>(0n);
@@ -60,7 +53,6 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
   const [status, setStatus] = useState<string | null>(null);
 
   const isConnected = Boolean(address);
-  const onVault = chainId === vault.chainId;
 
   const publicClient = useMemo(
     () =>
@@ -129,31 +121,21 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       await refresh();
       return;
     }
-    try {
-      await openOrderlyWallet();
-    } catch (err) {
-      setStatus(err instanceof Error ? err.message : "Connect failed.");
-    }
+    openOrderlyWallet();
   }, [address, refresh]);
 
   const ensureChain = useCallback(async () => {
-    if (chainId === vault.chainId) return;
+    if (!provider) return;
     const hexId = `0x${vault.chainId.toString(16)}`;
-    if (provider) {
-      try {
-        await provider.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: hexId }],
-        });
-        return;
-      } catch {
-        // fall through to Orderly setChain only when a chain is already selected
-      }
+    try {
+      await provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: hexId }],
+      });
+    } catch {
+      // user can switch in the wallet UI
     }
-    if (rawChain && typeof connector?.setChain === "function") {
-      await connector.setChain({ chainId: vault.chainId });
-    }
-  }, [chainId, connector, provider, rawChain, vault.chainId]);
+  }, [provider, vault.chainId]);
 
   const walletClient = useCallback(() => {
     if (!provider || !address) {
@@ -248,13 +230,12 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
   return {
     address,
     isConnected,
-    onVault,
     shares,
     formattedBalance: formatUnits(assetBalance, token.decimals),
     formattedPosition: formatUnits(shareAssets, token.decimals),
     busy,
     status,
-    connecting: Boolean(connector?.connecting),
+    connecting: false,
     connect,
     deposit,
     withdraw,
