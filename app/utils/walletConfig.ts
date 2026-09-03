@@ -93,21 +93,28 @@ export const getOnboardEvmWallets = () => {
   );
   const isBrowser = typeof window !== "undefined";
 
-  if (!walletConnectProjectId || !isBrowser) {
+  if (!isBrowser) {
     return [];
   }
 
-  return [
+  const wallets = [
     injectedOnboard(),
     binanceWallet({ options: { lng: "en" } }),
-    walletConnectOnboard({
-      projectId: walletConnectProjectId,
-      qrModalOptions: {
-        themeMode: "dark",
-      },
-      dappUrl: window.location.origin,
-    }),
   ];
+
+  if (walletConnectProjectId) {
+    wallets.push(
+      walletConnectOnboard({
+        projectId: walletConnectProjectId,
+        qrModalOptions: {
+          themeMode: "dark",
+        },
+        dappUrl: window.location.origin,
+      }),
+    );
+  }
+
+  return wallets;
 };
 
 export const getEvmInitialConfig = () => {
