@@ -141,7 +141,8 @@ const getEnabledMenus = (
 
     const enabledMenus = [];
     for (const menuId of enabledMenuIds) {
-      const menuItem = allMenuItems.find((item) => item.id === menuId);
+      const resolvedId = menuId === "Vaults" ? "Earn" : menuId;
+      const menuItem = allMenuItems.find((item) => item.id === resolvedId);
       if (menuItem) {
         enabledMenus.push(menuItem);
       }
@@ -387,9 +388,9 @@ export const useOrderlyConfig = () => {
       },
       {
         id: "Vaults",
-        href: "/vaults",
+        href: "/earn",
         name: t("common.vaults"),
-        customRender: () => labeled("Vaults", t("common.vaults")),
+        customRender: () => labeled("Earn", "Earn"),
       },
       {
         id: "Points",
@@ -431,20 +432,20 @@ export const useOrderlyConfig = () => {
       customRender: menu.customRender,
     }));
 
-    const deskMenu = allMenuItems.find((menu) => menu.id === "Desk");
-    const hasDesk = translatedEnabledMenus.some((menu) => menu.href === "/desk");
+    const extraMenus = allMenuItems.filter(
+      (menu) =>
+        (menu.id === "Desk" || menu.id === "Earn") &&
+        !translatedEnabledMenus.some((item) => item.href === menu.href),
+    );
+
     const allMainMenus = [
       ...translatedEnabledMenus,
-      ...(!hasDesk && deskMenu
-        ? [
-            {
-              name: deskMenu.name,
-              href: deskMenu.href,
-              target: deskMenu.target,
-              customRender: deskMenu.customRender,
-            },
-          ]
-        : []),
+      ...extraMenus.map((menu) => ({
+        name: menu.name,
+        href: menu.href,
+        target: menu.target,
+        customRender: menu.customRender,
+      })),
       ...customMenus,
     ];
 
