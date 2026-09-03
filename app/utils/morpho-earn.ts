@@ -1,157 +1,179 @@
-/** Morpho Earn Phase 1 — curated vaults for Black DEX /earn */
+/**
+ * Morpho Earn — curated vault catalog + live APY from Morpho GraphQL.
+ * Phase 1: browse + deep-link deposit/withdraw on app.morpho.org.
+ * Attribution required: "Powered by Morpho · curated by X"
+ */
 
-export type MorphoVault = {
+export type MorphoChain = "base" | "ethereum";
+
+export type MorphoVaultMeta = {
   id: string;
-  name: string;
-  asset: "USDC" | "WETH";
+  address: string;
+  chain: MorphoChain;
   chainId: number;
-  chainLabel: string;
-  chainSlug: string;
-  address: `0x${string}`;
+  name: string;
+  asset: "USDC" | "WETH" | "ETH";
   curator: string;
   slug: string;
-  /** Performance fee charged by curator (not Black DEX) */
-  performanceFeePct: number;
+  description: string;
 };
 
-/** Curated list — Base first (gas), then Ethereum. */
-export const MORPHO_VAULTS: MorphoVault[] = [
+export type MorphoVaultLive = MorphoVaultMeta & {
+  netApy: number | null;
+  totalAssetsUsd: number | null;
+  liquidityUsd: number | null; // optional; API may omit
+};
+
+/** Curated shortlist — Steakhouse + Gauntlet USDC (Base + Ethereum). */
+export const MORPHO_VAULTS: MorphoVaultMeta[] = [
   {
     id: "steakhouse-usdc-base",
+    address: "0xbeeF010f9cb27031ad51e3333f9aF9C6B1228183",
+    chain: "base",
+    chainId: 8453,
     name: "Steakhouse USDC",
     asset: "USDC",
-    chainId: 8453,
-    chainLabel: "Base",
-    chainSlug: "base",
-    address: "0xbeeF010f9cb27031ad51e3333f9aF9C6B1228183",
     curator: "Steakhouse Financial",
     slug: "steakhouse-usdc",
-    performanceFeePct: 25,
+    description:
+      "Blue-chip + RWA dual-engine USDC vault on Base. Conservative allocation to high-liquidity Morpho markets.",
   },
   {
-    id: "gauntlet-usdc-base",
-    name: "Gauntlet USDC",
-    asset: "USDC",
-    chainId: 8453,
-    chainLabel: "Base",
-    chainSlug: "base",
+    id: "gauntlet-usdc-prime-base",
     address: "0xeE8F4eC5672F09119b96Ab6fB59C27E1b7e44b61",
+    chain: "base",
+    chainId: 8453,
+    name: "Gauntlet USDC Prime",
+    asset: "USDC",
     curator: "Gauntlet",
-    slug: "gauntlet-usdc",
-    performanceFeePct: 10,
+    slug: "gauntlet-usdc-prime",
+    description:
+      "Gauntlet-curated Prime USDC on Base. Blue-chip collateral only (cbBTC, WETH, cbETH, wstETH).",
   },
   {
     id: "steakhouse-usdc-eth",
+    address: "0xBEEF01735c132Ada46AA9aA4c54623cAA92A64CB",
+    chain: "ethereum",
+    chainId: 1,
     name: "Steakhouse USDC",
     asset: "USDC",
-    chainId: 1,
-    chainLabel: "Ethereum",
-    chainSlug: "ethereum",
-    address: "0xBEEF01735c132Ada46AA9aA4c54623cAA92A64CB",
     curator: "Steakhouse Financial",
     slug: "steakhouse-usdc",
-    performanceFeePct: 5,
+    description:
+      "Steakhouse USDC on Ethereum mainnet. Same dual-engine mandate as the Base vault.",
   },
 ];
 
-export type MorphoVaultLive = MorphoVault & {
-  netApy: number | null;
-  totalAssetsUsd: number | null;
-  fee: number | null;
-};
+const MORPHO_GQL = "https://blue-api.morpho.org/graphql";
 
-const MORPHO_API = "https://api.morpho.org/graphql";
-
-function morphoAppUrl(vault: MorphoVault) {
-  return `https://app.morpho.org/${vault.chainSlug}/vault/${vault.address}/${vault.slug}`;
-}
-
-export function vaultDepositUrl(vault: MorphoVault) {
-  return morphoAppUrl(vault);
-}
-
-export function vaultWithdrawUrl(vault: MorphoVault) {
-  return morphoAppUrl(vault);
-}
-
-function shortAddr(addr: string) {
-  return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
-}
-
-export { shortAddr, morphoAppUrl };
-
-async function fetchVaultState(
-  address: string,
-  chainId: number,
-): Promise<{ netApy: number | null; totalAssetsUsd: number | null; fee: number | null }> {
-  const query = `
-    query VaultState($address: String!, $chainId: Int!) {
-      vaultByAddress(address: $address, chainId: $chainId) {
+const VAULT_QUERY = `
+  query VaultsByAddress($addresses: [String!]!) {
+    vaults(where: { address_in: $addresses }) {
+      items {
         address
+        name
+        asset {
+          symbol
+        }
         state {
-          apy
           netApy
           totalAssetsUsd
-          fee
         }
       }
     }
-  `;
+  }
+`;
+
+function chainPath(chain: MorphoChain): string {
+  return chain === "base" ? "base" : "ethereum";
+}
+
+/** Deep-link into Morpho app for deposit / withdraw UI. */
+export function morphoVaultUrl(vault: MorphoVaultMeta): string {
+  return `https://app.morpho.org/${chainPath(vault.chain)}/vault/${vault.address}/${vault.slug}`;
+}
+
+export function formatApy(netApy: number | null | undefined): string {
+  if (netApy == null || Number.isNaN(netApy)) return "—";
+  // Morpho GraphQL returns decimal (e.g. 0.0342 = 3.42%)
+  const pct = netApy > 1 ? netApy : netApy * 100;
+  return `${pct.toFixed(2)}%`;
+}
+
+export function formatUsdCompact(value: number | null | undefined): string {
+  if (value == null || Number.isNaN(value)) return "—";
+  if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
+  return `$${value.toFixed(0)}`;
+}
+
+export async function loadMorphoVaults(
+  catalog: MorphoVaultMeta[] = MORPHO_VAULTS,
+): Promise<MorphoVaultLive[]> {
+  const addresses = catalog.map((v) => v.address.toLowerCase());
 
   try {
-    const res = await fetch(MORPHO_API, {
+    const res = await fetch(MORPHO_GQL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        query,
-        variables: { address: address.toLowerCase(), chainId },
+        query: VAULT_QUERY,
+        variables: { addresses },
       }),
     });
-    if (!res.ok) return { netApy: null, totalAssetsUsd: null, fee: null };
+
+    if (!res.ok) {
+      throw new Error(`Morpho API ${res.status}`);
+    }
+
     const json = (await res.json()) as {
       data?: {
-        vaultByAddress?: {
-          state?: {
-            netApy?: number;
-            apy?: number;
-            totalAssetsUsd?: number;
-            fee?: number;
-          };
+        vaults?: {
+          items?: Array<{
+            address: string;
+            state?: {
+              netApy?: number | null;
+              totalAssetsUsd?: number | null;
+            };
+          }>;
         };
       };
     };
-    const state = json.data?.vaultByAddress?.state;
-    if (!state) return { netApy: null, totalAssetsUsd: null, fee: null };
-    return {
-      netApy: typeof state.netApy === "number" ? state.netApy : null,
-      totalAssetsUsd:
-        typeof state.totalAssetsUsd === "number" ? state.totalAssetsUsd : null,
-      fee: typeof state.fee === "number" ? state.fee : null,
-    };
-  } catch {
-    return { netApy: null, totalAssetsUsd: null, fee: null };
+
+    const items = json.data?.vaults?.items ?? [];
+    const live = new Map<
+      string,
+      {
+        netApy: number | null;
+        totalAssetsUsd: number | null;
+      }
+    >();
+
+    for (const item of items) {
+      const key = item.address.toLowerCase();
+      live.set(key, {
+        netApy: item.state?.netApy ?? null,
+        totalAssetsUsd: item.state?.totalAssetsUsd ?? null,
+      });
+    }
+
+    return catalog.map((meta) => {
+      const stats = live.get(meta.address.toLowerCase());
+      return {
+        ...meta,
+        netApy: stats?.netApy ?? null,
+        totalAssetsUsd: stats?.totalAssetsUsd ?? null,
+        liquidityUsd: null,
+      };
+    });
+  } catch (err) {
+    console.warn("[morpho-earn] live APY fetch failed", err);
+    return catalog.map((meta) => ({
+      ...meta,
+      netApy: null,
+      totalAssetsUsd: null,
+      liquidityUsd: null,
+    }));
   }
-}
-
-export async function loadMorphoEarnVaults(): Promise<MorphoVaultLive[]> {
-  const rows = await Promise.all(
-    MORPHO_VAULTS.map(async (vault) => {
-      const live = await fetchVaultState(vault.address, vault.chainId);
-      return { ...vault, ...live };
-    }),
-  );
-  return rows;
-}
-
-export function formatApy(netApy: number | null) {
-  if (netApy == null || Number.isNaN(netApy)) return "—";
-  return `${(netApy * 100).toFixed(2)}%`;
-}
-
-export function formatTvl(usd: number | null) {
-  if (usd == null || Number.isNaN(usd)) return "—";
-  if (usd >= 1_000_000_000) return `$${(usd / 1_000_000_000).toFixed(2)}B`;
-  if (usd >= 1_000_000) return `$${(usd / 1_000_000).toFixed(2)}M`;
-  if (usd >= 1_000) return `$${(usd / 1_000).toFixed(1)}K`;
-  return `$${usd.toFixed(0)}`;
 }
