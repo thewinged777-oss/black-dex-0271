@@ -14,6 +14,7 @@ import {
   type OrderlyEarnVault,
 } from "@/utils/orderly-earn";
 import { useMorphoVault } from "@/hooks/useMorphoVault";
+import { openOrderlyWallet } from "@/utils/open-orderly-wallet";
 
 const VaultsPageComponent = lazy(() =>
   import("@orderly.network/vaults").then((mod) => ({ default: mod.VaultsPage })),
@@ -188,7 +189,8 @@ function OrderlyCard({
 
   const onClick = async () => {
     if (!connected) {
-      await connector.connect();
+      await openOrderlyWallet(connector);
+      return;
     }
     onDeposit();
   };
