@@ -1,11 +1,9 @@
-import type { useWalletConnector } from "@orderly.network/hooks";
-
-type Connector = ReturnType<typeof useWalletConnector>;
-
 export function clickHeaderWallet() {
   const scopes = [
     document.querySelector(".bd-navbar"),
     document.querySelector(".bd-header-row"),
+    document.querySelector(".oui-top-nav"),
+    document.querySelector("[class*='topNavbar']"),
     document.querySelector("header"),
   ].filter(Boolean) as Element[];
 
@@ -14,6 +12,7 @@ export function clickHeaderWallet() {
       scope.querySelectorAll<HTMLElement>("button, [role='button'], a"),
     );
     const match = nodes.find((el) => {
+      if (el.closest(".bd-earn-card")) return false;
       const text = `${el.textContent || ""} ${el.getAttribute("aria-label") || ""}`;
       return /connect/i.test(text);
     });
@@ -25,10 +24,6 @@ export function clickHeaderWallet() {
   return false;
 }
 
-export async function openOrderlyWallet(connector?: Connector) {
-  const opened = clickHeaderWallet();
-  if (opened) return;
-  if (connector?.connect) {
-    await connector.connect();
-  }
+export async function openOrderlyWallet() {
+  clickHeaderWallet();
 }

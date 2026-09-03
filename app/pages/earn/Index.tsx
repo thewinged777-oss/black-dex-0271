@@ -185,11 +185,11 @@ function OrderlyCard({
 }) {
   const { state } = useAccount();
   const connector = useWalletConnector();
-  const connected = Boolean(state?.address || connector.wallet?.accounts?.[0]?.address);
+  const connected = Boolean(state?.address || connector?.wallet?.accounts?.[0]?.address);
 
   const onClick = async () => {
     if (!connected) {
-      await openOrderlyWallet(connector);
+      await openOrderlyWallet();
       return;
     }
     onDeposit();
@@ -224,7 +224,7 @@ function OrderlyCard({
         </div>
       </div>
       <button type="button" className="bd-earn-cta" onClick={() => void onClick()}>
-        {connected ? "Open vault" : connector.connecting ? "Connecting\u2026" : "Connect wallet"}
+        {connected ? "Open vault" : connector?.connecting ? "Connecting\u2026" : "Connect wallet"}
       </button>
       <p className="bd-earn-powered">Powered by Orderly, no gas on deposit</p>
     </article>

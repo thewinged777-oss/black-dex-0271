@@ -42,12 +42,15 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
   const address = useMemo(() => {
     const fromAccount = asAddress(state?.address);
     if (fromAccount) return fromAccount;
-    const fromWallet = connector.wallet?.accounts?.[0]?.address;
+    const fromWallet = connector?.wallet?.accounts?.[0]?.address;
     return asAddress(fromWallet);
-  }, [connector.wallet, state?.address]);
+  }, [connector?.wallet, state?.address]);
 
-  const provider = (connector.wallet?.provider as EthereumProvider | undefined) ?? null;
-  const chainId = Number(connector.connectedChain?.id ?? 0) || null;
+  const provider =
+    (connector?.wallet?.provider as EthereumProvider | undefined) ?? null;
+  const rawChain = connector?.connectedChain;
+  const chainId =
+    rawChain && rawChain.id != null ? Number(rawChain.id) || null : null;
 
   const [assetBalance, setAssetBalance] = useState<bigint>(0n);
   const [allowance, setAllowance] = useState<bigint>(0n);
@@ -127,16 +130,30 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       return;
     }
     try {
-      await openOrderlyWallet(connector);
+      await openOrderlyWallet();
     } catch (err) {
       setStatus(err instanceof Error ? err.message : "Connect failed.");
     }
-  }, [address, connector, refresh]);
+  }, [address, refresh]);
 
   const ensureChain = useCallback(async () => {
-    if (Number(connector.connectedChain?.id) === vault.chainId) return;
-    await connector.setChain({ chainId: vault.chainId });
-  }, [connector, vault.chainId]);
+    if (chainId === vault.chainId) return;
+    const hexId = `0x${vault.chainId.toString(16)}`;
+    if (provider) {
+      try {
+        await provider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: hexId }],
+        });
+        return;
+      } catch {
+        // fall through to Orderly setChain only when a chain is already selected
+      }
+    }
+    if (rawChain && typeof connector?.setChain === "function") {
+      await connector.setChain({ chainId: vault.chainId });
+    }
+  }, [chainId, connector, provider, rawChain, vault.chainId]);
 
   const walletClient = useCallback(() => {
     if (!provider || !address) {
@@ -237,7 +254,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
     formattedPosition: formatUnits(shareAssets, token.decimals),
     busy,
     status,
-    connecting: Boolean(connector.connecting),
+    connecting: Boolean(connector?.connecting),
     connect,
     deposit,
     withdraw,
