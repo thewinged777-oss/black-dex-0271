@@ -165,7 +165,7 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
         </div>
       )}
       {morpho.status && !morpho.busy && <p className="bd-earn-status">{morpho.status}</p>}
-      <p className="bd-earn-powered">Powered by Morpho \u00b7 curated by {vault.curator}</p>
+      <p className="bd-earn-powered">Powered by Morpho, curated by {vault.curator}</p>
     </article>
   );
 }
@@ -215,7 +215,7 @@ function OrderlyCard({
       >
         Connect wallet
       </button>
-      <p className="bd-earn-powered">Powered by Orderly \u00b7 no gas on deposit</p>
+      <p className="bd-earn-powered">Powered by Orderly, no gas on deposit</p>
     </article>
   );
 }
@@ -284,7 +284,7 @@ export default function EarnIndex() {
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Orderly strategy vaults</h2>
-            <p>Available on Black DEX · any supported chain · no gas</p>
+            <p>Available on Black DEX, any supported chain, no gas</p>
           </header>
           <div className="bd-earn-grid">
             {orderly.map((vault) => (
