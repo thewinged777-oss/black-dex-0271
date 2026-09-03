@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useAccount, useWalletConnector } from "@orderly.network/hooks";
 import {
   createPublicClient,
   createWalletClient,
@@ -15,15 +16,7 @@ import { ERC20_ABI, ERC4626_ABI, USDC_BY_CHAIN } from "@/utils/morpho-tx";
 
 type EthereumProvider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-  on?: (event: string, handler: (...args: unknown[]) => void) => void;
-  removeListener?: (event: string, handler: (...args: unknown[]) => void) => void;
 };
-
-function getProvider(): EthereumProvider | null {
-  if (typeof window === "undefined") return null;
-  const injected = (window as Window & { ethereum?: EthereumProvider }).ethereum;
-  return injected ?? null;
-}
 
 function chainFor(vault: MorphoVaultMeta) {
   return vault.chainId === 8453 ? base : mainnet;
@@ -33,13 +26,28 @@ function rpcFor(vault: MorphoVaultMeta) {
   return vault.chainId === 8453 ? "https://mainnet.base.org" : "https://eth.llamarpc.com";
 }
 
+function asAddress(value: unknown): Address | null {
+  if (typeof value !== "string" || !value.startsWith("0x")) return null;
+  return value as Address;
+}
+
 export function useMorphoVault(vault: MorphoVaultMeta) {
   const token = USDC_BY_CHAIN[vault.chain];
   const vaultAddress = vault.address as Address;
   const chain = chainFor(vault);
+  const { state } = useAccount();
+  const connector = useWalletConnector();
 
-  const [address, setAddress] = useState<Address | null>(null);
-  const [chainId, setChainId] = useState<number | null>(null);
+  const address = useMemo(() => {
+    const fromAccount = asAddress(state?.address);
+    if (fromAccount) return fromAccount;
+    const fromWallet = connector.wallet?.accounts?.[0]?.address;
+    return asAddress(fromWallet);
+  }, [connector.wallet, state?.address]);
+
+  const provider = (connector.wallet?.provider as EthereumProvider | undefined) ?? null;
+  const chainId = Number(connector.connectedChain?.id ?? 0) || null;
+
   const [assetBalance, setAssetBalance] = useState<bigint>(0n);
   const [allowance, setAllowance] = useState<bigint>(0n);
   const [shares, setShares] = useState<bigint>(0n);
@@ -50,28 +58,14 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
   const isConnected = Boolean(address);
   const onVault = chainId === vault.chainId;
 
-  const publicClient = createPublicClient({
-    chain,
-    transport: http(rpcFor(vault)),
-  });
-
-  const refreshAccount = useCallback(async () => {
-    const provider = getProvider();
-    if (!provider) {
-      setAddress(null);
-      setChainId(null);
-      return;
-    }
-    try {
-      const accounts = (await provider.request({ method: "eth_accounts" })) as string[];
-      const next = accounts[0] ? (accounts[0] as Address) : null;
-      setAddress(next);
-      const hex = (await provider.request({ method: "eth_chainId" })) as string;
-      setChainId(Number.parseInt(hex, 16));
-    } catch {
-      setAddress(null);
-    }
-  }, []);
+  const publicClient = useMemo(
+    () =>
+      createPublicClient({
+        chain,
+        transport: http(rpcFor(vault)),
+      }),
+    [chain, vault],
+  );
 
   const refresh = useCallback(async () => {
     if (!address) {
@@ -122,79 +116,33 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
   }, [address, publicClient, token.address, vaultAddress]);
 
   useEffect(() => {
-    void refreshAccount();
-    const provider = getProvider();
-    if (!provider?.on) return;
-    const onAccounts = () => void refreshAccount();
-    const onChain = () => void refreshAccount();
-    provider.on("accountsChanged", onAccounts);
-    provider.on("chainChanged", onChain);
-    return () => {
-      provider.removeListener?.("accountsChanged", onAccounts);
-      provider.removeListener?.("chainChanged", onChain);
-    };
-  }, [refreshAccount]);
-
-  useEffect(() => {
     void refresh();
   }, [refresh]);
 
   const connect = useCallback(async () => {
-    const provider = getProvider();
-    if (!provider) {
-      const buttons = Array.from(document.querySelectorAll("button"));
-      const header = buttons.find((btn) => /connect/i.test(btn.textContent || ""));
-      if (header) {
-        header.click();
-        return;
-      }
+    setStatus(null);
+    if (address) {
+      await refresh();
+      return;
+    }
+    await connector.connect();
+  }, [address, connector, refresh]);
+
+  const ensureChain = useCallback(async () => {
+    if (Number(connector.connectedChain?.id) === vault.chainId) return;
+    await connector.setChain({ chainId: vault.chainId });
+  }, [connector, vault.chainId]);
+
+  const walletClient = useCallback(() => {
+    if (!provider || !address) {
       throw new Error("Connect the Black DEX wallet first.");
     }
-    const accounts = (await provider.request({
-      method: "eth_requestAccounts",
-    })) as string[];
-    setAddress(accounts[0] ? (accounts[0] as Address) : null);
-    const hex = (await provider.request({ method: "eth_chainId" })) as string;
-    setChainId(Number.parseInt(hex, 16));
-  }, []);
-
-  const ensureChain = useCallback(async (provider: EthereumProvider) => {
-    const hexId = `0x${vault.chainId.toString(16)}`;
-    try {
-      await provider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: hexId }],
-      });
-    } catch (err) {
-      const code = typeof err === "object" && err && "code" in err ? Number((err as { code: number }).code) : 0;
-      if (code !== 4902) throw err;
-      await provider.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: hexId,
-            chainName: vault.chain === "base" ? "Base" : "Ethereum",
-            nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-            rpcUrls: [rpcFor(vault)],
-          },
-        ],
-      });
-    }
-    setChainId(vault.chainId);
-  }, [vault.chain, vault.chainId]);
-
-  const wallet = useCallback(() => {
-    const provider = getProvider();
-    if (!provider || !address) throw new Error("Connect the Black DEX wallet first.");
-    return {
-      provider,
-      client: createWalletClient({
-        account: address,
-        chain,
-        transport: custom(provider),
-      }),
-    };
-  }, [address, chain]);
+    return createWalletClient({
+      account: address,
+      chain,
+      transport: custom(provider),
+    });
+  }, [address, chain, provider]);
 
   const parseAmount = useCallback(
     (raw: string) => {
@@ -209,11 +157,11 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
     async (raw: string) => {
       const amount = parseAmount(raw);
       if (amount <= 0n) throw new Error("Amount must be greater than 0.");
-      const { provider, client } = wallet();
+      const client = walletClient();
       setBusy("deposit");
       setStatus(null);
       try {
-        await ensureChain(provider);
+        await ensureChain();
         if (allowance < amount) {
           setStatus("Approve USDC…");
           const approveHash = await client.writeContract({
@@ -242,18 +190,18 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
         setBusy(null);
       }
     },
-    [address, allowance, ensureChain, parseAmount, publicClient, refresh, token.address, vaultAddress, wallet],
+    [address, allowance, ensureChain, parseAmount, publicClient, refresh, token.address, vaultAddress, walletClient],
   );
 
   const withdraw = useCallback(
     async (raw: string) => {
       const amount = parseAmount(raw);
       if (amount <= 0n) throw new Error("Amount must be greater than 0.");
-      const { provider, client } = wallet();
+      const client = walletClient();
       setBusy("withdraw");
       setStatus(null);
       try {
-        await ensureChain(provider);
+        await ensureChain();
         setStatus("Withdrawing from Morpho…");
         const hash = await client.writeContract({
           address: vaultAddress,
@@ -272,7 +220,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
         setBusy(null);
       }
     },
-    [address, ensureChain, parseAmount, publicClient, refresh, vaultAddress, wallet],
+    [address, ensureChain, parseAmount, publicClient, refresh, vaultAddress, walletClient],
   );
 
   return {
@@ -284,6 +232,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
     formattedPosition: formatUnits(shareAssets, token.decimals),
     busy,
     status,
+    connecting: Boolean(connector.connecting),
     connect,
     deposit,
     withdraw,
