@@ -2,7 +2,7 @@
   width: min(1120px, 100%);
   max-width: 100%;
   margin: 12px auto 96px;
-  padding: 0 12px;
+  padding: 0 12px 24px;
   box-sizing: border-box;
   display: grid;
   gap: 20px;
