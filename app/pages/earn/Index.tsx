@@ -9,53 +9,58 @@ import {
   loadMorphoVaults,
   type MorphoVaultLive,
 } from "@/utils/morpho-earn";
+import {
+  loadOrderlyEarnVaults,
+  type OrderlyEarnVault,
+} from "@/utils/orderly-earn";
 import { useMorphoVault } from "@/hooks/useMorphoVault";
 
-const ALLOWED_VAULTS = ["orderly omnivault", "smaug"];
-
-function hideOtherVaultRows(root: Element) {
-  const rows = root.querySelectorAll("tbody tr, [role='row']");
-  rows.forEach((row) => {
-    const text = (row.textContent || "").toLowerCase();
-    if (!text.trim()) return;
-    if (!/tvl|apy|usdc|deposit|withdraw|balance/i.test(text)) return;
-    const keep = ALLOWED_VAULTS.some((name) => text.includes(name));
-    (row as HTMLElement).style.display = keep ? "" : "none";
-  });
-}
-
-function hideVaultsMarketing(root: Element) {
-  root.querySelectorAll("h1, h2, p").forEach((el) => {
+function hideVaultsChrome(root: Element) {
+  root.querySelectorAll("h1, h2, p, span").forEach((el) => {
     const text = (el.textContent || "").toLowerCase();
     if (
       text.includes("earn passive yield") ||
       text.includes("idle or extra assets") ||
-      text.includes("available on")
+      text.includes("available on") ||
+      text.includes("curated vault strategies directly from black dex")
     ) {
       (el as HTMLElement).style.display = "none";
     }
   });
 }
 
-function FilterOrderlyVaults() {
+function OrderlyDepositDesk({ open }: { open: boolean }) {
   useEffect(() => {
+    if (!open) return;
     const run = () => {
       const root = document.querySelector(".bd-earn-orderly");
-      if (!root) return;
-      hideOtherVaultRows(root);
-      hideVaultsMarketing(root);
+      if (root) hideVaultsChrome(root);
     };
     run();
     const root = document.querySelector(".bd-earn-orderly");
     const observer = new MutationObserver(run);
     if (root) observer.observe(root, { childList: true, subtree: true });
-    const timer = window.setInterval(run, 700);
+    const timer = window.setInterval(run, 600);
     return () => {
       observer.disconnect();
       window.clearInterval(timer);
     };
-  }, []);
-  return null;
+  }, [open]);
+  if (!open) return null;
+  return (
+    <div className="bd-earn-orderly">
+      <VaultsPageComponent
+        className="bd-earn-vaults-page"
+        config={{ overallInfoBrokerIds: "orderly,thegangdex" }}
+      />
+    </div>
+  );
+}
+
+function openHeaderConnect() {
+  const buttons = Array.from(document.querySelectorAll("button"));
+  const connect = buttons.find((btn) => /connect/i.test(btn.textContent || ""));
+  connect?.click();
 }
 
 function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
@@ -99,7 +104,7 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
               ? Number(morpho.formattedBalance).toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                 })
-              : "—"}
+              : "\u2014"}
           </b>
         </div>
         <div>
@@ -109,11 +114,10 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
               ? Number(morpho.formattedPosition).toLocaleString(undefined, {
                   maximumFractionDigits: 2,
                 })
-              : "—"}
+              : "\u2014"}
           </b>
         </div>
       </div>
-
       {!morpho.isConnected ? (
         <button type="button" className="bd-earn-cta" onClick={() => void morpho.connect()}>
           Connect wallet
@@ -146,9 +150,6 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
               Max
             </button>
           </label>
-          {!morpho.onVault && (
-            <p className="bd-earn-hint">Switch to {chainLabel} when you confirm the transaction.</p>
-          )}
           <button
             type="button"
             className="bd-earn-cta"
@@ -156,16 +157,65 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
             onClick={() => void onSubmit()}
           >
             {morpho.busy
-              ? morpho.status || "Working…"
+              ? morpho.status || "Working\u2026"
               : mode === "deposit"
                 ? "Deposit from wallet"
                 : "Withdraw to wallet"}
           </button>
         </div>
       )}
-
       {morpho.status && !morpho.busy && <p className="bd-earn-status">{morpho.status}</p>}
-      <p className="bd-earn-powered">Powered by Morpho · curated by {vault.curator}</p>
+      <p className="bd-earn-powered">Powered by Morpho \u00b7 curated by {vault.curator}</p>
+    </article>
+  );
+}
+
+function OrderlyCard({
+  vault,
+  onDeposit,
+}: {
+  vault: OrderlyEarnVault;
+  onDeposit: () => void;
+}) {
+  return (
+    <article className="bd-earn-card">
+      <header className="bd-earn-card-head">
+        <div className="bd-earn-card-title">
+          <strong>{vault.name}</strong>
+          <span className="bd-earn-chip">{vault.asset}</span>
+          <span className="bd-earn-chip is-chain">{vault.status === "live" ? "Active" : vault.status}</span>
+        </div>
+        <div className="bd-earn-apy">
+          <em>{formatApy(vault.apy)}</em>
+          <small>Net APY</small>
+        </div>
+      </header>
+      <p className="bd-earn-desc">{vault.description}</p>
+      <div className="bd-earn-stats">
+        <div>
+          <span>TVL</span>
+          <b>{formatUsdCompact(vault.tvl)}</b>
+        </div>
+        <div>
+          <span>Depositors</span>
+          <b>{vault.depositors ?? "\u2014"}</b>
+        </div>
+        <div>
+          <span>Min deposit</span>
+          <b>{vault.minDeposit != null ? `${vault.minDeposit} USDC` : "\u2014"}</b>
+        </div>
+      </div>
+      <button
+        type="button"
+        className="bd-earn-cta"
+        onClick={() => {
+          openHeaderConnect();
+          onDeposit();
+        }}
+      >
+        Connect wallet
+      </button>
+      <p className="bd-earn-powered">Powered by Orderly \u00b7 no gas on deposit</p>
     </article>
   );
 }
@@ -173,17 +223,24 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
 export default function EarnIndex() {
   const pageMeta = getPageMeta();
   const pageTitle = generatePageTitle("Earn");
-  const [vaults, setVaults] = useState<MorphoVaultLive[]>([]);
+  const [morpho, setMorpho] = useState<MorphoVaultLive[]>([]);
+  const [orderly, setOrderly] = useState<OrderlyEarnVault[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showOrderlyDesk, setShowOrderlyDesk] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    loadMorphoVaults()
-      .then((rows) => {
-        if (!cancelled) setVaults(rows);
+    Promise.all([loadMorphoVaults(), loadOrderlyEarnVaults()])
+      .then(([morphoRows, orderlyRows]) => {
+        if (cancelled) return;
+        setMorpho(morphoRows);
+        setOrderly(orderlyRows);
       })
       .catch(() => {
-        if (!cancelled) setVaults([]);
+        if (!cancelled) {
+          setMorpho([]);
+          setOrderly([]);
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -211,13 +268,12 @@ export default function EarnIndex() {
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Morpho Earn</h2>
-            <p>Connect the Black DEX wallet and deposit USDC on-chain from this page.</p>
           </header>
-          {loading && vaults.length === 0 ? (
-            <div className="bd-earn-loading">Loading Morpho APY…</div>
+          {loading && morpho.length === 0 ? (
+            <div className="bd-earn-loading">Loading vaults\u2026</div>
           ) : (
             <div className="bd-earn-grid">
-              {vaults.map((vault) => (
+              {morpho.map((vault) => (
                 <MorphoCard key={vault.id} vault={vault} />
               ))}
             </div>
@@ -227,15 +283,17 @@ export default function EarnIndex() {
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Orderly strategy vaults</h2>
-            <p>OmniVault and Smaug. Deposit from the Black DEX account, no gas.</p>
           </header>
-          <FilterOrderlyVaults />
-          <div className="bd-earn-orderly">
-            <VaultsPageComponent
-              className="bd-earn-vaults-page"
-              config={{ overallInfoBrokerIds: "orderly,thegangdex" }}
-            />
+          <div className="bd-earn-grid">
+            {orderly.map((vault) => (
+              <OrderlyCard
+                key={vault.id}
+                vault={vault}
+                onDeposit={() => setShowOrderlyDesk(true)}
+              />
+            ))}
           </div>
+          <OrderlyDepositDesk open={showOrderlyDesk} />
         </section>
       </div>
     </>
