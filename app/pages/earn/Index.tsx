@@ -268,6 +268,7 @@ export default function EarnIndex() {
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Morpho Earn</h2>
+            <p>Available on Base and Ethereum</p>
           </header>
           {loading && morpho.length === 0 ? (
             <div className="bd-earn-loading">Loading vaults\u2026</div>
@@ -283,6 +284,7 @@ export default function EarnIndex() {
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Orderly strategy vaults</h2>
+            <p>Available on Black DEX · any supported chain · no gas</p>
           </header>
           <div className="bd-earn-grid">
             {orderly.map((vault) => (
