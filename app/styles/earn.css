@@ -234,15 +234,10 @@
 }
 
 .bd-earn-hint,
-.bd-earn-status {
-  margin: 0;
-  font-size: 12px;
-  color: rgb(var(--oui-color-base-foreground) / 0.55);
-}
-
+.bd-earn-status,
 .bd-earn-powered {
   margin: 0;
-  font-size: 11px;
+  font-size: 12px;
   color: rgb(var(--oui-color-base-foreground) / 0.45);
 }
 
@@ -255,9 +250,11 @@
 
 .bd-earn-orderly {
   min-width: 0;
+  margin-top: 8px;
 }
 
-.bd-earn-orderly h1 {
+.bd-earn-orderly h1,
+.bd-earn-orderly .oui-page-title {
   display: none !important;
 }
 
