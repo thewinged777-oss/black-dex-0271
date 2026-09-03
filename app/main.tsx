@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import App from "./App";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { initializeAnalyticsFromRuntimeConfig } from "./utils/analytics";
@@ -30,8 +30,6 @@ const LeaderboardIndex = lazy(() => import("./pages/leaderboard/Index"));
 const RewardsLayout = lazy(() => import("./pages/rewards/Layout"));
 const RewardsIndex = lazy(() => import("./pages/rewards/Index"));
 const RewardsAffiliate = lazy(() => import("./pages/rewards/Affiliate"));
-const VaultsLayout = lazy(() => import("./pages/vaults/Layout"));
-const VaultsIndex = lazy(() => import("./pages/vaults/Index"));
 const SwapLayout = lazy(() => import("./pages/swap/Layout"));
 const SwapIndex = lazy(() => import("./pages/swap/Index"));
 const PointsLayout = lazy(() => import("./pages/points/Layout"));
@@ -114,8 +112,7 @@ const router = createBrowserRouter(
         },
         {
           path: "vaults",
-          element: <VaultsLayout />,
-          children: [{ index: true, element: <VaultsIndex /> }],
+          element: <Navigate to="/earn" replace />,
         },
         {
           path: "swap",
