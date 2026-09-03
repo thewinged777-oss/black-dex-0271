@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useAccount, useWalletConnector } from "@orderly.network/hooks";
+import { useAccount } from "@orderly.network/hooks";
 import { generatePageTitle } from "@/utils/utils";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
@@ -15,6 +15,7 @@ import {
 } from "@/utils/orderly-earn";
 import { useMorphoVault } from "@/hooks/useMorphoVault";
 import { openOrderlyWallet } from "@/utils/open-orderly-wallet";
+import PageSafe from "@/components/PageSafe";
 
 const VaultsPageComponent = lazy(() =>
   import("@orderly.network/vaults").then((mod) => ({ default: mod.VaultsPage })),
@@ -55,10 +56,12 @@ function OrderlyDepositDesk({ open }: { open: boolean }) {
   return (
     <div className="bd-earn-orderly">
       <Suspense fallback={<div className="bd-earn-loading">Opening Orderly vaults\u2026</div>}>
-        <VaultsPageComponent
-          className="bd-earn-vaults-page"
-          config={{ overallInfoBrokerIds: "orderly,thegangdex" }}
-        />
+        <PageSafe>
+          <VaultsPageComponent
+            className="bd-earn-vaults-page"
+            config={{ overallInfoBrokerIds: "orderly,thegangdex" }}
+          />
+        </PageSafe>
       </Suspense>
     </div>
   );
@@ -120,13 +123,8 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
         </div>
       </div>
       {!morpho.isConnected ? (
-        <button
-          type="button"
-          className="bd-earn-cta"
-          disabled={Boolean(morpho.connecting)}
-          onClick={() => void morpho.connect()}
-        >
-          {morpho.connecting ? "Connecting\u2026" : "Connect wallet"}
+        <button type="button" className="bd-earn-cta" onClick={() => void morpho.connect()}>
+          Connect wallet
         </button>
       ) : (
         <div className="bd-earn-form">
@@ -184,12 +182,11 @@ function OrderlyCard({
   onDeposit: () => void;
 }) {
   const { state } = useAccount();
-  const connector = useWalletConnector();
-  const connected = Boolean(state?.address || connector?.wallet?.accounts?.[0]?.address);
+  const connected = Boolean(state?.address);
 
-  const onClick = async () => {
+  const onClick = () => {
     if (!connected) {
-      await openOrderlyWallet();
+      openOrderlyWallet();
       return;
     }
     onDeposit();
@@ -223,8 +220,8 @@ function OrderlyCard({
           <b>{vault.minDeposit != null ? `${vault.minDeposit} USDC` : "\u2014"}</b>
         </div>
       </div>
-      <button type="button" className="bd-earn-cta" onClick={() => void onClick()}>
-        {connected ? "Open vault" : connector?.connecting ? "Connecting\u2026" : "Connect wallet"}
+      <button type="button" className="bd-earn-cta" onClick={onClick}>
+        {connected ? "Open vault" : "Connect wallet"}
       </button>
       <p className="bd-earn-powered">Powered by Orderly, no gas on deposit</p>
     </article>
@@ -286,7 +283,9 @@ export default function EarnIndex() {
           ) : (
             <div className="bd-earn-grid">
               {morpho.map((vault) => (
-                <MorphoCard key={vault.id} vault={vault} />
+                <PageSafe key={vault.id}>
+                  <MorphoCard vault={vault} />
+                </PageSafe>
               ))}
             </div>
           )}
@@ -299,11 +298,9 @@ export default function EarnIndex() {
           </header>
           <div className="bd-earn-grid">
             {orderly.map((vault) => (
-              <OrderlyCard
-                key={vault.id}
-                vault={vault}
-                onDeposit={() => setShowOrderlyDesk(true)}
-              />
+              <PageSafe key={vault.id}>
+                <OrderlyCard vault={vault} onDeposit={() => setShowOrderlyDesk(true)} />
+              </PageSafe>
             ))}
           </div>
           <OrderlyDepositDesk open={showOrderlyDesk} />
