@@ -10,7 +10,6 @@ import {
   SwapIcon,
   LeaderboardIcon,
   RewardsIcon,
-  VaultsIcon,
   PointsIcon,
   DeskIcon,
   EarnIcon,
@@ -34,9 +33,8 @@ const TILES: Array<{ href: string; label: string; icon: FC<{ size?: number }> }>
   { href: "/swap", label: "Swap", icon: SwapIcon },
   { href: "/leaderboard", label: "Leaderboard", icon: LeaderboardIcon },
   { href: "/rewards", label: "Rewards", icon: RewardsIcon },
-  { href: "/vaults", label: "Vaults", icon: VaultsIcon },
-  { href: "/points", label: "Points", icon: PointsIcon },
   { href: "/earn", label: "Earn", icon: EarnIcon },
+  { href: "/points", label: "Points", icon: PointsIcon },
   { href: "/desk", label: "Desk", icon: DeskIcon },
 ];
 

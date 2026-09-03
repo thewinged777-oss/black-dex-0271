@@ -169,8 +169,9 @@ export function EarnIcon({ active, size, ...rest }: IconProps) {
   const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path d="M12 3.5v17" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
-      <path d="M8.2 7.2c0-1.7 1.7-3.1 3.8-3.1s3.8 1.4 3.8 3.1c0 1.5-1.2 2.6-2.8 3L10.2 12c-1.6.4-2.8 1.5-2.8 3 0 1.7 1.7 3.1 3.8 3.1s3.8-1.4 3.8-3.1" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
+      <circle cx="12" cy="12" r="8.15" stroke={c} strokeWidth="1.7" fill={active ? "rgba(212,175,55,0.16)" : "none"} />
+      <path d="M12 7.15v9.7" stroke={c} strokeWidth="1.65" strokeLinecap="round" />
+      <path d="M9.05 9.2c.5-1.15 1.7-1.85 3.05-1.85 1.75 0 3.05.9 3.05 2.2 0 1.2-.85 1.9-2.7 2.25l-1.25.25c-1.6.32-2.35.98-2.35 2.12 0 1.32 1.25 2.23 3.15 2.23 1.45 0 2.6-.62 3.15-1.72" stroke={c} strokeWidth="1.65" strokeLinecap="round" />
     </Base>
   );
 }

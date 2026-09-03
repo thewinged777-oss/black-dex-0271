@@ -16,7 +16,6 @@ import TokenMark from "@/components/TokenMark";
 import {
   LeaderboardIcon,
   RewardsIcon,
-  VaultsIcon,
   PointsIcon,
   EarnIcon,
   SwapIcon,
@@ -52,7 +51,6 @@ function pct(value: number) {
 const SHORTCUTS = [
   { href: "/leaderboard", label: "Leaderboard", icon: <LeaderboardIcon size={18} /> },
   { href: "/rewards", label: "Rewards", icon: <RewardsIcon size={18} /> },
-  { href: "/vaults", label: "Vaults", icon: <VaultsIcon size={18} /> },
   { href: "/earn", label: "Earn", icon: <EarnIcon size={18} /> },
   { href: "/points", label: "Points", icon: <PointsIcon size={18} /> },
 ];
