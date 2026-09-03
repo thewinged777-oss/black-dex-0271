@@ -13,6 +13,7 @@ import {
 import { base, mainnet } from "viem/chains";
 import type { MorphoVaultMeta } from "@/utils/morpho-earn";
 import { ERC20_ABI, ERC4626_ABI, USDC_BY_CHAIN } from "@/utils/morpho-tx";
+import { openOrderlyWallet } from "@/utils/open-orderly-wallet";
 
 type EthereumProvider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
@@ -125,7 +126,11 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       await refresh();
       return;
     }
-    await connector.connect();
+    try {
+      await openOrderlyWallet(connector);
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : "Connect failed.");
+    }
   }, [address, connector, refresh]);
 
   const ensureChain = useCallback(async () => {
@@ -163,7 +168,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       try {
         await ensureChain();
         if (allowance < amount) {
-          setStatus("Approve USDC…");
+          setStatus("Approve USDC\u2026");
           const approveHash = await client.writeContract({
             address: token.address,
             abi: ERC20_ABI,
@@ -172,7 +177,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
           });
           await publicClient.waitForTransactionReceipt({ hash: approveHash });
         }
-        setStatus("Depositing into Morpho…");
+        setStatus("Depositing into Morpho\u2026");
         const hash = await client.writeContract({
           address: vaultAddress,
           abi: ERC4626_ABI,
@@ -202,7 +207,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       setStatus(null);
       try {
         await ensureChain();
-        setStatus("Withdrawing from Morpho…");
+        setStatus("Withdrawing from Morpho\u2026");
         const hash = await client.writeContract({
           address: vaultAddress,
           abi: ERC4626_ABI,
