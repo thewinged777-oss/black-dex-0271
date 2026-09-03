@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Scaffold } from "@orderly.network/ui-scaffold";
 import { useOrderlyConfig } from "@/utils/config";
 import { useNav } from "@/hooks/useNav";
+import PageSafe from "@/components/PageSafe";
 
 export default function EarnLayout() {
   const config = useOrderlyConfig();
@@ -24,7 +25,9 @@ export default function EarnLayout() {
       }}
       bottomNavProps={config.scaffold.bottomNavProps}
     >
-      <Outlet />
+      <PageSafe>
+        <Outlet />
+      </PageSafe>
     </Scaffold>
   );
 }
