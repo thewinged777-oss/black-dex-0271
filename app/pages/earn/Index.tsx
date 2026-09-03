@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { VaultsPage as VaultsPageComponent } from "@orderly.network/vaults";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { generatePageTitle } from "@/utils/utils";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
@@ -14,6 +13,10 @@ import {
   type OrderlyEarnVault,
 } from "@/utils/orderly-earn";
 import { useMorphoVault } from "@/hooks/useMorphoVault";
+
+const VaultsPageComponent = lazy(() =>
+  import("@orderly.network/vaults").then((mod) => ({ default: mod.VaultsPage })),
+);
 
 function hideVaultsChrome(root: Element) {
   root.querySelectorAll("h1, h2, p, span").forEach((el) => {
@@ -49,10 +52,12 @@ function OrderlyDepositDesk({ open }: { open: boolean }) {
   if (!open) return null;
   return (
     <div className="bd-earn-orderly">
-      <VaultsPageComponent
-        className="bd-earn-vaults-page"
-        config={{ overallInfoBrokerIds: "orderly,thegangdex" }}
-      />
+      <Suspense fallback={<div className="bd-earn-loading">Opening Orderly vaults\u2026</div>}>
+        <VaultsPageComponent
+          className="bd-earn-vaults-page"
+          config={{ overallInfoBrokerIds: "orderly,thegangdex" }}
+        />
+      </Suspense>
     </div>
   );
 }
