@@ -38,6 +38,7 @@ import {
   VaultsIcon,
   PointsIcon,
   DeskIcon,
+  EarnIcon,
 } from "../components/icons/desk";
 import { withBasePath } from "./base-path";
 import {
@@ -208,6 +209,8 @@ const deskMark = (menuId: string) => {
       return <PointsIcon size={14} />;
     case "Desk":
       return <DeskIcon size={14} />;
+    case "Earn":
+      return <EarnIcon size={14} />;
     default:
       return null;
   }
@@ -246,6 +249,11 @@ const getBottomNavIcon = (menuId: string) => {
       return {
         activeIcon: <DeskIcon active />,
         inactiveIcon: <DeskIcon />,
+      };
+    case "Earn":
+      return {
+        activeIcon: <EarnIcon active />,
+        inactiveIcon: <EarnIcon />,
       };
     default:
       throw new Error(`Unsupported menu id: ${menuId}`);
@@ -395,6 +403,12 @@ export const useOrderlyConfig = () => {
         name: "Desk",
         customRender: () => labeled("Desk", "Desk"),
       },
+      {
+        id: "Earn",
+        href: "/earn",
+        name: "Earn",
+        customRender: () => labeled("Earn", "Earn"),
+      },
     ];
 
     const defaultEnabledMenus = allMenuItems.filter((menu) => menu.isDefault);
@@ -434,7 +448,7 @@ export const useOrderlyConfig = () => {
       ...customMenus,
     ];
 
-    const bottomNavOrder = ["Home", "Markets", "Trading", "Desk", "Portfolio"];
+    const bottomNavOrder = ["Home", "Markets", "Trading", "Earn", "Portfolio"];
     const bottomNavMenus = bottomNavOrder.flatMap((id) => {
       const menu = allMenuItems.find((item) => item.id === id);
       if (!menu) return [];

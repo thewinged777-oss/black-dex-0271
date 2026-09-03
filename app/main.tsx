@@ -38,6 +38,8 @@ const PointsLayout = lazy(() => import("./pages/points/Layout"));
 const PointsIndex = lazy(() => import("./pages/points/Index"));
 const DeskLayout = lazy(() => import("./pages/desk/Layout"));
 const DeskIndex = lazy(() => import("./pages/desk/Index"));
+const EarnLayout = lazy(() => import("./pages/earn/Layout"));
+const EarnIndex = lazy(() => import("./pages/earn/Index"));
 
 async function loadRuntimeConfig() {
   return new Promise<void>((resolve) => {
@@ -48,14 +50,14 @@ async function loadRuntimeConfig() {
       resolve();
     };
     script.onerror = () => {
-      console.log("Runtime config not found, using build-time env vars");
+      console.log("Runtime config not found, using build-time config");
       resolve();
     };
     document.head.appendChild(script);
   });
 }
 
-const basePath = import.meta.env.BASE_URL || "/";
+const basePath = withBasePath("");
 
 const router = createBrowserRouter(
   [
@@ -129,6 +131,11 @@ const router = createBrowserRouter(
           path: "desk",
           element: <DeskLayout />,
           children: [{ index: true, element: <DeskIndex /> }],
+        },
+        {
+          path: "earn",
+          element: <EarnLayout />,
+          children: [{ index: true, element: <EarnIndex /> }],
         },
       ],
     },

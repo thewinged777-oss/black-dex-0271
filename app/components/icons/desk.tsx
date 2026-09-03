@@ -32,13 +32,7 @@ export function HomeIcon({ active, size, ...rest }: IconProps) {
   const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path
-        d="M4.6 11.2 12 4.8l7.4 6.4V19a1.4 1.4 0 0 1-1.4 1.4H6A1.4 1.4 0 0 1 4.6 19V11.2Z"
-        stroke={c}
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-        fill={active ? "rgba(212,175,55,0.16)" : "none"}
-      />
+      <path d="M4.6 11.2 12 4.8l7.4 6.4V19a1.4 1.4 0 0 1-1.4 1.4H6A1.4 1.4 0 0 1 4.6 19V11.2Z" stroke={c} strokeWidth="1.7" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.16)" : "none"} />
       <path d="M10 20.2v-5.2h4v5.2" stroke={c} strokeWidth="1.7" strokeLinejoin="round" />
     </Base>
   );
@@ -128,13 +122,7 @@ export function PointsIcon({ active, size, ...rest }: IconProps) {
   const c = paint(active);
   return (
     <Base size={size} {...rest}>
-      <path
-        d="M12 3.8 13.9 8.4l5 .6-3.7 3.4.9 4.9L12 15.1 7.9 17.3l.9-4.9L5.1 9l5-.6L12 3.8Z"
-        stroke={c}
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-        fill={active ? "rgba(212,175,55,0.16)" : "none"}
-      />
+      <path d="M12 3.8 13.9 8.4l5 .6-3.7 3.4.9 4.9L12 15.1 7.9 17.3l.9-4.9L5.1 9l5-.6L12 3.8Z" stroke={c} strokeWidth="1.7" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.16)" : "none"} />
     </Base>
   );
 }
@@ -177,6 +165,16 @@ export function DeskIcon({ active, size, ...rest }: IconProps) {
   );
 }
 
+export function EarnIcon({ active, size, ...rest }: IconProps) {
+  const c = paint(active);
+  return (
+    <Base size={size} {...rest}>
+      <path d="M12 3.5v17" stroke={c} strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M8.2 7.2c0-1.7 1.7-3.1 3.8-3.1s3.8 1.4 3.8 3.1c0 1.5-1.2 2.6-2.8 3L10.2 12c-1.6.4-2.8 1.5-2.8 3 0 1.7 1.7 3.1 3.8 3.1s3.8-1.4 3.8-3.1" stroke={c} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" fill={active ? "rgba(212,175,55,0.12)" : "none"} />
+    </Base>
+  );
+}
+
 export function HomeActiveIcon(props: IconProps) {
   return <HomeIcon active {...props} />;
 }
@@ -206,4 +204,10 @@ export function LeaderboardActiveIcon(props: IconProps) {
 }
 export function LeaderboardInactiveIcon(props: IconProps) {
   return <LeaderboardIcon {...props} />;
+}
+export function EarnActiveIcon(props: IconProps) {
+  return <EarnIcon active {...props} />;
+}
+export function EarnInactiveIcon(props: IconProps) {
+  return <EarnIcon {...props} />;
 }
