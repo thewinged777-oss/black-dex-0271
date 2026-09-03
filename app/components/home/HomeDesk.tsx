@@ -18,6 +18,7 @@ import {
   RewardsIcon,
   PointsIcon,
   EarnIcon,
+  DeskIcon,
   SwapIcon,
   TradeIcon,
 } from "@/components/icons/desk";
@@ -53,6 +54,7 @@ const SHORTCUTS = [
   { href: "/rewards", label: "Rewards", icon: <RewardsIcon size={18} /> },
   { href: "/earn", label: "Earn", icon: <EarnIcon size={18} /> },
   { href: "/points", label: "Points", icon: <PointsIcon size={18} /> },
+  { href: "/desk", label: "Desk", icon: <DeskIcon size={18} /> },
 ];
 
 type MoverTab = "gainers" | "losers" | "listings";
