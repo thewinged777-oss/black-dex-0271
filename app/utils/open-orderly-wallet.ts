@@ -5,6 +5,8 @@ export function clickHeaderWallet() {
     document.querySelector(".oui-top-nav"),
     document.querySelector("[class*='topNavbar']"),
     document.querySelector("header"),
+    document.querySelector(".oui-navbar"),
+    document.body,
   ].filter(Boolean) as Element[];
 
   for (const scope of scopes) {
@@ -13,8 +15,9 @@ export function clickHeaderWallet() {
     );
     const match = nodes.find((el) => {
       if (el.closest(".bd-earn-card")) return false;
+      if (el.closest(".bd-earn-form")) return false;
       const text = `${el.textContent || ""} ${el.getAttribute("aria-label") || ""}`;
-      return /connect/i.test(text);
+      return /connect\s*wallet/i.test(text) || /^connect$/i.test((el.textContent || "").trim());
     });
     if (match) {
       match.click();
