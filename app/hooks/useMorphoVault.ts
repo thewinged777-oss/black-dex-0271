@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAccount } from "@orderly.network/hooks";
+import { useAccount, useWalletConnector } from "@orderly.network/hooks";
 import {
   createPublicClient,
   createWalletClient,
@@ -67,13 +67,23 @@ function getInjected(): EthereumProvider | null {
   return (window as Window & { ethereum?: EthereumProvider }).ethereum ?? null;
 }
 
+function providerFromWallet(wallet: unknown): EthereumProvider | null {
+  if (!wallet || typeof wallet !== "object") return getInjected();
+  const row = wallet as {
+    provider?: EthereumProvider;
+    wallets?: Array<{ provider?: EthereumProvider }>;
+  };
+  return row.provider ?? row.wallets?.[0]?.provider ?? getInjected();
+}
+
 export function useMorphoVault(vault: MorphoVaultMeta) {
   const token = tokenFor(vault);
   const vaultAddress = vault.address as Address;
   const chain = chainFor(vault);
   const { state } = useAccount();
+  const connector = useWalletConnector();
   const address = asAddress(state?.address);
-  const provider = getInjected();
+  const provider = providerFromWallet(connector.wallet);
 
   const [assetBalance, setAssetBalance] = useState<bigint>(0n);
   const [allowance, setAllowance] = useState<bigint>(0n);
@@ -151,38 +161,65 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       await refresh();
       return;
     }
-    openOrderlyWallet();
-  }, [address, refresh]);
+    try {
+      if (typeof connector.connect === "function") {
+        await connector.connect();
+        return;
+      }
+    } catch {
+      // fall through to header button
+    }
+    const opened = await openOrderlyWallet();
+    if (!opened) {
+      setStatus("Use Connect wallet in the header.");
+    }
+  }, [address, connector, refresh]);
 
   const ensureChain = useCallback(async () => {
-    if (!provider) return;
     const hexId = `0x${vault.chainId.toString(16)}`;
+    try {
+      if (typeof connector.setChain === "function") {
+        await connector.setChain({ chainId: vault.chainId });
+        return;
+      }
+    } catch {
+      // Orderly chain list may omit Tempo / Base
+    }
+    if (!provider) return;
     try {
       await provider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: hexId }],
       });
     } catch {
-      if (vault.chainId === 4217) {
+      if (vault.chainId === 4217 || vault.chainId === 8453) {
         try {
           await provider.request({
             method: "wallet_addEthereumChain",
             params: [
-              {
-                chainId: hexId,
-                chainName: "Tempo",
-                nativeCurrency: { name: "USD", symbol: "USD", decimals: 18 },
-                rpcUrls: ["https://rpc.tempo.xyz"],
-                blockExplorerUrls: ["https://explore.tempo.xyz"],
-              },
+              vault.chainId === 4217
+                ? {
+                    chainId: hexId,
+                    chainName: "Tempo",
+                    nativeCurrency: { name: "USD", symbol: "USD", decimals: 18 },
+                    rpcUrls: ["https://rpc.tempo.xyz"],
+                    blockExplorerUrls: ["https://explore.tempo.xyz"],
+                  }
+                : {
+                    chainId: hexId,
+                    chainName: "Base",
+                    nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+                    rpcUrls: ["https://mainnet.base.org"],
+                    blockExplorerUrls: ["https://basescan.org"],
+                  },
             ],
           });
         } catch {
-          // user can add Tempo in the wallet UI
+          // user can add the chain in the wallet UI
         }
       }
     }
-  }, [provider, vault.chainId]);
+  }, [connector, provider, vault.chainId]);
 
   const walletClient = useCallback(() => {
     if (!provider || !address) {
@@ -293,7 +330,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
     formattedPosition: formatUnits(shareAssets, token.decimals),
     busy,
     status,
-    connecting: false,
+    connecting: Boolean(connector.connecting),
     connect,
     deposit,
     withdraw,
