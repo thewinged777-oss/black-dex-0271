@@ -5,27 +5,7 @@ const PLATE = "rgb(var(--oui-color-base-8))";
 const MUTED = "rgb(var(--oui-color-base-7))";
 const INK = "rgb(var(--oui-color-primary-contrast))";
 const FG = "rgb(var(--oui-color-base-foreground))";
-
-const CHAIN_ACCENT: Record<string, string> = {
-  arbitrum: "#2d6bff",
-  "arbitrum one": "#2d6bff",
-  base: "#0052ff",
-  ethereum: "#627eea",
-  eth: "#627eea",
-  solana: "#14f195",
-  sol: "#14f195",
-  polygon: "#8247e5",
-  optimism: "#ff0420",
-  op: "#ff0420",
-  mantle: "#000000",
-  avalanche: "#e84142",
-  avax: "#e84142",
-  bnb: "#f3ba2f",
-  bsc: "#f3ba2f",
-  sei: "#9b1c1c",
-  mode: "#dffe00",
-  mantle: "#65c3b8",
-};
+const LINE = "1px solid rgb(var(--oui-color-line))";
 
 let selected: "deposit" | "withdraw" = "deposit";
 
@@ -69,53 +49,76 @@ function isSaturated(color: string) {
   return max - min > 40 && max > 60;
 }
 
-function chainAccent() {
-  const text = (document.body.innerText || "").toLowerCase();
-  for (const [name, color] of Object.entries(CHAIN_ACCENT)) {
-    if (new RegExp(`\\b${name}\\b`).test(text)) return color;
+function flattenChainChrome(el: HTMLElement) {
+  const style = window.getComputedStyle(el);
+  if (isSaturated(style.borderTopColor) || isSaturated(style.borderColor) || isSaturated(style.outlineColor)) {
+    el.style.setProperty("border-color", "transparent", "important");
+    el.style.setProperty("outline", "none", "important");
+    el.style.setProperty("box-shadow", "none", "important");
   }
-  return GOLD;
+  if (isSaturated(style.backgroundColor) && !el.classList.contains("bd-pf-gold") && !el.classList.contains("bd-buy-usdc-cta")) {
+    el.style.setProperty("background", "transparent", "important");
+    el.style.setProperty("background-image", "none", "important");
+  }
 }
 
 function paintValueCard() {
   if (!isOverview()) return;
   const labels = Array.from(document.querySelectorAll("div,span,p")).filter((node) =>
-    /portfolio value/i.test((node.textContent || "").trim()),
+    /^portfolio value/i.test((node.textContent || "").trim()),
   );
   labels.forEach((label) => {
     let card = label.parentElement as HTMLElement | null;
     let found: HTMLElement | null = null;
     for (let i = 0; i < 10 && card; i += 1) {
-      const style = window.getComputedStyle(card);
       const tall = card.offsetHeight >= 72 && card.offsetWidth >= 160;
-      if (tall && (isSaturated(style.backgroundColor) || card.classList.contains("bd-pf-value"))) {
+      if (tall) {
         found = card;
         break;
       }
       card = card.parentElement;
     }
-    if (!found) {
-      card = label.parentElement as HTMLElement | null;
-      for (let i = 0; i < 6 && card; i += 1) {
-        if (card.offsetHeight >= 88 && card.offsetWidth >= 180) {
-          found = card;
-          break;
-        }
-        card = card.parentElement;
-      }
-    }
     if (!found) return;
-    if (!found.dataset.bdChainAccent) {
-      const current = window.getComputedStyle(found).backgroundColor;
-      found.dataset.bdChainAccent = isSaturated(current) ? current : chainAccent();
-    }
     found.classList.add("bd-pf-value");
-    found.style.setProperty("--bd-chain-accent", found.dataset.bdChainAccent);
-    found.style.setProperty("background", PLATE, "important");
+    found.style.setProperty("background", "transparent", "important");
     found.style.setProperty("background-image", "none", "important");
-    found.style.setProperty("border", `2px solid ${found.dataset.bdChainAccent}`, "important");
-    found.style.setProperty("color", FG, "important");
+    found.style.setProperty("border", "0", "important");
     found.style.setProperty("box-shadow", "none", "important");
+    found.style.setProperty("color", FG, "important");
+    paintHero(found);
+  });
+}
+
+function paintHero(value: HTMLElement) {
+  let wrap = value.parentElement as HTMLElement | null;
+  let hero: HTMLElement | null = null;
+  for (let i = 0; i < 8 && wrap; i += 1) {
+    const text = (wrap.textContent || "").replace(/\s+/g, " ");
+    const hasAddr = /\b[0-9a-z]{3,6}\.\.\.[0-9a-z]{3,6}\b/i.test(text);
+    const hasValue = /portfolio value/i.test(text);
+    if (hasAddr && hasValue && wrap.offsetHeight >= 110) {
+      hero = wrap;
+      break;
+    }
+    wrap = wrap.parentElement;
+  }
+  if (!hero) hero = value;
+  hero.classList.add("bd-pf-hero");
+  hero.style.setProperty("background", PLATE, "important");
+  hero.style.setProperty("background-image", "none", "important");
+  hero.style.setProperty("border", LINE, "important");
+  hero.style.setProperty("border-radius", "14px", "important");
+  hero.style.setProperty("box-shadow", "none", "important");
+  hero.querySelectorAll("div,span,p,button,a").forEach((node) => {
+    const el = node as HTMLElement;
+    if (el.classList.contains("bd-pf-gold") || el.classList.contains("bd-buy-usdc") || el.closest(".bd-buy-usdc")) return;
+    flattenChainChrome(el);
+    const text = labelOf(el);
+    if (/\b[0-9a-z]{3,6}\.\.\.[0-9a-z]{3,6}\b/i.test(text) || text.includes("solana") || text.includes("evm") || text.includes("arbitrum") || text.includes("base")) {
+      el.classList.add("bd-pf-addr");
+      el.style.setProperty("background", "transparent", "important");
+      el.style.setProperty("border", "0", "important");
+    }
   });
 }
 
