@@ -61,6 +61,18 @@
   border: 0 !important;
 }
 
+.bd-pf-value {
+  background: rgb(var(--oui-color-base-8)) !important;
+  background-image: none !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  border: 2px solid var(--bd-chain-accent, rgb(var(--oui-color-primary))) !important;
+  box-shadow: none !important;
+}
+
+.bd-pf-value * {
+  color: inherit;
+}
+
 .bd-buy-usdc {
   display: grid;
   gap: 12px;
