@@ -1,0 +1,71 @@
+/* Orderly Privy connect drawer — follow data-bd-theme tokens */
+
+.oui-sheet-content {
+  background: rgb(var(--oui-color-base-9)) !important;
+  border-color: rgb(var(--oui-color-line)) !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+  font-family: "IBM Plex Sans", "Manrope", system-ui, sans-serif !important;
+}
+
+@media (max-width: 767px) {
+  .oui-sheet-content {
+    background: rgb(var(--oui-color-base-8)) !important;
+  }
+}
+
+.oui-sheet-content [class*="conic-gradient"],
+.oui-sheet-content > div.oui-absolute {
+  background: radial-gradient(
+    60% 50% at 50% 0%,
+    rgb(var(--oui-color-primary) / 0.16),
+    transparent 70%
+  ) !important;
+  filter: blur(36px) !important;
+}
+
+.oui-sheet-content .oui-bg-\[\#335FFC\],
+.oui-sheet-content .oui-bg-\[\#333948\],
+.oui-sheet-content .oui-bg-\[\#07080A\],
+.oui-sheet-content .oui-bg-\[\#3D79A9\] {
+  background: rgb(var(--oui-color-base-6)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border-radius: 8px !important;
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.oui-sheet-content .oui-bg-\[\#335FFC\] {
+  background: rgb(var(--oui-color-primary)) !important;
+  border-color: rgb(var(--oui-color-primary)) !important;
+}
+
+.oui-sheet-content .oui-bg-\[\#335FFC\] .oui-text-base-static {
+  color: rgb(var(--oui-color-primary-contrast)) !important;
+}
+
+.oui-sheet-content .oui-bg-\[\#333948\] .oui-text-base-static,
+.oui-sheet-content .oui-bg-\[\#07080A\] .oui-text-base-static,
+.oui-sheet-content .oui-bg-\[\#3D79A9\] .oui-text-base-static {
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.oui-sheet-content .oui-bg-base-5,
+.oui-sheet-content .oui-bg-base-10 {
+  background: rgb(var(--oui-color-base-6)) !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border-radius: 8px !important;
+}
+
+.oui-sheet-content .oui-bg-line,
+.oui-sheet-content .oui-h-px {
+  background: rgb(var(--oui-color-line)) !important;
+}
+
+.oui-sheet-content .oui-text-base-contrast,
+.oui-sheet-content .oui-text-base-contrast-80 {
+  color: rgb(var(--oui-color-base-foreground)) !important;
+}
+
+.oui-sheet-overlay,
+[data-state="open"].oui-sheet-overlay {
+  background: rgb(var(--oui-color-base-10) / 0.72) !important;
+}
