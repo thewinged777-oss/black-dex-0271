@@ -47,6 +47,9 @@ const PrivyConnector = ({ children, networkId }: {
       privyConfig={{
         config: {
           appearance: {
+            theme: 'dark',
+            accentColor: '#d4af37',
+            logo: '/logo-secondary.webp',
             showWalletLoginFirst: false,
           },
           loginMethods: loginMethods,
@@ -62,4 +65,4 @@ const PrivyConnector = ({ children, networkId }: {
   );
 };
 
-export default PrivyConnector; 
+export default PrivyConnector;

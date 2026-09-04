@@ -9,6 +9,7 @@
 @import "../styles/nav.css";
 @import "../styles/markets.css";
 @import "../styles/portfolio.css";
+@import "../styles/connect.css";
 
 @tailwind base;
 @tailwind components;
