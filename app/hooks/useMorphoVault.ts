@@ -4,11 +4,13 @@ import {
   createPublicClient,
   createWalletClient,
   custom,
+  defineChain,
   formatUnits,
   http,
   maxUint256,
   parseUnits,
   type Address,
+  type Chain,
 } from "viem";
 import { base, mainnet } from "viem/chains";
 import type { MorphoVaultMeta } from "@/utils/morpho-earn";
@@ -19,12 +21,40 @@ type EthereumProvider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
 };
 
-function chainFor(vault: MorphoVaultMeta) {
-  return vault.chainId === 8453 ? base : mainnet;
+const tempo = defineChain({
+  id: 4217,
+  name: "Tempo",
+  nativeCurrency: { name: "USD", symbol: "USD", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.tempo.xyz"] },
+  },
+  blockExplorers: {
+    default: { name: "Tempo Explorer", url: "https://explore.tempo.xyz" },
+  },
+});
+
+function chainFor(vault: MorphoVaultMeta): Chain {
+  if (vault.chainId === 8453) return base;
+  if (vault.chainId === 4217) return tempo;
+  return mainnet;
 }
 
 function rpcFor(vault: MorphoVaultMeta) {
-  return vault.chainId === 8453 ? "https://mainnet.base.org" : "https://eth.llamarpc.com";
+  if (vault.chainId === 8453) return "https://mainnet.base.org";
+  if (vault.chainId === 4217) return "https://rpc.tempo.xyz";
+  return "https://eth.llamarpc.com";
+}
+
+function tokenFor(vault: MorphoVaultMeta) {
+  if (vault.assetAddress) {
+    return {
+      address: vault.assetAddress as Address,
+      decimals: vault.assetDecimals ?? 6,
+    };
+  }
+  if (vault.chain === "tempo") return USDC_BY_CHAIN.tempo;
+  if (vault.chain === "base") return USDC_BY_CHAIN.base;
+  return USDC_BY_CHAIN.ethereum;
 }
 
 function asAddress(value: unknown): Address | null {
@@ -38,7 +68,7 @@ function getInjected(): EthereumProvider | null {
 }
 
 export function useMorphoVault(vault: MorphoVaultMeta) {
-  const token = USDC_BY_CHAIN[vault.chain];
+  const token = tokenFor(vault);
   const vaultAddress = vault.address as Address;
   const chain = chainFor(vault);
   const { state } = useAccount();
@@ -107,7 +137,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
         setShareAssets(0n);
       }
     } catch (err) {
-      console.warn("[morpho] refresh failed", err);
+      console.warn("[earn] refresh failed", err);
     }
   }, [address, publicClient, token.address, vaultAddress]);
 
@@ -133,7 +163,24 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
         params: [{ chainId: hexId }],
       });
     } catch {
-      // user can switch in the wallet UI
+      if (vault.chainId === 4217) {
+        try {
+          await provider.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: hexId,
+                chainName: "Tempo",
+                nativeCurrency: { name: "USD", symbol: "USD", decimals: 18 },
+                rpcUrls: ["https://rpc.tempo.xyz"],
+                blockExplorerUrls: ["https://explore.tempo.xyz"],
+              },
+            ],
+          });
+        } catch {
+          // user can add Tempo in the wallet UI
+        }
+      }
     }
   }, [provider, vault.chainId]);
 
@@ -167,7 +214,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       try {
         await ensureChain();
         if (allowance < amount) {
-          setStatus("Approve USDC\u2026");
+          setStatus(`Approve ${vault.asset}\u2026`);
           const approveHash = await client.writeContract({
             address: token.address,
             abi: ERC20_ABI,
@@ -176,7 +223,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
           });
           await publicClient.waitForTransactionReceipt({ hash: approveHash });
         }
-        setStatus("Depositing into Morpho\u2026");
+        setStatus("Depositing\u2026");
         const hash = await client.writeContract({
           address: vaultAddress,
           abi: ERC4626_ABI,
@@ -194,7 +241,18 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
         setBusy(null);
       }
     },
-    [address, allowance, ensureChain, parseAmount, publicClient, refresh, token.address, vaultAddress, walletClient],
+    [
+      address,
+      allowance,
+      ensureChain,
+      parseAmount,
+      publicClient,
+      refresh,
+      token.address,
+      vault.asset,
+      vaultAddress,
+      walletClient,
+    ],
   );
 
   const withdraw = useCallback(
@@ -206,7 +264,7 @@ export function useMorphoVault(vault: MorphoVaultMeta) {
       setStatus(null);
       try {
         await ensureChain();
-        setStatus("Withdrawing from Morpho\u2026");
+        setStatus("Withdrawing\u2026");
         const hash = await client.writeContract({
           address: vaultAddress,
           abi: ERC4626_ABI,
