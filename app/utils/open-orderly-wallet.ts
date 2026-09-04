@@ -28,5 +28,5 @@ export function clickHeaderWallet() {
 }
 
 export async function openOrderlyWallet() {
-  clickHeaderWallet();
+  return clickHeaderWallet();
 }
