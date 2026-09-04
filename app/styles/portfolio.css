@@ -61,16 +61,29 @@
   border: 0 !important;
 }
 
-.bd-pf-value {
+.bd-pf-hero {
   background: rgb(var(--oui-color-base-8)) !important;
   background-image: none !important;
+  border: 1px solid rgb(var(--oui-color-line)) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+.bd-pf-hero .bd-pf-value,
+.bd-pf-value {
+  background: transparent !important;
+  background-image: none !important;
   color: rgb(var(--oui-color-base-foreground)) !important;
-  border: 2px solid var(--bd-chain-accent, rgb(var(--oui-color-primary))) !important;
+  border: 0 !important;
   box-shadow: none !important;
 }
 
-.bd-pf-value * {
-  color: inherit;
+.bd-pf-addr {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 .bd-buy-usdc {
