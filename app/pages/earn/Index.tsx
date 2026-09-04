@@ -3,6 +3,7 @@ import { generatePageTitle } from "@/utils/utils";
 import { getPageMeta } from "@/utils/seo";
 import { renderSEOTags } from "@/utils/seo-tags";
 import {
+  chainLabel,
   formatApy,
   formatUsdCompact,
   loadMorphoVaults,
@@ -12,7 +13,6 @@ import { useMorphoVault } from "@/hooks/useMorphoVault";
 import PageSafe from "@/components/PageSafe";
 
 function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
-  const chainLabel = vault.chain === "base" ? "Base" : "Ethereum";
   const [amount, setAmount] = useState("");
   const [mode, setMode] = useState<"deposit" | "withdraw">("deposit");
   const morpho = useMorphoVault(vault);
@@ -32,7 +32,7 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
         <div className="bd-earn-card-title">
           <strong>{vault.name}</strong>
           <span className="bd-earn-chip">{vault.asset}</span>
-          <span className="bd-earn-chip is-chain">{chainLabel}</span>
+          <span className="bd-earn-chip is-chain">{chainLabel(vault.chain)}</span>
           {vault.feePercent != null && (
             <span className="bd-earn-chip">Fee {vault.feePercent}%</span>
           )}
@@ -49,7 +49,7 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
           <b>{formatUsdCompact(vault.totalAssetsUsd)}</b>
         </div>
         <div>
-          <span>Wallet USDC</span>
+          <span>Wallet {vault.asset}</span>
           <b>
             {morpho.isConnected
               ? Number(morpho.formattedBalance).toLocaleString(undefined, {
@@ -117,7 +117,7 @@ function MorphoCard({ vault }: { vault: MorphoVaultLive }) {
       )}
       {morpho.status && !morpho.busy && <p className="bd-earn-status">{morpho.status}</p>}
       <p className="bd-earn-powered">
-        Powered by Morpho via Privy Earn, curated by {vault.curator}. APY is variable.
+        Powered by {vault.protocol || "Privy Earn"}, curated by {vault.curator}. APY is variable.
       </p>
     </article>
   );
@@ -152,18 +152,19 @@ export default function EarnIndex() {
       <div className="bd-earn">
         <header className="bd-earn-hero">
           <span className="bd-earn-kicker">Earn</span>
-          <h1>Earn yield on USDC</h1>
+          <h1>Earn yield on stables</h1>
           <p className="bd-earn-lead">
-            Deposit Base USDC into Black DEX vaults wrapped through Privy Earn.
-            Yield comes from Morpho. A performance fee is taken from yield only —
-            principal stays yours and can be withdrawn anytime. Rates move with the market.
+            Deposit from the same Black DEX wallet into Privy-wrapped vaults.
+            Base USDC goes to Steakhouse / Morpho. Tempo pathUSD goes to Sentora.
+            A performance fee is taken from yield only — principal stays yours.
+            Rates move with the market.
           </p>
         </header>
 
         <section className="bd-earn-block">
           <header className="bd-earn-block-head">
             <h2>Privy vaults</h2>
-            <p>Morpho strategies on Base, same Black DEX wallet</p>
+            <p>Base USDC and Tempo pathUSD, same connected wallet</p>
           </header>
           {loading && morpho.length === 0 ? (
             <div className="bd-earn-loading">Loading vaults\u2026</div>

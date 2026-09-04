@@ -7,6 +7,10 @@ export const USDC_BY_CHAIN = {
     address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" as `0x${string}`,
     decimals: 6,
   },
+  tempo: {
+    address: "0x20c0000000000000000000000000000000000000" as `0x${string}`,
+    decimals: 6,
+  },
 };
 
 export const ERC20_ABI = [
