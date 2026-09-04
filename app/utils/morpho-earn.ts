@@ -1,7 +1,6 @@
 /**
- * Morpho Earn — curated vault catalog + live APY from Morpho GraphQL.
- * Phase 1: browse + deep-link deposit/withdraw on app.morpho.org.
- * Attribution required: "Powered by Morpho · curated by X"
+ * Black DEX Earn — Privy fee-wrapper vaults on Morpho.
+ * Deposits go to the wrapper address so Black DEX receives the configured yield cut.
  */
 
 export type MorphoChain = "base" | "ethereum";
@@ -16,51 +15,33 @@ export type MorphoVaultMeta = {
   curator: string;
   slug: string;
   description: string;
+  privyVaultId?: string;
+  feePercent?: number;
+  underlyingAddress?: string;
 };
 
 export type MorphoVaultLive = MorphoVaultMeta & {
   netApy: number | null;
   totalAssetsUsd: number | null;
-  liquidityUsd: number | null; // optional; API may omit
+  liquidityUsd: number | null;
 };
 
-/** Curated shortlist — Steakhouse + Gauntlet USDC (Base + Ethereum). */
+/** Privy Earn wrappers only — public Morpho vaults have no Black DEX fee. */
 export const MORPHO_VAULTS: MorphoVaultMeta[] = [
   {
-    id: "steakhouse-usdc-base",
-    address: "0xbeeF010f9cb27031ad51e3333f9aF9C6B1228183",
+    id: "privy-steakhouse-prime-usdc-base",
+    address: "0xa709c3469c5477749af47b455cfc522a0aa90c1b",
     chain: "base",
     chainId: 8453,
-    name: "Steakhouse USDC",
+    name: "Steakhouse Prime USDC",
     asset: "USDC",
     curator: "Steakhouse Financial",
-    slug: "steakhouse-usdc",
+    slug: "steakhouse-prime-usdc",
     description:
-      "Blue-chip + RWA dual-engine USDC vault on Base. Conservative allocation to high-liquidity Morpho markets.",
-  },
-  {
-    id: "gauntlet-usdc-prime-base",
-    address: "0xeE8F4eC5672F09119b96Ab6fB59C27E1b7e44b61",
-    chain: "base",
-    chainId: 8453,
-    name: "Gauntlet USDC Prime",
-    asset: "USDC",
-    curator: "Gauntlet",
-    slug: "gauntlet-usdc-prime",
-    description:
-      "Gauntlet-curated Prime USDC on Base. Blue-chip collateral only (cbBTC, WETH, cbETH, wstETH).",
-  },
-  {
-    id: "steakhouse-usdc-eth",
-    address: "0xBEEF01735c132Ada46AA9aA4c54623cAA92A64CB",
-    chain: "ethereum",
-    chainId: 1,
-    name: "Steakhouse USDC",
-    asset: "USDC",
-    curator: "Steakhouse Financial",
-    slug: "steakhouse-usdc",
-    description:
-      "Steakhouse USDC on Ethereum mainnet. Same dual-engine mandate as the Base vault.",
+      "Privy-wrapped Steakhouse USDC on Base. Yield from Morpho; Black DEX keeps a 10% performance fee. APY is variable, not guaranteed.",
+    privyVaultId: "yq61ylarv3q585itz2rkuzeu",
+    feePercent: 10,
+    underlyingAddress: "0xbeeF010f9cb27031ad51e3333f9aF9C6B1228183",
   },
 ];
 
@@ -88,20 +69,19 @@ function chainPath(chain: MorphoChain): string {
   return chain === "base" ? "base" : "ethereum";
 }
 
-/** Deep-link into Morpho app for deposit / withdraw UI. */
 export function morphoVaultUrl(vault: MorphoVaultMeta): string {
-  return `https://app.morpho.org/${chainPath(vault.chain)}/vault/${vault.address}/${vault.slug}`;
+  const target = vault.underlyingAddress || vault.address;
+  return `https://app.morpho.org/${chainPath(vault.chain)}/vault/${target}/${vault.slug}`;
 }
 
 export function formatApy(netApy: number | null | undefined): string {
-  if (netApy == null || Number.isNaN(netApy)) return "—";
-  // Morpho GraphQL returns decimal (e.g. 0.0342 = 3.42%)
+  if (netApy == null || Number.isNaN(netApy)) return "\u2014";
   const pct = netApy > 1 ? netApy : netApy * 100;
   return `${pct.toFixed(2)}%`;
 }
 
 export function formatUsdCompact(value: number | null | undefined): string {
-  if (value == null || Number.isNaN(value)) return "—";
+  if (value == null || Number.isNaN(value)) return "\u2014";
   if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
   if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
@@ -111,7 +91,13 @@ export function formatUsdCompact(value: number | null | undefined): string {
 export async function loadMorphoVaults(
   catalog: MorphoVaultMeta[] = MORPHO_VAULTS,
 ): Promise<MorphoVaultLive[]> {
-  const addresses = catalog.map((v) => v.address.toLowerCase());
+  const addresses = Array.from(
+    new Set(
+      catalog.flatMap((v) =>
+        [v.address, v.underlyingAddress].filter(Boolean).map((addr) => addr!.toLowerCase()),
+      ),
+    ),
+  );
 
   try {
     const res = await fetch(MORPHO_GQL, {
@@ -151,19 +137,25 @@ export async function loadMorphoVaults(
     >();
 
     for (const item of items) {
-      const key = item.address.toLowerCase();
-      live.set(key, {
+      live.set(item.address.toLowerCase(), {
         netApy: item.state?.netApy ?? null,
         totalAssetsUsd: item.state?.totalAssetsUsd ?? null,
       });
     }
 
     return catalog.map((meta) => {
-      const stats = live.get(meta.address.toLowerCase());
+      const wrapper = live.get(meta.address.toLowerCase());
+      const underlying = meta.underlyingAddress
+        ? live.get(meta.underlyingAddress.toLowerCase())
+        : undefined;
+      const rawApy = wrapper?.netApy ?? underlying?.netApy ?? null;
+      const fee = (meta.feePercent ?? 0) / 100;
+      const userApy =
+        rawApy == null ? null : wrapper?.netApy != null ? wrapper.netApy : rawApy * (1 - fee);
       return {
         ...meta,
-        netApy: stats?.netApy ?? null,
-        totalAssetsUsd: stats?.totalAssetsUsd ?? null,
+        netApy: userApy,
+        totalAssetsUsd: wrapper?.totalAssetsUsd ?? underlying?.totalAssetsUsd ?? null,
         liquidityUsd: null,
       };
     });
