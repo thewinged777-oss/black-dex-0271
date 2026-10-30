@@ -20,7 +20,7 @@ window.__RUNTIME_CONFIG__ = {
   "VITE_HAS_PRIMARY_LOGO": "false",
   "VITE_HAS_SECONDARY_LOGO": "false",
   "VITE_ENABLED_MENUS": "Trading,Swap,Portfolio,Markets,Leaderboard,Rewards,Vaults,Points",
-  "VITE_CUSTOM_MENUS": "Main, https://main.black-dex.online;Listing, https://main.black-dex.online/listing.html;Affiliates, https://main.black-dex.online/affiliates.html;Token, https://main.black-dex.online/token.html",
+  "VITE_CUSTOM_MENUS": "Main, https://main.black-dex.online;Listing, https://main.black-dex.online/listing.html;Affiliates, https://main.black-dex.online/affiliates.html;Token, https://main.black-dex.online/token.html;Presale, https://main.black-dex.online/presale",
   "VITE_ENABLE_SERVICE_DISCLAIMER_DIALOG": "false",
   "VITE_ENABLE_CAMPAIGNS": "true",
   "VITE_TELEGRAM_URL": "https://t.me/blackdexonlineadmin",
