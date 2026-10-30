@@ -10,6 +10,7 @@
 @import "../styles/markets.css";
 @import "../styles/portfolio.css";
 @import "../styles/connect.css";
+@import "../pages/presale/presale.css";
 
 @tailwind base;
 @tailwind components;
