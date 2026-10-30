@@ -1,24 +1,18 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
 import {
-  ArrowDownRight,
   ArrowRight,
   ArrowUpRight,
-  Check,
   ChevronDown,
   CircleHelp,
   ExternalLink,
   LockKeyhole,
   ShieldCheck,
-  Wallet,
   Zap,
 } from "lucide-react";
 import "./presale.css";
 
-const TOTAL_SUPPLY = 1_000_000_000;
 const PRESALE_PRICE = 0.01;
-const HARD_CAP = 800_000;
-const PRESALE_ALLOCATION = 80_000_000;
 
 const allocations = [
   { name: "Ecosystem & development", pct: 25, tokens: "250M", color: "#d4af37" },
@@ -56,7 +50,7 @@ const money = (value: number) =>
 const number = (value: number) =>
   new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value);
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({ children }: { children: ReactNode }) {
   return <div className="black-presale-kicker"><span />{children}</div>;
 }
 
