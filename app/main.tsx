@@ -38,6 +38,7 @@ const DeskLayout = lazy(() => import("./pages/desk/Layout"));
 const DeskIndex = lazy(() => import("./pages/desk/Index"));
 const EarnLayout = lazy(() => import("./pages/earn/Layout"));
 const EarnIndex = lazy(() => import("./pages/earn/Index"));
+const PresalePage = lazy(() => import("./pages/presale/Index"));
 
 async function loadRuntimeConfig() {
   return new Promise<void>((resolve) => {
@@ -65,6 +66,7 @@ const router = createBrowserRouter(
       errorElement: <ErrorBoundary />,
       children: [
         { index: true, element: <IndexPage /> },
+        { path: "presale", element: <PresalePage /> },
         {
           path: "home",
           element: <HomeLayout />,
